@@ -1,0 +1,27 @@
+% Query 1: A valid attack when the target is both a province and a planet and harmony is absent; after attack, target is in pain, no longer province/planet, and harmony becomes present. (satisfiable)
+:- query
+    0: ~harmony & isProvince(a) & isPlanet(a) & ~inPain(a);
+    0: attack(a);
+    maxstep: harmony & inPain(a) & ~isProvince(a) & ~isPlanet(a).
+
+% Query 2: Attempt to attack while harmony is present (should be blocked by nonexecutable). (unsatisfiable)
+:- query
+    0: harmony & isProvince(a) & isPlanet(a) & ~inPain(a);
+    0: attack(a).
+
+% Query 3: Succumb is not allowed if the entity is in pain. (unsatisfiable)
+:- query
+    0: harmony & inPain(b);
+    0: succumb(b).
+
+% Query 4: A valid overcome when the second entity is a province and the first is not in pain; after overcome, harmony is present and craves(E1,E2) holds, and both stop being provinces. (satisfiable)
+:- query
+    0: ~harmony & isProvince(c) & ~inPain(b);
+    0: overcome(b,c);
+    maxstep: harmony & craves(b,c) & ~isProvince(b) & ~isProvince(c) & ~inPain(b).
+
+% Query 5: Feast requires craving, first not a province, and harmony present; after feast, first becomes a province and in pain, craving removed, and harmony becomes absent. (satisfiable)
+:- query
+    0: harmony & craves(a,c) & ~isProvince(a) & ~inPain(a);
+    0: feast(a,c);
+    maxstep: ~harmony & isProvince(a) & inPain(a) & ~craves(a,c) & isProvince(c).

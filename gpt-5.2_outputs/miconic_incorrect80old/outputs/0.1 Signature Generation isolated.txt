@@ -1,0 +1,29 @@
+BC+ Signature:
+:- sorts
+    floor;
+    passenger.
+
+:- objects
+    % Floors and passengers are domain-specific; add concrete objects later.
+    % (No required objects given in the problem statement.)
+
+:- variables
+    F, F1, F2, F3, F4 :: floor;
+    P, P1, P2, P3, P4 :: passenger;
+    Bool, Bool1, Bool2, Bool3, Bool4 :: boolean.
+
+:- constants
+    board(floor, passenger) :: exogenousAction;
+    depart(floor, passenger) :: exogenousAction;
+    up(floor, floor) :: exogenousAction;
+    down(floor, floor) :: exogenousAction;
+
+    isFloor(floor) :: inertialFluent(boolean);
+    above(floor, floor) :: inertialFluent(boolean);
+    elevAt(floor) :: inertialFluent(boolean);
+
+    origin(passenger) :: inertialFluent(floor);
+    dest(passenger) :: inertialFluent(floor);
+
+    boarded(passenger) :: inertialFluent(boolean);
+    served(passenger) :: inertialFluent(boolean).

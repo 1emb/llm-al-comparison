@@ -1,0 +1,7 @@
+There are two types of objects: "floor" and "passenger".
+
+Actions:
+boardfloor, passenger - a passenger boards the elevator at their origin floor.
+departfloor, passenger - a passenger departs the elevator at their destination floor.
+upfloor, floor - the elevator moves up from one floor to another.
+downfloor, floor - the elevator moves down from one floor to another.

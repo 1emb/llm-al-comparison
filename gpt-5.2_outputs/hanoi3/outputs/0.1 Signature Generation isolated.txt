@@ -1,0 +1,20 @@
+BC+ Signature:
+:- sorts
+    loc >> disk;
+    loc >> peg.
+
+:- objects
+    a, b, c :: peg;
+    d1, d2, d3 :: disk.
+
+:- variables
+    D, D1, D2, D3, D4 :: disk;
+    P, P1, P2, P3, P4 :: peg;
+    L, L1, L2, L3, L4 :: loc;
+    N, N1, N2, N3, N4 :: integer;
+    Bool, Bool1, Bool2, Bool3, Bool4 :: boolean.
+
+:- constants
+    on(disk) :: inertialFluent(loc);
+    weight(disk) :: inertialFluent(integer);
+    move(disk, loc) :: exogenousAction.

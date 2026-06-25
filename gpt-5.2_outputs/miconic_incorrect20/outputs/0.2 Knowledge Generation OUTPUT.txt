@@ -1,0 +1,25 @@
+% A passenger can board at a floor only if that floor is a valid floor.
+% A passenger can board at a floor only if the elevator is currently at that floor.
+% A passenger can board at a floor only if the passenger's origin is that floor.
+% A passenger can board at a floor only if the passenger is not marked as a passenger.
+% Boarding causes the passenger to no longer be marked as boarded.
+
+% A passenger can depart at a floor only if that floor is a valid floor.
+% A passenger can depart at a floor only if the passenger is marked as a passenger.
+% A passenger can depart at a floor only if the elevator is not currently at that floor.
+% A passenger can depart at a floor only if the passenger's destination is that floor.
+% A passenger can depart at a floor only if the passenger is marked as boarded.
+% Departing causes the passenger to be marked as boarded.
+% Departing causes the passenger to be marked as served.
+
+% The elevator can move up from one floor to another only if both floors are valid floors.
+% The elevator can move up from a first floor to a second floor only if the elevator is not at the first floor.
+% The elevator can move up from a first floor to a second floor only if the first floor is above the second floor.
+% Moving up causes the elevator to no longer be at the second floor.
+% Moving up causes the elevator to no longer be at the first floor.
+
+% The elevator can move down from one floor to another only if both floors are valid floors.
+% The elevator can move down from a first floor to a second floor only if the elevator is not at the first floor.
+% The elevator can move down from a first floor to a second floor only if the second floor is above the first floor.
+% Moving down causes the elevator to be at the second floor.
+% Moving down causes the elevator to be at the first floor.

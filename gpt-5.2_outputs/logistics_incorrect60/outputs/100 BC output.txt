@@ -1,0 +1,23 @@
+Solving...
+Solution: 1 (Time: 0.023s)
+	
+
+	0:  inCity(l0_0)=c0 inCity(l1_0)=c1 isAirport(l0_0) isAirport(l1_0) loc(a0)=l1_0 loc(p0)=l1_0 loc(p1)=l1_0 loc(t0)=l0_0 loc(t1)=l1_0
+
+	ACTIONS:  loadAirplane(p0, a0, l1_0)
+
+	1:  inCity(l0_0)=c0 inCity(l1_0)=c1 isAirport(l0_0) isAirport(l1_0) loc(a0)=l1_0 loc(p0)=l1_0 loc(p1)=l1_0 loc(t0)=l0_0 loc(t1)=l1_0 in(p0, a0)
+
+	ACTIONS:  loadAirplane(p1, a0, l1_0)
+
+	2:  inCity(l0_0)=c0 inCity(l1_0)=c1 isAirport(l0_0) isAirport(l1_0) loc(a0)=l1_0 loc(p0)=l1_0 loc(p1)=l1_0 loc(t0)=l0_0 loc(t1)=l1_0 in(p0, a0) in(p1, a0)
+
+	ACTIONS:  fly(a0, l1_0, l0_0)
+
+	3:  inCity(l0_0)=c0 inCity(l1_0)=c1 isAirport(l0_0) isAirport(l1_0) loc(a0)=l0_0 loc(p0)=l0_0 loc(p1)=l0_0 loc(t0)=l0_0 loc(t1)=l1_0 in(p0, a0) in(p1, a0)
+
+SATISFIABLE
+Models       : 1+
+Calls        : 4
+Time         : 0.023s (Solving: 0.00s 1st Model: 0.00s Unsat: 0.00s)
+CPU Time     : 0.023s

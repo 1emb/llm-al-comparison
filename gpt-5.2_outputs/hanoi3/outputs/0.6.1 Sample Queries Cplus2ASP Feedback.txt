@@ -1,0 +1,54 @@
+% Query 1: Move the top disk d3 from d2 onto peg b (should be allowed) (satisfiable)
+:- query
+    0: loc(d1)=a & loc(d2)=d1 & loc(d3)=d2 & weight(d1)=d3 & weight(d2)=d2 & weight(d3)=d1;
+    0: move(d3,b).
+
+Cplus2ASP Output:
+
+% Error: The specified query was not found.
+
+% Query 2: Try to move disk d2 while d3 is on top of it (should be blocked by the “cannot move if something is on top” rule) (unsatisfiable)
+:- query
+    0: loc(d1)=a & loc(d2)=d1 & loc(d3)=d2 & weight(d1)=d3 & weight(d2)=d2 & weight(d3)=d1;
+    0: move(d2,b).
+
+Cplus2ASP Output:
+
+% Error: The specified query was not found.
+
+% Query 3: Try to move heavier disk d1 onto lighter disk d3 (should violate the weight constraint) (unsatisfiable)
+:- query
+    0: loc(d1)=a & loc(d2)=b & loc(d3)=c & weight(d1)=d3 & weight(d2)=d2 & weight(d3)=d1;
+    0: move(d1,d3).
+
+Cplus2ASP Output:
+
+% Error: The specified query was not found.
+
+% Query 4: Try to move d3 onto d2 when d2 already has a disk on it (d3 is on d2 initially), so destination has a disk on top (unsatisfiable)
+:- query
+    0: loc(d1)=a & loc(d2)=d1 & loc(d3)=d2 & weight(d1)=d3 & weight(d2)=d2 & weight(d3)=d1;
+    0: move(d1,d2).
+
+Cplus2ASP Output:
+
+% Error: The specified query was not found.
+
+% Query 5: Try to move a disk to the location it is already at (should be disallowed) (unsatisfiable)
+:- query
+    0: loc(d1)=a & loc(d2)=d1 & loc(d3)=d2 & weight(d1)=d3 & weight(d2)=d2 & weight(d3)=d1;
+    0: move(d1,a).
+
+Cplus2ASP Output:
+
+% Error: The specified query was not found.
+
+
+
+:- query
+    0: loc(d1)=a & loc(d2)=d1 & loc(d3)=d2 & weight(d1)=d3 & weight(d2)=d2 & weight(d3)=d1;
+    maxstep: loc(d1)=c & loc(d2)=d1 & loc(d3)=d2.
+
+Cplus2ASP Output:
+
+% Error: The specified query was not found.

@@ -1,0 +1,163 @@
+:- sorts
+    vehicle >> truck;
+    vehicle >> airplane;
+    thing >> package;
+    thing >> vehicle;
+    location;
+    city.
+
+
+:- objects
+    % Domain objects are not specified in the problem statement.
+    % Add concrete objects later (e.g., p1 :: package; t1 :: truck; a1 :: airplane; l1 :: location; c1 :: city).
+
+
+:- variables
+    P, P1, P2, P3, P4 :: package;
+    T, T1, T2, T3, T4 :: truck;
+    A, A1, A2, A3, A4 :: airplane;
+    V, V1, V2, V3, V4 :: vehicle;
+    Th, Th1, Th2, Th3, Th4 :: thing;
+    L, L1, L2, L3, L4 :: location;
+    C, C1, C2, C3, C4 :: city;
+    Bool, Bool1, Bool2, Bool3, Bool4 :: boolean.
+
+
+:- constants
+    % Actions
+    loadTruck(package, truck, location) :: exogenousAction;
+    loadPlane(package, airplane, location) :: exogenousAction;
+    unloadTruck(package, truck, location) :: exogenousAction;
+    unloadPlane(package, airplane, location) :: exogenousAction;
+    drive(truck, location, location, city) :: exogenousAction;
+    fly(airplane, location, location) :: exogenousAction;
+
+    % Fluents
+    loc(thing) :: inertialFluent(location);
+    in(package, vehicle) :: inertialFluent(boolean);
+    inCity(location) :: inertialFluent(city);
+    airport(location) :: inertialFluent(boolean).
+
+
+% constraints/rules
+% 1. A package cannot be both at a location and inside a vehicle at the same time.
+impossible loc(P)=L & in(P,V).
+
+% 2. A package cannot be inside two different vehicles at the same time.
+impossible in(P,V1) & in(P,V2) & V1\=V2.
+
+% 3. If a package is inside a vehicle, then the package's location is the same as the vehicle's location.
+loc(P)=L if in(P,V) & loc(V)=L.
+
+% 4. Loading a package into a truck at a location causes the package to be inside that truck.
+loadTruck(P,T,L) causes in(P,T).
+
+% 5. Loading a package into a truck at a location causes the package to no longer be at that location.
+loadTruck(P,T,L) causes loc(P)=L1 if loc(P)=L1 & L1\=L.
+
+% 6. Loading a package into a truck at a location is not executable if the truck is not at that location.
+nonexecutable loadTruck(P,T,L) if loc(T)\=L.
+
+% 7. Loading a package into a truck at a location is not executable if the package is not at that location.
+nonexecutable loadTruck(P,T,L) if loc(P)\=L.
+
+% 8. Loading a package into a truck at a location is not executable if the package is already inside some vehicle.
+nonexecutable loadTruck(P,T,L) if in(P,V).
+
+% 9. Loading a package into an airplane at a location causes the package to be inside that airplane.
+loadPlane(P,A,L) causes in(P,A).
+
+% 10. Loading a package into an airplane at a location causes the package to no longer be at that location.
+loadPlane(P,A,L) causes loc(P)=L1 if loc(P)=L1 & L1\=L.
+
+% 11. Loading a package into an airplane at a location is not executable if the airplane is not at that location.
+nonexecutable loadPlane(P,A,L) if loc(A)\=L.
+
+% 12. Loading a package into an airplane at a location is not executable if the package is not at that location.
+nonexecutable loadPlane(P,A,L) if loc(P)\=L.
+
+% 13. Loading a package into an airplane at a location is not executable if the package is already inside some vehicle.
+nonexecutable loadPlane(P,A,L) if in(P,V).
+
+% 14. Unloading a package from a truck at a location causes the package to no longer be inside that truck.
+unloadTruck(P,T,L) causes ~in(P,T).
+
+% 15. Unloading a package from a truck at a location causes the package to be at that location.
+unloadTruck(P,T,L) causes loc(P)=L.
+
+% 16. Unloading a package from a truck at a location is not executable if the truck is not at that location.
+nonexecutable unloadTruck(P,T,L) if loc(T)\=L.
+
+% 17. Unloading a package from a truck at a location is not executable if the package is not inside that truck.
+nonexecutable unloadTruck(P,T,L) if ~in(P,T).
+
+% 18. Unloading a package from an airplane at a location causes the package to no longer be inside that airplane.
+unloadPlane(P,A,L) causes ~in(P,A).
+
+% 19. Unloading a package from an airplane at a location causes the package to be at that location.
+unloadPlane(P,A,L) causes loc(P)=L.
+
+% 20. Unloading a package from an airplane at a location is not executable if the airplane is not at that location.
+nonexecutable unloadPlane(P,A,L) if loc(A)\=L.
+
+% 21. Unloading a package from an airplane at a location is not executable if the package is not inside that airplane.
+nonexecutable unloadPlane(P,A,L) if ~in(P,A).
+
+% 22. Driving a truck from one location to another in a city causes the truck to be at the destination location.
+drive(T,L1,L2,C) causes loc(T)=L2.
+
+% 23. Driving a truck from one location to another in a city causes the truck to no longer be at the starting location.
+drive(T,L1,L2,C) causes loc(T)=L3 if loc(T)=L3 & L3\=L2.
+
+% 24. Driving a truck from one location to another in a city is not executable if the truck is not at the starting location.
+nonexecutable drive(T,L1,L2,C) if loc(T)\=L1.
+
+% 25. Driving a truck from one location to another in a city is not executable if the starting location is not in that city.
+nonexecutable drive(T,L1,L2,C) if inCity(L1)\=C.
+
+% 26. Driving a truck from one location to another in a city is not executable if the destination location is not in that city.
+nonexecutable drive(T,L1,L2,C) if inCity(L2)\=C.
+
+% 27. Driving a truck from one location to another in a city is not executable if the starting location and the destination location are the same.
+nonexecutable drive(T,L1,L2,C) if L1=L2.
+
+% 28. Flying an airplane from one airport to another causes the airplane to be at the destination airport.
+fly(A,L1,L2) causes loc(A)=L2.
+
+% 29. Flying an airplane from one airport to another causes the airplane to no longer be at the starting airport.
+fly(A,L1,L2) causes loc(A)=L3 if loc(A)=L3 & L3\=L2.
+
+% 30. Flying an airplane from one airport to another is not executable if the airplane is not at the starting airport.
+nonexecutable fly(A,L1,L2) if loc(A)\=L1.
+
+% 31. Flying an airplane from one airport to another is not executable if the starting location is not an airport.
+nonexecutable fly(A,L1,L2) if ~airport(L1).
+
+% 32. Flying an airplane from one airport to another is not executable if the destination location is not an airport.
+nonexecutable fly(A,L1,L2) if ~airport(L2).
+
+% 33. Flying an airplane from one airport to another is not executable if the starting location and the destination location are the same.
+nonexecutable fly(A,L1,L2) if L1=L2.
+
+% 34. It is not executable to load and unload the same package with the same vehicle at the same time (truck case).
+nonexecutable loadTruck(P,T,L) & unloadTruck(P,T,L).
+
+% 35. It is not executable to load and unload the same package with the same vehicle at the same time (airplane case).
+nonexecutable loadPlane(P,A,L) & unloadPlane(P,A,L).
+
+% 36. It is not executable for a truck to be driven by two different drive actions to two different destinations at the same time.
+nonexecutable drive(T,L1,L2,C) & drive(T,L1,L3,C) if L2\=L3.
+
+% 37. It is not executable for an airplane to be flown by two different fly actions to two different destinations at the same time.
+nonexecutable fly(A,L1,L2) & fly(A,L1,L3) if L2\=L3.
+
+
+% query
+:- query
+    0: inCity(l0_0)=c0 & inCity(l0_1)=c0 & inCity(l1_0)=c1 & inCity(l1_1)=c1;
+    0: airport(l0_0) & ~airport(l0_1) & airport(l1_0) & ~airport(l1_1);
+    0: loc(a0)=l1_0 & loc(a1)=l0_0 & loc(t0)=l0_0 & loc(t1)=l1_0;
+    0: loc(p0)=l0_0 & loc(p1)=l1_1;
+    0: ~in(p0,a0) & ~in(p0,a1) & ~in(p0,t0) & ~in(p0,t1);
+    0: ~in(p1,a0) & ~in(p1,a1) & ~in(p1,t0) & ~in(p1,t1);
+    maxstep: loc(p0)=l0_1 & loc(p1)=l1_0.

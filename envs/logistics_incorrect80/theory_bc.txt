@@ -1,0 +1,90 @@
+:- sorts
+    thing >> package;
+    thing >> vehicle;
+    vehicle >> truck;
+    vehicle >> airplane;
+    location;
+    city.
+
+:- objects
+    p0 :: package;
+    t0 :: truck;
+    a0 :: airplane;
+    l00 :: location;
+    c0 :: city.
+
+:- variables
+    P :: package;
+    T :: truck;
+    A :: airplane;
+    V :: vehicle;
+    TH :: thing;
+    L, L1, L2 :: location;
+    C :: city.
+
+:- constants
+    load_truck(package, truck, location) :: exogenousAction;
+    load_airplane(package, airplane, location) :: exogenousAction;
+    unload_truck(package, truck, location) :: exogenousAction;
+    unload_airplane(package, airplane, location) :: exogenousAction;
+    drive_truck(truck, location, location, city) :: exogenousAction;
+    fly_airplane(airplane, location, location) :: exogenousAction;
+    loc_at(thing, location) :: inertialFluent(boolean);
+    inside(package, vehicle) :: inertialFluent(boolean);
+    in_city(location, city) :: inertialFluent(boolean);
+    is_airport(location) :: inertialFluent(boolean).
+
+% load_truck(P, T, L): P and T must both be at L
+nonexecutable load_truck(P, T, L) if ~loc_at(P, L).
+nonexecutable load_truck(P, T, L) if ~loc_at(T, L).
+load_truck(P, T, L) causes ~loc_at(P, L).
+load_truck(P, T, L) causes inside(P, T).
+
+% load_airplane(P, A, L): P and A must both be at L
+nonexecutable load_airplane(P, A, L) if ~loc_at(P, L).
+nonexecutable load_airplane(P, A, L) if ~loc_at(A, L).
+load_airplane(P, A, L) causes ~loc_at(P, L).
+load_airplane(P, A, L) causes inside(P, A).
+
+% unload_truck(P, T, L): T must be at L, P must be in T
+nonexecutable unload_truck(P, T, L) if ~loc_at(T, L).
+nonexecutable unload_truck(P, T, L) if ~inside(P, T).
+unload_truck(P, T, L) causes ~inside(P, T).
+unload_truck(P, T, L) causes loc_at(P, L).
+
+% unload_airplane(P, A, L): A must be at L, P must be in A
+nonexecutable unload_airplane(P, A, L) if ~loc_at(A, L).
+nonexecutable unload_airplane(P, A, L) if ~inside(P, A).
+unload_airplane(P, A, L) causes ~inside(P, A).
+unload_airplane(P, A, L) causes loc_at(P, L).
+
+% drive_truck(T, L1, L2, C): T at L1, both L1 and L2 in city C
+nonexecutable drive_truck(T, L1, L2, C) if ~loc_at(T, L1).
+nonexecutable drive_truck(T, L1, L2, C) if ~in_city(L1, C).
+nonexecutable drive_truck(T, L1, L2, C) if ~in_city(L2, C).
+nonexecutable drive_truck(T, L1, L2, C) if L1 = L2.
+drive_truck(T, L1, L2, C) causes ~loc_at(T, L1).
+drive_truck(T, L1, L2, C) causes loc_at(T, L2).
+
+% fly_airplane(A, L1, L2): A at L1, both L1 and L2 are airports
+nonexecutable fly_airplane(A, L1, L2) if ~loc_at(A, L1).
+nonexecutable fly_airplane(A, L1, L2) if ~is_airport(L1).
+nonexecutable fly_airplane(A, L1, L2) if ~is_airport(L2).
+nonexecutable fly_airplane(A, L1, L2) if L1 = L2.
+fly_airplane(A, L1, L2) causes ~loc_at(A, L1).
+fly_airplane(A, L1, L2) causes loc_at(A, L2).
+
+% State constraints
+% A thing can only be at one location at a time
+impossible loc_at(TH, L1) & loc_at(TH, L2) & L1 \= L2.
+% A package cannot be both inside a vehicle and at a location
+impossible inside(P, V) & loc_at(P, L).
+% in_city and is_airport are static (no action changes them)
+
+% CWA defaults
+default ~loc_at(TH, L).
+default ~inside(P, V).
+default ~in_city(L, C).
+default ~is_airport(L).
+
+noconcurrency.

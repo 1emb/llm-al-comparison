@@ -1,0 +1,97 @@
+:- sorts
+    floor;
+    passenger.
+
+
+
+:- objects
+    f0, f1 :: floor;
+    p0 :: passenger.
+
+
+
+:- variables
+    F, F1, F2 :: floor;
+    P :: passenger.
+
+
+
+:- constants
+    board(passenger,floor) :: exogenousAction;
+    depart(passenger,floor) :: exogenousAction;
+    moveUp(floor,floor) :: exogenousAction;
+    moveDown(floor,floor) :: exogenousAction;
+
+    isFloor(floor) :: inertialFluent(boolean);
+    loc(floor) :: inertialFluent(boolean);
+    above(floor,floor) :: inertialFluent(boolean);
+
+    origin(passenger) :: inertialFluent(floor);
+    dest(passenger) :: inertialFluent(floor);
+
+    passengerFlag(passenger) :: inertialFluent(boolean);
+    boarded(passenger) :: inertialFluent(boolean);
+    served(passenger) :: inertialFluent(boolean).
+
+% Generated constraints
+% NOTE: "at" is a reserved keyword in BC+, so we use loc(F) instead.
+
+% Sanity: elevator cannot be at two floors at once
+impossible loc(F1) & loc(F2) & F1\=F2.
+
+% (Optional but important) Sanity: above should not be reflexive
+impossible above(F,F).
+
+% Boarding preconditions
+nonexecutable board(P,F) if ~isFloor(F).
+nonexecutable board(P,F) if ~loc(F).
+nonexecutable board(P,F) if origin(P)\=F.
+nonexecutable board(P,F) if passengerFlag(P).
+
+% Boarding effects
+board(P,F) causes boarded(P).
+board(P,F) causes passengerFlag(P).
+
+% Departing preconditions
+nonexecutable depart(P,F) if ~isFloor(F).
+nonexecutable depart(P,F) if ~passengerFlag(P).
+nonexecutable depart(P,F) if ~loc(F).          % fix: must be at floor F to depart there
+nonexecutable depart(P,F) if dest(P)\=F.
+nonexecutable depart(P,F) if ~boarded(P).
+
+% Departing effects
+depart(P,F) causes ~boarded(P).
+depart(P,F) causes served(P).
+depart(P,F) causes ~passengerFlag(P).          % optional: no longer a passenger after departing
+
+% Move up preconditions
+nonexecutable moveUp(F1,F2) if ~isFloor(F1).
+nonexecutable moveUp(F1,F2) if ~isFloor(F2).
+nonexecutable moveUp(F1,F2) if ~loc(F1).
+nonexecutable moveUp(F1,F2) if ~above(F1,F2).
+
+% Move up effects
+moveUp(F1,F2) causes ~loc(F1).
+moveUp(F1,F2) causes loc(F2).
+
+% Move down preconditions
+nonexecutable moveDown(F1,F2) if ~isFloor(F1).
+nonexecutable moveDown(F1,F2) if ~isFloor(F2).
+nonexecutable moveDown(F1,F2) if ~loc(F1).
+nonexecutable moveDown(F1,F2) if ~above(F2,F1).
+
+% Move down effects
+moveDown(F1,F2) causes ~loc(F1).
+moveDown(F1,F2) causes loc(F2).
+
+
+
+noconcurrency.
+
+:- query
+    0: isFloor(f0) & isFloor(f1) & above(f0,f1) &
+       origin(p0)=f0 & dest(p0)=f1 &
+       loc(f0) & ~loc(f1) &
+       ~passengerFlag(p0) & ~boarded(p0) & ~served(p0);
+    maxstep: served(p0).
+

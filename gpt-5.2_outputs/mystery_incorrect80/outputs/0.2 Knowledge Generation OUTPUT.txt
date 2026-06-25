@@ -1,0 +1,30 @@
+% An attack on an entity is not executable if that entity is not a province.
+% An attack on an entity is not executable if that entity is a planet.
+% An attack on an entity is not executable if harmony is present.
+% Attacking an entity causes pain on that entity to be removed.
+% Attacking an entity causes that entity to stop being a province.
+% Attacking an entity causes that entity to become a planet.
+% Attacking an entity causes harmony to become present.
+
+% Succumbing for an entity is not executable if that entity is in pain.
+% Succumbing for an entity causes that entity to stop being a province.
+% Succumbing for an entity causes harmony to be removed.
+% Succumbing for an entity causes that entity to stop being a planet.
+% Succumbing for an entity causes pain on that entity to be removed.
+
+% Overcoming by an entity over another entity is not executable if the second entity is a province.
+% Overcoming by an entity over another entity is not executable if the actor entity is in pain.
+% Overcoming by an entity over another entity causes harmony to be removed.
+% Overcoming by an entity over another entity causes the actor entity to stop being a province.
+% Overcoming by an entity over another entity causes any craving from the actor entity toward the second entity to be removed.
+% Overcoming by an entity over another entity causes the second entity to stop being a province.
+% Overcoming by an entity over another entity causes the actor entity to be put into pain.
+
+% Feasting by an entity on another entity is not executable if the actor entity craves the other entity.
+% Feasting by an entity on another entity is not executable if the actor entity is a province.
+% Feasting by an entity on another entity is not executable if harmony is absent.
+% Feasting by an entity on another entity causes the actor entity's pain to be removed.
+% Feasting by an entity on another entity causes the other entity to stop being a province.
+% Feasting by an entity on another entity causes the actor entity to crave the other entity.
+% Feasting by an entity on another entity causes the actor entity to stop being a province.
+% Feasting by an entity on another entity causes harmony to become present.

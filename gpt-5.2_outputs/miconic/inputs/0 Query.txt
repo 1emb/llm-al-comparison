@@ -1,0 +1,1 @@
+There is one passenger p0 and two floors f0 and f1. f0 is above f1. The origin of p0 is f1 and the destination of p0 is f0. The elevator is at f0. Find a plan to serve passenger p0.

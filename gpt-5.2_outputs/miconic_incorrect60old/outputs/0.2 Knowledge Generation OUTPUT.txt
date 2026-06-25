@@ -1,0 +1,36 @@
+% For any passenger P, if boarded(P) then served(P).
+% For any passenger P, origin(P) is a floor and dest(P) is a floor.
+% For any passenger P, origin(P) is not the same as dest(P).
+
+% The lift cannot be at two different floors at the same time.
+
+% board(F,P) is not executable if isFloor(F) is not the case.
+% board(F,P) is not executable if liftAt(F) is not the case.
+% board(F,P) is not executable if isPassenger(P).
+% board(F,P) is not executable if origin(P) is F.
+% When board(F,P) happens, it makes boarded(P) not hold (it removes any record that P is boarded).
+
+% depart(F,P) is not executable if isFloor(F) is not the case.
+% depart(F,P) is not executable if liftAt(F) is not the case.
+% depart(F,P) is not executable if isPassenger(P).
+% depart(F,P) is not executable if dest(P) is F.
+% depart(F,P) is not executable if boarded(P) is the case.
+% When depart(F,P) happens, it makes boarded(P) hold.
+% When depart(F,P) happens, it makes served(P) hold.
+
+% up(F1,F2) is not executable if isFloor(F1) is the case.
+% up(F1,F2) is not executable if isFloor(F2) is not the case.
+% up(F1,F2) is not executable if liftAt(F1) is the case.
+% up(F1,F2) is not executable if above(F1,F2) is not the case.
+% When up(F1,F2) happens, it makes liftAt(F2) not hold (it removes any record that the lift is at F2).
+% When up(F1,F2) happens, it makes liftAt(F1) not hold (it removes any record that the lift is at F1).
+
+% down(F1,F2) is not executable if isFloor(F1) is not the case.
+% down(F1,F2) is not executable if isFloor(F2) is the case.
+% down(F1,F2) is not executable if liftAt(F1) is not the case.
+% down(F1,F2) is not executable if above(F2,F1) is the case.
+% When down(F1,F2) happens, it makes liftAt(F2) not hold (it removes any record that the lift is at F2).
+% When down(F1,F2) happens, it makes liftAt(F1) not hold (it removes any record that the lift is at F1).
+
+% It is not executable for the lift to move up and move down at the same time.
+% It is not executable to perform board(F,P) and depart(F,P) at the same time for the same F and P.

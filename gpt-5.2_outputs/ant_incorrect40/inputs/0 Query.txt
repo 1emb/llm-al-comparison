@@ -1,0 +1,1 @@
+Ant ant1 is at p1. p1 is adjacent to p2 and p2 is adjacent to p1. p1 is clear and p2 is clear. p1 is the nest. Food is present at p2. Find a plan to bring the food to the nest.

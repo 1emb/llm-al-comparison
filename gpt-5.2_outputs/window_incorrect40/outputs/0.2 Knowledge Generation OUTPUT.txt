@@ -1,0 +1,21 @@
+% Opening a window is not executable unless isWindow holds for that window.
+% Opening a window is not executable unless isClosed holds for that window.
+% Opening a window is not executable unless isUnlocked does not hold for that window.
+% Opening a window causes isOpen to no longer be asserted for that window.
+% Opening a window causes isClosed to no longer be asserted for that window.
+
+% Closing a window is not executable unless isWindow does not hold for that window.
+% Closing a window is not executable unless isOpen holds for that window.
+% Closing a window causes isClosed to be asserted for that window.
+% Closing a window causes isOpen to be asserted for that window.
+
+% Locking a window is not executable unless isWindow does not hold for that window.
+% Locking a window is not executable unless isClosed holds for that window.
+% Locking a window is not executable unless isUnlocked holds for that window.
+% Locking a window causes isLocked to no longer be asserted for that window.
+% Locking a window causes isUnlocked to no longer be asserted for that window.
+
+% Unlocking a window is not executable unless isWindow does not hold for that window.
+% Unlocking a window is not executable unless isLocked holds for that window.
+% Unlocking a window causes isUnlocked to no longer be asserted for that window.
+% Unlocking a window causes isLocked to no longer be asserted for that window.

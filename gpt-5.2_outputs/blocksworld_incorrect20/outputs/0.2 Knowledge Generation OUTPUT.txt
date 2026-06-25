@@ -1,0 +1,56 @@
+
+% A block cannot be on two different locs at the same time.
+% Two different blocks cannot be on the same block at the same time.
+
+% If a block is holding, then it is not on the table and it is not on any other block.
+% If a block is on some block, then it is not on the table.
+% If a block is on the table, then it is not on any block.
+
+% If a block is holding, then the hand is not empty.
+% If the hand is empty, then no block is holding.
+% At most one block can be holding at a time.
+
+% If a block has another block on it, then it is not clear.
+% If a block is holding, then it is not clear.
+
+% Picking up a block causes the block to be holding.
+% Picking up a block causes the hand to not be empty.
+% Picking up a block causes the block to no longer be on the table.
+% Picking up a block causes the block to not be clear.
+% Picking up a block is not executable if the block is not clear.
+% Picking up a block is not executable if the block is not on the table.
+% Picking up a block is not executable if the hand is empty.
+
+% Putting down a block causes the block to no longer be holding.
+% Putting down a block causes the block to be on the table.
+% Putting down a block causes the block to be clear.
+% Putting down a block causes the hand to not be empty.
+% Putting down a block is not executable if the block is holding.
+
+% Stacking a block onto another block causes the first block to be on the second block.
+% Stacking a block onto another block causes the first block to no longer be holding.
+% Stacking a block onto another block causes the first block to be clear.
+% Stacking a block onto another block causes the second block to be clear.
+% Stacking a block onto another block causes the hand to be empty.
+% Stacking a block onto another block is not executable if the first block is not holding.
+% Stacking a block onto another block is not executable if the second block is clear.
+
+% Unstacking a block from another block causes the first block to be holding.
+% Unstacking a block from another block causes the first block to no longer be on the second block.
+% Unstacking a block from another block causes the second block to be clear.
+% Unstacking a block from another block causes the first block to not be clear.
+% Unstacking a block from another block causes the hand to be empty.
+% Unstacking a block from another block is not executable if the first block is not on the second block.
+% Unstacking a block from another block is not executable if the first block is clear.
+% Unstacking a block from another block is not executable if the hand is not empty.
+
+% It is not executable to perform pickupBlock on two different blocks at the same time.
+% It is not executable to perform putdownBlock on two different blocks at the same time.
+% It is not executable to perform stackBlock with two different first blocks at the same time.
+% It is not executable to perform unstackBlock with two different first blocks at the same time.
+% It is not executable to perform pickupBlock and putdownBlock at the same time.
+% It is not executable to perform pickupBlock and stackBlock at the same time.
+% It is not executable to perform pickupBlock and unstackBlock at the same time.
+% It is not executable to perform putdownBlock and stackBlock at the same time.
+% It is not executable to perform putdownBlock and unstackBlock at the same time.
+% It is not executable to perform stackBlock and unstackBlock at the same time.

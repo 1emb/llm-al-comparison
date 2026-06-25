@@ -1,0 +1,155 @@
+% Query 1: A legal move from p1 to p2 when p2 is clear and p1 is adjacent to p2. (satisfiable)
+:- query
+    0: loc(ant1)=p1
+       & adjacent(p1,p2) & adjacent(p2,p1)
+       & clear(p1) & clear(p2)
+       & isNest(p1) & ~isNest(p2)
+       & hasFood(p2) & ~hasFood(p1)
+       & ~carryingFood(ant1);
+    0: move(ant1,p1,p2);
+    maxstep: loc(ant1)=p2.
+
+Cplus2ASP Output:
+
+Solving...
+	
+
+	0:  clear(p1) clear(p2) hasFood(p2) isNest(p1) loc(ant1)=p1 adjacent(p1, p2) adjacent(p2, p1) adjacent(p2, p2)
+
+	ACTIONS:  move(ant1, p1, p2)
+
+	1:  clear(p1) clear(p2) hasFood(p2) isNest(p1) loc(ant1)=p2 adjacent(p1, p2) adjacent(p2, p1) adjacent(p2, p2)
+
+SATISFIABLE
+Models       : 1+
+
+
+% Query 2: Attempt to move from p1 to p2 when p1 is NOT adjacent to p2 (move should be blocked). (unsatisfiable)
+:- query
+    0: loc(ant1)=p1
+       & ~adjacent(p1,p2) & ~adjacent(p2,p1)
+       & clear(p1) & clear(p2)
+       & isNest(p1) & ~isNest(p2)
+       & hasFood(p2) & ~hasFood(p1)
+       & ~carryingFood(ant1);
+    0: move(ant1,p1,p2).
+
+Cplus2ASP Output:
+
+Solving...
+UNSATISFIABLE
+Models       : 0
+No solution.
+
+
+
+% Query 3: Pick up food at p2 while at p2 and not already carrying food. (satisfiable)
+:- query
+    0: loc(ant1)=p2
+       & adjacent(p1,p2) & adjacent(p2,p1)
+       & clear(p1) & clear(p2)
+       & isNest(p1) & ~isNest(p2)
+       & hasFood(p2) & ~hasFood(p1)
+       & ~carryingFood(ant1);
+    0: pickUpFood(ant1,p2);
+    maxstep: carryingFood(ant1) & ~hasFood(p2).
+
+Cplus2ASP Output:
+
+Solving...
+	
+
+	0:  clear(p1) clear(p2) hasFood(p2) isNest(p1) loc(ant1)=p2 adjacent(p1, p2) adjacent(p2, p1) adjacent(p2, p2)
+
+	ACTIONS:  pickUpFood(ant1, p2)
+
+	1:  carryingFood(ant1) clear(p1) clear(p2) isNest(p1) loc(ant1)=p2 adjacent(p1, p2) adjacent(p2, p1) adjacent(p2, p2)
+
+SATISFIABLE
+Models       : 1+
+
+
+% Query 4: Try to pick up food at p2 when p2 has no food (should be blocked). (unsatisfiable)
+:- query
+    0: loc(ant1)=p2
+       & adjacent(p1,p2) & adjacent(p2,p1)
+       & clear(p1) & clear(p2)
+       & isNest(p1) & ~isNest(p2)
+       & ~hasFood(p2) & ~hasFood(p1)
+       & ~carryingFood(ant1);
+    0: pickUpFood(ant1,p2).
+
+Cplus2ASP Output:
+
+Solving...
+UNSATISFIABLE
+Models       : 0
+No solution.
+
+
+
+% Query 5: Clear an obstacle at p2 while at p1, with p1 adjacent to p2 and p2 not clear. (satisfiable)
+:- query
+    0: loc(ant1)=p1
+       & adjacent(p1,p2) & adjacent(p2,p1)
+       & clear(p1) & ~clear(p2)
+       & isNest(p1) & ~isNest(p2)
+       & hasFood(p2) & ~hasFood(p1)
+       & ~carryingFood(ant1);
+    0: clearObstacle(ant1,p1,p2);
+    maxstep: clear(p2).
+
+Cplus2ASP Output:
+
+Solving...
+	
+
+	0:  clear(p1) hasFood(p2) isNest(p1) loc(ant1)=p1 adjacent(p1, p2) adjacent(p2, p1) adjacent(p2, p2)
+
+	ACTIONS:  clearObstacle(ant1, p1, p2)
+
+	1:  clear(p1) clear(p2) hasFood(p2) isNest(p1) loc(ant1)=p1 adjacent(p1, p2) adjacent(p2, p1) adjacent(p2, p2)
+
+SATISFIABLE
+Models       : 1+
+
+
+
+
+:- query
+    0: loc(ant1)=p1
+       & adjacent(p1,p2) & adjacent(p2,p1)
+       & clear(p1) & clear(p2)
+       & isNest(p1) & ~isNest(p2)
+       & hasFood(p2) & ~hasFood(p1)
+       & ~carryingFood(ant1);
+    maxstep: hasFood(p1).
+
+
+
+Cplus2ASP Output:
+
+Solving...
+	
+
+	0:  clear(p1) clear(p2) hasFood(p2) isNest(p1) loc(ant1)=p1 adjacent(p1, p2) adjacent(p2, p1) adjacent(p2, p2)
+
+	ACTIONS:  move(ant1, p1, p2)
+
+	1:  clear(p1) clear(p2) hasFood(p2) isNest(p1) loc(ant1)=p2 adjacent(p1, p2) adjacent(p2, p1) adjacent(p2, p2)
+
+	ACTIONS:  pickUpFood(ant1, p2)
+
+	2:  carryingFood(ant1) clear(p1) clear(p2) isNest(p1) loc(ant1)=p2 adjacent(p1, p2) adjacent(p2, p1) adjacent(p2, p2)
+
+	ACTIONS:  move(ant1, p2, p1)
+
+	3:  carryingFood(ant1) clear(p1) clear(p2) isNest(p1) loc(ant1)=p1 adjacent(p1, p2) adjacent(p2, p1) adjacent(p2, p2)
+
+	ACTIONS:  dropFoodAtNest(ant1, p1)
+
+	4:  clear(p1) clear(p2) hasFood(p1) isNest(p1) loc(ant1)=p1 adjacent(p1, p2) adjacent(p2, p1) adjacent(p2, p2)
+
+SATISFIABLE
+Models       : 1+
+

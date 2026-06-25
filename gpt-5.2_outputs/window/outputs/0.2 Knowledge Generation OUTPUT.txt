@@ -1,0 +1,24 @@
+% A window cannot be both open and closed at the same time.
+% A window cannot be both locked and unlocked at the same time.
+
+% Opening a window makes that window open.
+% Opening a window makes that window not closed.
+% Opening a window is not executable if the window is already open.
+% Opening a window is not executable if the window is not closed.
+% Opening a window is not executable if the window is not unlocked.
+
+% Closing a window makes that window closed.
+% Closing a window makes that window not open.
+% Closing a window is not executable if the window is already closed.
+% Closing a window is not executable if the window is not open.
+
+% Locking a window makes that window locked.
+% Locking a window makes that window not unlocked.
+% Locking a window is not executable if the window is already locked.
+% Locking a window is not executable if the window is not closed.
+% Locking a window is not executable if the window is not unlocked.
+
+% Unlocking a window makes that window unlocked.
+% Unlocking a window makes that window not locked.
+% Unlocking a window is not executable if the window is already unlocked.
+% Unlocking a window is not executable if the window is not locked.

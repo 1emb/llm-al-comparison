@@ -1,0 +1,146 @@
+% Query 1: Basic boarding works at the passenger's origin when the elevator is there and the floor is valid. (satisfiable)
+:- query
+    label :: q1_board_ok;
+    0: validFloor(f0) & validFloor(f1) & above(f0,f1) &
+       loc(f0) &
+       origin(p0)=f0 & dest(p0)=f1 &
+       ~passengerFlag(p0) & ~boarded(p0) & ~served(p0);
+    0: board(f0,p0).
+
+Cplus2ASP Output:
+
+Solving...
+	
+
+	0:  dest(p0)=f1 loc(f0) origin(p0)=f0 validFloor(f0) validFloor(f1) above(f0, f1)
+
+	ACTIONS:  board(f0, p0)
+
+	1:  boarded(p0) dest(p0)=f1 loc(f0) origin(p0)=f0 passengerFlag(p0) validFloor(f0) validFloor(f1) above(f0, f1)
+
+SATISFIABLE
+Models       : 1
+
+
+% Query 2: Boarding is not allowed at the wrong floor (origin mismatch). (unsatisfiable)
+:- query
+    label :: q2_board_wrong_floor;
+    0: validFloor(f0) & validFloor(f1) & above(f0,f1) &
+       loc(f1) &
+       origin(p0)=f0 & dest(p0)=f1 &
+       ~passengerFlag(p0) & ~boarded(p0) & ~served(p0);
+    0: board(f1,p0).
+
+Cplus2ASP Output:
+
+Solving...
+UNSATISFIABLE
+Models       : 0
+No solution.
+
+
+
+% Query 3: Depart is not allowed if the elevator is NOT at the departure floor. (unsatisfiable)
+:- query
+    label :: q3_depart_when_elevator_not_there;
+    0: validFloor(f0) & validFloor(f1) & above(f0,f1) &
+       loc(f0) &
+       origin(p0)=f0 & dest(p0)=f1 &
+       passengerFlag(p0) & boarded(p0) & ~served(p0);
+    0: depart(f1,p0).
+
+Cplus2ASP Output:
+
+Solving...
+UNSATISFIABLE
+Models       : 0
+No solution.
+
+
+
+% Query 4: A concrete serve plan per intended rules. (satisfiable)
+% CHANGED: use down(f0,f1) since above(f0,f1) means f0 is above f1.
+:- query
+    label :: q4_serve_plan;
+    0: validFloor(f0) & validFloor(f1) & above(f0,f1) &
+       loc(f0) &
+       origin(p0)=f0 & dest(p0)=f1 &
+       ~passengerFlag(p0) & ~boarded(p0) & ~served(p0);
+    0: board(f0,p0);
+    1: down(f0,f1);
+    2: depart(f1,p0);
+    maxstep: served(p0).
+
+Cplus2ASP Output:
+
+Solving...
+	
+
+	0:  dest(p0)=f1 loc(f0) origin(p0)=f0 validFloor(f0) validFloor(f1) above(f0, f1)
+
+	ACTIONS:  board(f0, p0)
+
+	1:  boarded(p0) dest(p0)=f1 loc(f0) origin(p0)=f0 passengerFlag(p0) validFloor(f0) validFloor(f1) above(f0, f1)
+
+	ACTIONS:  down(f0, f1)
+
+	2:  boarded(p0) dest(p0)=f1 loc(f1) origin(p0)=f0 passengerFlag(p0) validFloor(f0) validFloor(f1) above(f0, f1)
+
+	ACTIONS:  depart(f1, p0)
+
+	3:  dest(p0)=f1 loc(f1) origin(p0)=f0 passengerFlag(p0) served(p0) validFloor(f0) validFloor(f1) above(f0, f1)
+
+SATISFIABLE
+Models       : 1
+
+
+% Query 5: The elevator cannot be at two different floors in the same state. (unsatisfiable)
+:- query
+    label :: q5_unique_loc;
+    0: validFloor(f0) & validFloor(f1) & above(f0,f1) &
+       loc(f0) & loc(f1) &
+       origin(p0)=f0 & dest(p0)=f1 &
+       ~passengerFlag(p0) & ~boarded(p0) & ~served(p0).
+
+Cplus2ASP Output:
+
+Solving...
+UNSATISFIABLE
+Models       : 0
+No solution.
+
+
+
+
+
+:- query
+    0: validFloor(f0) & validFloor(f1) & above(f0,f1) &
+       origin(p0)=f0 & dest(p0)=f1 &
+       loc(f0) &
+       ~passengerFlag(p0) & ~boarded(p0) & ~served(p0);
+    maxstep: served(p0).
+
+
+
+Cplus2ASP Output:
+
+Solving...
+	
+
+	0:  dest(p0)=f1 loc(f0) origin(p0)=f0 validFloor(f0) validFloor(f1) above(f0, f1)
+
+	ACTIONS:  board(f0, p0)
+
+	1:  boarded(p0) dest(p0)=f1 loc(f0) origin(p0)=f0 passengerFlag(p0) validFloor(f0) validFloor(f1) above(f0, f1)
+
+	ACTIONS:  down(f0, f1)
+
+	2:  boarded(p0) dest(p0)=f1 loc(f1) origin(p0)=f0 passengerFlag(p0) validFloor(f0) validFloor(f1) above(f0, f1)
+
+	ACTIONS:  depart(f1, p0)
+
+	3:  dest(p0)=f1 loc(f1) origin(p0)=f0 passengerFlag(p0) served(p0) validFloor(f0) validFloor(f1) above(f0, f1)
+
+SATISFIABLE
+Models       : 1+
+

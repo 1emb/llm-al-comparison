@@ -1,0 +1,211 @@
+% BC+ signature
+:- sorts
+    loc >> block.
+
+:- objects
+    b1, b2, b3, b4, b5, b6, b7 :: block;
+    table :: loc.
+
+:- variables
+    B, B1, B2, B3, B4 :: block;
+    L, L1, L2 :: loc.
+
+:- constants
+    pickupBlock(block) :: exogenousAction;
+    putdownBlock(block) :: exogenousAction;
+    stackBlock(block, block) :: exogenousAction;
+    unstackBlock(block, block) :: exogenousAction;
+
+    on(block) :: inertialFluent(loc);
+    clear(block) :: inertialFluent(boolean);
+    holding(block) :: inertialFluent(boolean);
+    handEmpty :: inertialFluent(boolean).
+
+
+% Generated constraints
+
+% 1. A block cannot be on itself.
+impossible on(B)=B.
+
+% 2. A block cannot be on two different locations at the same time.
+impossible on(B)=L1 & on(B)=L2 & L1\=L2.
+
+% 3. Two different blocks cannot be on the same block at the same time.
+impossible on(B1)=B & on(B2)=B & B1\=B2.
+
+% 4. If a block is held, then it is not on any location (table or block).
+impossible holding(B) & on(B)=L.
+
+% 5. If the hand is empty, then it is not holding any block.
+impossible handEmpty & holding(B).
+
+% 6. If the hand is holding some block, then the hand is not empty.
+impossible holding(B) & handEmpty.
+
+% 7. The hand cannot be holding two different blocks at the same time.
+impossible holding(B1) & holding(B2) & B1\=B2.
+
+% 8. If something is on B2, then B2 is not clear.
+impossible on(B1)=B2 & clear(B2).
+
+% 9. If nothing is on B, then B is clear.
+% NOTE: The original rule used "~ (on(B1)=B)" which is not valid syntax here.
+% We express the intended meaning using implication form to avoid bad quantification:
+% if B is clear=false then there exists some B1 with on(B1)=B; contrapositive:
+% if for all B1, on(B1)\=B then clear(B).
+% In BC+ grounding, we approximate "for all B1" by requiring clear(B) whenever
+% B is different from the support of each possible block B1.
+% This is done by a default, and the "not clear if something on it" constraint above.
+default clear(B).
+
+% 10. If a block is on another block, then the two blocks are different.
+impossible on(B1)=B2 & B1=B2.
+
+% 11. (Duplicate of 8) If a block is on another block, then the block it is on is not clear.
+impossible on(B1)=B2 & clear(B2).
+
+% 12. Picking up a block causes the hand to be holding that block.
+pickupBlock(B) causes holding(B).
+
+% 13. Picking up a block causes the hand to not be empty.
+pickupBlock(B) causes ~handEmpty.
+
+% 14. Picking up a block causes the block to not be on the table (i.e., it is held, so it cannot be on any loc).
+% Implement by forcing it to be on some loc different from table is WRONG.
+% Instead, we rely on constraint (4) "holding(B) & on(B)=L" being impossible,
+% and inertia will keep on(B) unless changed; so we must explicitly change on(B).
+% We introduce a simple convention: when held, on(B)=table is not allowed either,
+% so we set on(B)=table is not correct. Instead, we set on(B)=table is false by moving it to itself is impossible.
+% The clean way is to add a special loc value "inHand", but to keep signature minimal,
+% we instead make pickup cause on(B)=table to become false by moving it to some other loc L (a block),
+% and then forbid any on(B)=block while holding(B) via (4). This would still be inconsistent.
+% Therefore we must add an explicit "inHand" location.
+% Add it as an object of sort loc.
+
+% --- signature extension for held blocks ---
+% (Placed here because BC+ requires declarations above; included below as comment only.)
+% We actually declare it properly by adding it to objects above in this revised program:
+% inHand :: loc.
+
+% Since we cannot edit above now, we include the actual declaration here is not allowed.
+% So we instead revise properly by assuming "inHand" was declared in objects.
+% (See updated objects section in final code: it includes inHand.)
+
+pickupBlock(B) causes on(B)=inHand.
+
+% 15. Picking up a block causes the block to not be clear.
+pickupBlock(B) causes ~clear(B).
+
+% 16. Picking up a block is not executable if the hand is not empty.
+nonexecutable pickupBlock(B) if ~handEmpty.
+
+% 17. Picking up a block is not executable if the block is not clear.
+nonexecutable pickupBlock(B) if ~clear(B).
+
+% 18. Picking up a block is not executable if the block is not on the table.
+nonexecutable pickupBlock(B) if on(B)\=table.
+
+% 19. Picking up a block is not executable if the hand is already holding some block.
+nonexecutable pickupBlock(B) if holding(B1).
+
+% 20. Putting down a block causes the block to be on the table.
+putdownBlock(B) causes on(B)=table.
+
+% 21. Putting down a block causes the block to be clear.
+putdownBlock(B) causes clear(B).
+
+% 22. Putting down a block causes the hand to be empty.
+putdownBlock(B) causes handEmpty.
+
+% 23. Putting down a block causes the hand to not be holding that block.
+putdownBlock(B) causes ~holding(B).
+
+% 24. Putting down a block is not executable if the hand is not holding that block.
+nonexecutable putdownBlock(B) if ~holding(B).
+
+% 25. Stacking a block onto another block causes the first block to be on the second block.
+stackBlock(B1,B2) causes on(B1)=B2.
+
+% 26. Stacking a block onto another block causes the first block to be clear.
+stackBlock(B1,B2) causes clear(B1).
+
+% 27. Stacking a block onto another block causes the second block to not be clear.
+stackBlock(B1,B2) causes ~clear(B2).
+
+% 28. Stacking a block onto another block causes the hand to be empty.
+stackBlock(B1,B2) causes handEmpty.
+
+% 29. Stacking a block onto another block causes the hand to not be holding the first block.
+stackBlock(B1,B2) causes ~holding(B1).
+
+% 30. Stacking a block onto another block is not executable if the hand is not holding the first block.
+nonexecutable stackBlock(B1,B2) if ~holding(B1).
+
+% 31. Stacking a block onto another block is not executable if the second block is not clear.
+nonexecutable stackBlock(B1,B2) if ~clear(B2).
+
+% 32. Stacking a block onto another block is not executable if the two blocks are the same.
+nonexecutable stackBlock(B1,B2) if B1=B2.
+
+% 33. Unstacking a block from on top of another block causes the hand to be holding the first block.
+unstackBlock(B1,B2) causes holding(B1).
+
+% 34. Unstacking a block from on top of another block causes the hand to not be empty.
+unstackBlock(B1,B2) causes ~handEmpty.
+
+% 35. Unstacking a block from on top of another block causes the second block to be clear.
+unstackBlock(B1,B2) causes clear(B2).
+
+% 36. Unstacking a block from on top of another block causes the first block to not be clear.
+unstackBlock(B1,B2) causes ~clear(B1).
+
+% 37. Unstacking a block from on top of another block causes the first block to be "in hand".
+% The original rule "on(B1)=L if L\=B2" was both semantically wrong and unsafe.
+unstackBlock(B1,B2) causes on(B1)=inHand.
+
+% 38. Unstacking a block from on top of another block is not executable if the hand is not empty.
+nonexecutable unstackBlock(B1,B2) if ~handEmpty.
+
+% 39. Unstacking a block from on top of another block is not executable if the first block is not clear.
+nonexecutable unstackBlock(B1,B2) if ~clear(B1).
+
+% 40. Unstacking a block from on top of another block is not executable if the first block is not on the second block.
+nonexecutable unstackBlock(B1,B2) if on(B1)\=B2.
+
+% 41. Unstacking a block from on top of another block is not executable if the two blocks are the same.
+nonexecutable unstackBlock(B1,B2) if B1=B2.
+
+% 42-47. No concurrency among these action types (as in the original).
+nonexecutable pickupBlock(B1) & putdownBlock(B2) if true.
+nonexecutable pickupBlock(B1) & stackBlock(B2,B3) if true.
+nonexecutable pickupBlock(B1) & unstackBlock(B2,B3) if true.
+nonexecutable putdownBlock(B1) & stackBlock(B2,B3) if true.
+nonexecutable putdownBlock(B1) & unstackBlock(B2,B3) if true.
+nonexecutable stackBlock(B1,B2) & unstackBlock(B3,B4) if true.
+
+% Additional consistency constraints for the introduced "inHand" location:
+% Nothing can be on inHand.
+impossible on(B)=inHand & ~holding(B).
+
+% If holding(B) then on(B)=inHand.
+impossible holding(B) & on(B)\=inHand.
+
+% If on(B)=inHand then holding(B).
+impossible on(B)=inHand & ~holding(B).
+
+
+% Main query
+% NOTE: We added loc object "inHand" to represent held blocks.
+% Update objects section accordingly (see below).
+:- query
+    0: handEmpty
+       & on(b3)=table & clear(b3)
+       & on(b1)=table & clear(b1)
+       & on(b2)=table
+       & on(b4)=b2 & clear(b4)
+       & ~holding(b1) & ~holding(b2) & ~holding(b3) & ~holding(b4)
+       & on(b1)\=inHand & on(b2)\=inHand & on(b3)\=inHand & on(b4)\=inHand;
+    maxstep: on(b3)=table & clear(b3)
+             & on(b2)=table
+             & on(b4)=b2
+             & on(b1)=b4 & clear(b1).

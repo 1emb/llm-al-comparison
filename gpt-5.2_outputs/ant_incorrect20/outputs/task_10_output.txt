@@ -1,0 +1,112 @@
+Objects:
+:- objects
+    ant1 :: ant;
+    p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11 :: place.
+
+Query:
+:- query
+    0: loc(ant1)=p1 & carryingFood(ant1)=false & isNest(p1)=true & isNest(p2)=false & isNest(p3)=false & isNest(p4)=false & isNest(p5)=false & isNest(p6)=false & isNest(p7)=false & isNest(p8)=false & isNest(p9)=false & isNest(p10)=false & isNest(p11)=false & adjacent(p1,p1)=false & adjacent(p1,p2)=true & adjacent(p1,p3)=false & adjacent(p1,p4)=false & adjacent(p1,p5)=false & adjacent(p1,p6)=false & adjacent(p1,p7)=false & adjacent(p1,p8)=false & adjacent(p1,p9)=false & adjacent(p1,p10)=false & adjacent(p1,p11)=false & adjacent(p2,p1)=true & adjacent(p2,p2)=false & adjacent(p2,p3)=true & adjacent(p2,p4)=false & adjacent(p2,p5)=false & adjacent(p2,p6)=false & adjacent(p2,p7)=false & adjacent(p2,p8)=false & adjacent(p2,p9)=false & adjacent(p2,p10)=false & adjacent(p2,p11)=false & adjacent(p3,p1)=false & adjacent(p3,p2)=true & adjacent(p3,p3)=false & adjacent(p3,p4)=true & adjacent(p3,p5)=false & adjacent(p3,p6)=false & adjacent(p3,p7)=false & adjacent(p3,p8)=false & adjacent(p3,p9)=false & adjacent(p3,p10)=false & adjacent(p3,p11)=false & adjacent(p4,p1)=false & adjacent(p4,p2)=false & adjacent(p4,p3)=true & adjacent(p4,p4)=false & adjacent(p4,p5)=true & adjacent(p4,p6)=false & adjacent(p4,p7)=false & adjacent(p4,p8)=false & adjacent(p4,p9)=false & adjacent(p4,p10)=false & adjacent(p4,p11)=false & adjacent(p5,p1)=false & adjacent(p5,p2)=false & adjacent(p5,p3)=false & adjacent(p5,p4)=true & adjacent(p5,p5)=false & adjacent(p5,p6)=true & adjacent(p5,p7)=false & adjacent(p5,p8)=false & adjacent(p5,p9)=false & adjacent(p5,p10)=false & adjacent(p5,p11)=false & adjacent(p6,p1)=false & adjacent(p6,p2)=false & adjacent(p6,p3)=false & adjacent(p6,p4)=false & adjacent(p6,p5)=true & adjacent(p6,p6)=false & adjacent(p6,p7)=true & adjacent(p6,p8)=false & adjacent(p6,p9)=false & adjacent(p6,p10)=false & adjacent(p6,p11)=false & adjacent(p7,p1)=false & adjacent(p7,p2)=false & adjacent(p7,p3)=false & adjacent(p7,p4)=false & adjacent(p7,p5)=false & adjacent(p7,p6)=true & adjacent(p7,p7)=false & adjacent(p7,p8)=true & adjacent(p7,p9)=false & adjacent(p7,p10)=false & adjacent(p7,p11)=false & adjacent(p8,p1)=false & adjacent(p8,p2)=false & adjacent(p8,p3)=false & adjacent(p8,p4)=false & adjacent(p8,p5)=false & adjacent(p8,p6)=false & adjacent(p8,p7)=true & adjacent(p8,p8)=false & adjacent(p8,p9)=true & adjacent(p8,p10)=false & adjacent(p8,p11)=false & adjacent(p9,p1)=false & adjacent(p9,p2)=false & adjacent(p9,p3)=false & adjacent(p9,p4)=false & adjacent(p9,p5)=false & adjacent(p9,p6)=false & adjacent(p9,p7)=false & adjacent(p9,p8)=true & adjacent(p9,p9)=false & adjacent(p9,p10)=true & adjacent(p9,p11)=false & adjacent(p10,p1)=false & adjacent(p10,p2)=false & adjacent(p10,p3)=false & adjacent(p10,p4)=false & adjacent(p10,p5)=false & adjacent(p10,p6)=false & adjacent(p10,p7)=false & adjacent(p10,p8)=false & adjacent(p10,p9)=true & adjacent(p10,p10)=false & adjacent(p10,p11)=true & adjacent(p11,p1)=false & adjacent(p11,p2)=false & adjacent(p11,p3)=false & adjacent(p11,p4)=false & adjacent(p11,p5)=false & adjacent(p11,p6)=false & adjacent(p11,p7)=false & adjacent(p11,p8)=false & adjacent(p11,p9)=false & adjacent(p11,p10)=true & adjacent(p11,p11)=false & clear(p1)=true & clear(p2)=true & clear(p3)=true & clear(p4)=false & clear(p5)=true & clear(p6)=true & clear(p7)=false & clear(p8)=true & clear(p9)=true & clear(p10)=false & clear(p11)=true & hasFood(p1)=false & hasFood(p2)=false & hasFood(p3)=false & hasFood(p4)=false & hasFood(p5)=false & hasFood(p6)=false & hasFood(p7)=false & hasFood(p8)=false & hasFood(p9)=false & hasFood(p10)=false & hasFood(p11)=true;
+    maxstep: hasFood(p1)=true.
+
+Status: True
+
+Output:
+Solving...
+Solution: 1 (Time: 1.517s)
+	
+
+	0:  clear(p1) clear(p11) clear(p2) clear(p3) clear(p5) clear(p6) clear(p8) clear(p9) hasFood(p11) isNest(p1) loc(ant1)=p1 adjacent(p1, p2) adjacent(p10, p11) adjacent(p10, p9) adjacent(p11, p10) adjacent(p2, p1) adjacent(p2, p3) adjacent(p3, p2) adjacent(p3, p4) adjacent(p4, p3) adjacent(p4, p5) adjacent(p5, p4) adjacent(p5, p6) adjacent(p6, p5) adjacent(p6, p7) adjacent(p7, p6) adjacent(p7, p8) adjacent(p8, p7) adjacent(p8, p9) adjacent(p9, p10) adjacent(p9, p8)
+
+	ACTIONS:  move(ant1, p1, p2)
+
+	1:  clear(p3) clear(p5) hasFood(p11) isNest(p1) loc(ant1)=p2 adjacent(p10, p11) adjacent(p10, p9) adjacent(p11, p10) adjacent(p2, p1) adjacent(p2, p3) adjacent(p3, p2) adjacent(p3, p4) adjacent(p4, p3) adjacent(p4, p5) adjacent(p5, p4) adjacent(p5, p6) adjacent(p6, p5) adjacent(p6, p7) adjacent(p7, p6) adjacent(p7, p8) adjacent(p8, p7) adjacent(p8, p9) adjacent(p9, p10) adjacent(p9, p8)
+
+	ACTIONS:  move(ant1, p2, p3)
+
+	2:  clear(p4) hasFood(p11) isNest(p1) loc(ant1)=p3 adjacent(p10, p11) adjacent(p10, p9) adjacent(p11, p10) adjacent(p2, p1) adjacent(p3, p2) adjacent(p3, p4) adjacent(p4, p3) adjacent(p4, p5) adjacent(p5, p4) adjacent(p5, p6) adjacent(p6, p5) adjacent(p6, p7) adjacent(p7, p6) adjacent(p7, p8) adjacent(p8, p7) adjacent(p8, p9) adjacent(p9, p10) adjacent(p9, p8)
+
+	ACTIONS:  move(ant1, p3, p4)
+
+	3:  clear(p5) hasFood(p11) isNest(p1) loc(ant1)=p4 adjacent(p10, p11) adjacent(p10, p9) adjacent(p11, p10) adjacent(p2, p1) adjacent(p3, p2) adjacent(p4, p3) adjacent(p4, p5) adjacent(p5, p4) adjacent(p5, p6) adjacent(p6, p5) adjacent(p6, p7) adjacent(p7, p6) adjacent(p7, p8) adjacent(p8, p7) adjacent(p8, p9) adjacent(p9, p10) adjacent(p9, p8)
+
+	ACTIONS:  move(ant1, p4, p5)
+
+	4:  clear(p6) hasFood(p11) isNest(p1) loc(ant1)=p5 adjacent(p10, p11) adjacent(p10, p9) adjacent(p11, p10) adjacent(p2, p1) adjacent(p3, p2) adjacent(p4, p3) adjacent(p5, p4) adjacent(p5, p6) adjacent(p6, p5) adjacent(p6, p7) adjacent(p7, p6) adjacent(p7, p8) adjacent(p8, p7) adjacent(p8, p9) adjacent(p9, p10) adjacent(p9, p8)
+
+	ACTIONS:  move(ant1, p5, p6)
+
+	5:  clear(p7) hasFood(p11) isNest(p1) loc(ant1)=p6 adjacent(p10, p11) adjacent(p10, p9) adjacent(p11, p10) adjacent(p2, p1) adjacent(p3, p2) adjacent(p4, p3) adjacent(p5, p4) adjacent(p6, p5) adjacent(p6, p7) adjacent(p7, p6) adjacent(p7, p8) adjacent(p8, p7) adjacent(p8, p9) adjacent(p9, p10) adjacent(p9, p8)
+
+	ACTIONS:  move(ant1, p6, p7)
+
+	6:  clear(p8) hasFood(p11) isNest(p1) loc(ant1)=p7 adjacent(p10, p11) adjacent(p10, p9) adjacent(p11, p10) adjacent(p2, p1) adjacent(p3, p2) adjacent(p4, p3) adjacent(p5, p4) adjacent(p6, p5) adjacent(p7, p6) adjacent(p7, p8) adjacent(p8, p7) adjacent(p8, p9) adjacent(p9, p10) adjacent(p9, p8)
+
+	ACTIONS:  move(ant1, p7, p8)
+
+	7:  clear(p9) hasFood(p11) isNest(p1) loc(ant1)=p8 adjacent(p10, p11) adjacent(p10, p9) adjacent(p11, p10) adjacent(p2, p1) adjacent(p3, p2) adjacent(p4, p3) adjacent(p5, p4) adjacent(p6, p5) adjacent(p7, p6) adjacent(p8, p7) adjacent(p8, p9) adjacent(p9, p10) adjacent(p9, p8)
+
+	ACTIONS:  move(ant1, p8, p9)
+
+	8:  clear(p10) hasFood(p11) isNest(p1) loc(ant1)=p9 adjacent(p10, p11) adjacent(p10, p9) adjacent(p11, p10) adjacent(p2, p1) adjacent(p3, p2) adjacent(p4, p3) adjacent(p5, p4) adjacent(p6, p5) adjacent(p7, p6) adjacent(p8, p7) adjacent(p9, p10) adjacent(p9, p8)
+
+	ACTIONS:  move(ant1, p9, p10)
+
+	9:  clear(p11) hasFood(p11) isNest(p1) loc(ant1)=p10 adjacent(p10, p11) adjacent(p10, p9) adjacent(p11, p10) adjacent(p2, p1) adjacent(p3, p2) adjacent(p4, p3) adjacent(p5, p4) adjacent(p6, p5) adjacent(p7, p6) adjacent(p8, p7) adjacent(p9, p8)
+
+	ACTIONS:  move(ant1, p10, p11)
+
+	10:  hasFood(p11) isNest(p1) loc(ant1)=p11 adjacent(p10, p9) adjacent(p11, p10) adjacent(p2, p1) adjacent(p3, p2) adjacent(p4, p3) adjacent(p5, p4) adjacent(p6, p5) adjacent(p7, p6) adjacent(p8, p7) adjacent(p9, p8)
+
+	ACTIONS:  pickUpFood(ant1, p11)
+
+	11:  carryingFood(ant1) clear(p10) isNest(p1) loc(ant1)=p11 adjacent(p10, p9) adjacent(p11, p10) adjacent(p2, p1) adjacent(p3, p2) adjacent(p4, p3) adjacent(p5, p4) adjacent(p6, p5) adjacent(p7, p6) adjacent(p8, p7) adjacent(p9, p8)
+
+	ACTIONS:  move(ant1, p11, p10)
+
+	12:  carryingFood(ant1) clear(p9) isNest(p1) loc(ant1)=p10 adjacent(p10, p9) adjacent(p2, p1) adjacent(p3, p2) adjacent(p4, p3) adjacent(p5, p4) adjacent(p6, p5) adjacent(p7, p6) adjacent(p8, p7) adjacent(p9, p8)
+
+	ACTIONS:  move(ant1, p10, p9)
+
+	13:  carryingFood(ant1) clear(p8) isNest(p1) loc(ant1)=p9 adjacent(p2, p1) adjacent(p3, p2) adjacent(p4, p3) adjacent(p5, p4) adjacent(p6, p5) adjacent(p7, p6) adjacent(p8, p7) adjacent(p9, p8)
+
+	ACTIONS:  move(ant1, p9, p8)
+
+	14:  carryingFood(ant1) clear(p7) isNest(p1) loc(ant1)=p8 adjacent(p2, p1) adjacent(p3, p2) adjacent(p4, p3) adjacent(p5, p4) adjacent(p6, p5) adjacent(p7, p6) adjacent(p8, p7)
+
+	ACTIONS:  move(ant1, p8, p7)
+
+	15:  carryingFood(ant1) clear(p6) isNest(p1) loc(ant1)=p7 adjacent(p2, p1) adjacent(p3, p2) adjacent(p4, p3) adjacent(p5, p4) adjacent(p6, p5) adjacent(p7, p6)
+
+	ACTIONS:  move(ant1, p7, p6)
+
+	16:  carryingFood(ant1) clear(p5) isNest(p1) loc(ant1)=p6 adjacent(p2, p1) adjacent(p3, p2) adjacent(p4, p3) adjacent(p5, p4) adjacent(p6, p5)
+
+	ACTIONS:  move(ant1, p6, p5)
+
+	17:  carryingFood(ant1) clear(p4) isNest(p1) loc(ant1)=p5 adjacent(p2, p1) adjacent(p3, p2) adjacent(p4, p3) adjacent(p5, p4)
+
+	ACTIONS:  move(ant1, p5, p4)
+
+	18:  carryingFood(ant1) clear(p3) isNest(p1) loc(ant1)=p4 adjacent(p2, p1) adjacent(p3, p2) adjacent(p4, p3)
+
+	ACTIONS:  move(ant1, p4, p3)
+
+	19:  carryingFood(ant1) clear(p2) isNest(p1) loc(ant1)=p3 adjacent(p2, p1) adjacent(p3, p2)
+
+	ACTIONS:  move(ant1, p3, p2)
+
+	20:  carryingFood(ant1) clear(p1) isNest(p1) loc(ant1)=p2 adjacent(p2, p1)
+
+	ACTIONS:  move(ant1, p2, p1)
+
+	21:  carryingFood(ant1) isNest(p1) loc(ant1)=p1
+
+	ACTIONS:  dropFoodAtNest(ant1, p1)
+
+	22:  hasFood(p1) loc(ant1)=p1
+
+SATISFIABLE
+Models       : 1+
+Calls        : 23
+Time         : 1.513s (Solving: 0.02s 1st Model: 0.00s Unsat: 0.01s)
+CPU Time     : 1.512s

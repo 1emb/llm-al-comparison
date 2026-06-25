@@ -1,0 +1,201 @@
+% PROGRAM CHANGED? [CHANGED]
+% BC+ signature
+:- sorts
+    ant;
+    place.
+
+:- objects
+    ant1 :: ant;
+    p1, p2 :: place.
+
+:- variables
+    A, A1, A2 :: ant;
+    P, P1, P2, P3, P4 :: place.
+
+:- constants
+    move(ant, place, place) :: exogenousAction;
+    pickUpFood(ant, place) :: exogenousAction;
+    dropFoodAtNest(ant, place) :: exogenousAction;
+    clearObstacle(ant, place, place) :: exogenousAction;
+
+    loc(ant) :: inertialFluent(place);
+    adj(place, place) :: inertialFluent(boolean);
+    clear(place) :: inertialFluent(boolean);
+    hasFood(place) :: inertialFluent(boolean);
+    isNest(place) :: inertialFluent(boolean);
+    carryingFood(ant) :: inertialFluent(boolean).
+
+% Generated constraints
+
+% 1. An ant is at exactly one place at a time.
+impossible loc(A)=P1 & loc(A)=P2 & P1\=P2.
+
+% 2. Moving an ant from a starting place to a destination place causes the ant's current place to become the destination place.
+move(A,P1,P2) causes loc(A)=P2.
+
+% 3. The move action is not executable if the ant is not at the stated starting place.
+nonexecutable move(A,P1,P2) if loc(A)\=P1.
+
+% 4. The move action is not executable if the stated starting place is not adjacent to the stated destination place.
+nonexecutable move(A,P1,P2) if ~adj(P1,P2).
+
+% 5. The move action is not executable if the stated destination place is not clear.
+nonexecutable move(A,P1,P2) if ~clear(P2).
+
+% 6. Picking up food at a place causes the ant to become marked as carrying food.
+pickUpFood(A,P) causes carryingFood(A).
+
+% 7. Picking up food at a place causes that place to no longer have food.
+pickUpFood(A,P) causes ~hasFood(P).
+
+% 8. The pick-up-food action is not executable if the ant is not at the stated place.
+nonexecutable pickUpFood(A,P) if loc(A)\=P.
+
+% 9. The pick-up-food action is not executable if the stated place does not have food.
+nonexecutable pickUpFood(A,P) if ~hasFood(P).
+
+% 10. The pick-up-food action is not executable if the ant is already marked as carrying food.
+nonexecutable pickUpFood(A,P) if carryingFood(A).
+
+% 11. Dropping food at a nest place causes the ant to no longer be marked as carrying food.
+dropFoodAtNest(A,P) causes ~carryingFood(A).
+
+% 12. Dropping food at a nest place causes that nest place to have food.
+dropFoodAtNest(A,P) causes hasFood(P).
+
+% 13. The drop-food-at-nest action is not executable if the ant is not at the stated place.
+nonexecutable dropFoodAtNest(A,P) if loc(A)\=P.
+
+% 14. The drop-food-at-nest action is not executable if the stated place is not a nest.
+nonexecutable dropFoodAtNest(A,P) if ~isNest(P).
+
+% 15. The drop-food-at-nest action is not executable if the ant is marked as carrying food.
+nonexecutable dropFoodAtNest(A,P) if carryingFood(A).
+
+% 16-19. Clearing an obstacle:
+% Natural language says: executable when blocked place is NOT clear; after it happens, blocked place becomes clear.
+clearObstacle(A,P1,P2) causes clear(P2).
+nonexecutable clearObstacle(A,P1,P2) if loc(A)\=P1.
+nonexecutable clearObstacle(A,P1,P2) if ~adj(P1,P2).
+nonexecutable clearObstacle(A,P1,P2) if clear(P2).
+
+% 20. No two different actions at the same time step (no concurrency).
+nonexecutable move(A1,P1,P2) & pickUpFood(A2,P3) if true.
+nonexecutable move(A1,P1,P2) & dropFoodAtNest(A2,P3) if true.
+nonexecutable move(A1,P1,P2) & clearObstacle(A2,P3,P4) if true.
+nonexecutable pickUpFood(A1,P1) & dropFoodAtNest(A2,P2) if true.
+nonexecutable pickUpFood(A1,P1) & clearObstacle(A2,P2,P3) if true.
+nonexecutable dropFoodAtNest(A1,P1) & clearObstacle(A2,P2,P3) if true.
+
+% Added to prevent the solver from "guessing" extra initial facts that trivialize the goal.
+default ~hasFood(P).
+default ~carryingFood(A).
+
+% Prevent the solver from freely setting unspecified adjacency facts (e.g., adj(p1,p1), adj(p2,p2)).
+default ~adj(P1,P2).
+
+% Prevent the solver from freely setting unspecified clear/isNest facts that can trivialize plans.
+default ~clear(P).
+default ~isNest(P).
+
+% [FIX] Remove the incorrect static law:
+% hasFood(P) if loc(A)=P & carryingFood(A).
+% That law makes food "follow" any carrying ant in every state, which blocks pickUpFood
+% (because pickUpFood causes ~hasFood(P) while the static law re-derives hasFood(P)).
+% It also allowed the solver to satisfy hasFood(p1) without a proper drop in some cases.
+
+% [FIX] Instead, prevent "magic" creation of food at a nest by requiring that if a nest has food,
+% then some ant must be at that nest and not carrying food (i.e., food has been dropped there).
+hasFood(P) -> (isNest(P) & loc(A)=P & ~carryingFood(A)).
+
+% MAIN QUERY CHANGED? [UNCHANGED]
+:- query
+    0: loc(ant1)=p1
+       & adj(p1,p2) & adj(p2,p1)
+       & ~adj(p1,p1) & ~adj(p2,p2)
+       & clear(p1) & clear(p2)
+       & isNest(p1)
+       & hasFood(p2)
+       & ~hasFood(p1)
+       & ~carryingFood(ant1);
+    maxstep: hasFood(p1).
+
+% SAMPLE QUERIES CHANGED? [CHANGED]
+% Query 1: Simple move from p1 to p2 when adjacent and destination is clear (satisfiable)
+:- query
+    0: loc(ant1)=p1
+       & adj(p1,p2) & adj(p2,p1)
+       & ~adj(p1,p1) & ~adj(p2,p2)
+       & clear(p1) & clear(p2)
+       & isNest(p1)
+       & hasFood(p2)
+       & ~hasFood(p1)
+       & ~carryingFood(ant1);
+    0: move(ant1,p1,p2);
+    maxstep: loc(ant1)=p2.
+
+% Query 2: Attempt to move from the wrong starting place (ant is at p1 but action says start p2) (unsatisfiable)
+:- query
+    0: loc(ant1)=p1
+       & adj(p1,p2) & adj(p2,p1)
+       & ~adj(p1,p1) & ~adj(p2,p2)
+       & clear(p1) & clear(p2)
+       & isNest(p1)
+       & hasFood(p2)
+       & ~hasFood(p1)
+       & ~carryingFood(ant1);
+    0: move(ant1,p2,p1).
+
+% Query 3: Attempt to move into a destination that is not clear (unsatisfiable)
+:- query
+    0: loc(ant1)=p1
+       & adj(p1,p2) & adj(p2,p1)
+       & ~adj(p1,p1) & ~adj(p2,p2)
+       & clear(p1) & ~clear(p2)
+       & isNest(p1)
+       & hasFood(p2)
+       & ~hasFood(p1)
+       & ~carryingFood(ant1);
+    0: move(ant1,p1,p2).
+
+% Query 4: Pick up food at p2 after moving there; food at p2 should be gone and ant should be carrying food (satisfiable)
+:- query
+    0: loc(ant1)=p1
+       & adj(p1,p2) & adj(p2,p1)
+       & ~adj(p1,p1) & ~adj(p2,p2)
+       & clear(p1) & clear(p2)
+       & isNest(p1)
+       & hasFood(p2)
+       & ~hasFood(p1)
+       & ~carryingFood(ant1);
+    0: move(ant1,p1,p2);
+    1: pickUpFood(ant1,p2);
+    maxstep: carryingFood(ant1) & ~hasFood(p2) & loc(ant1)=p2.
+
+% Query 5: Try to execute two different actions in the same step (move and pick up) (unsatisfiable)
+:- query
+    0: loc(ant1)=p1
+       & adj(p1,p2) & adj(p2,p1)
+       & ~adj(p1,p1) & ~adj(p2,p2)
+       & clear(p1) & clear(p2)
+       & isNest(p1)
+       & hasFood(p2)
+       & ~hasFood(p1)
+       & ~carryingFood(ant1);
+    0: move(ant1,p1,p2) & pickUpFood(ant1,p1).
+
+% Query 6 (main-task-like): pick up at p2 then drop at nest p1 (satisfiable)
+:- query
+    0: loc(ant1)=p1
+       & adj(p1,p2) & adj(p2,p1)
+       & ~adj(p1,p1) & ~adj(p2,p2)
+       & clear(p1) & clear(p2)
+       & isNest(p1)
+       & hasFood(p2)
+       & ~hasFood(p1)
+       & ~carryingFood(ant1);
+    0: move(ant1,p1,p2);
+    1: pickUpFood(ant1,p2);
+    2: move(ant1,p2,p1);
+    3: dropFoodAtNest(ant1,p1);
+    maxstep: hasFood(p1) & ~carryingFood(ant1) & ~hasFood(p2) & loc(ant1)=p1.

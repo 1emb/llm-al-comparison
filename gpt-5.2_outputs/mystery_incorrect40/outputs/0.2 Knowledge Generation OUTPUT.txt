@@ -1,0 +1,30 @@
+% An attack on an entity is not executable unless the entity is a province.
+% An attack on an entity is not executable if the entity is a planet.
+% An attack on an entity is not executable unless harmony holds.
+% Attacking an entity causes that entity to be in pain.
+% Attacking an entity causes that entity to be a province.
+% Attacking an entity causes that entity to be a planet.
+% Attacking an entity causes harmony to not hold.
+
+% To succumb with respect to an entity is not executable if that entity is in pain.
+% Succumbing with respect to an entity causes that entity to be a province.
+% Succumbing with respect to an entity causes harmony to not hold.
+% Succumbing with respect to an entity causes that entity to be a planet.
+% Succumbing with respect to an entity causes that entity to be in pain.
+
+% To overcome by one entity over another is not executable unless the second entity is not a province.
+% To overcome by one entity over another is not executable unless the first entity is in pain.
+% Overcoming by one entity over another causes harmony to hold.
+% Overcoming by one entity over another causes the first entity to be a province.
+% Overcoming by one entity over another causes the first entity to not crave the second entity.
+% Overcoming by one entity over another causes the second entity to not be a province.
+% Overcoming by one entity over another causes the first entity to be in pain.
+
+% To feast by one entity on another is not executable if the first entity craves the second entity.
+% To feast by one entity on another is not executable unless the first entity is a province.
+% To feast by one entity on another is not executable unless harmony holds.
+% Feasting by one entity on another causes the first entity to not be in pain.
+% Feasting by one entity on another causes the second entity to be a province.
+% Feasting by one entity on another causes the first entity to not crave the second entity.
+% Feasting by one entity on another causes the first entity to not be a province.
+% Feasting by one entity on another causes harmony to hold.

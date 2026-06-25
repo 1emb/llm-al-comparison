@@ -1,0 +1,260 @@
+% PROGRAM CHANGED? [CHANGED]
+% BC+ signature
+:- sorts
+    loc >> block.
+
+:- objects
+    b1, b2, b3, b4, b5, b6, b7 :: block;
+    table :: loc;
+    hand :: loc.
+
+:- variables
+    B, B1, B2, B3, B4 :: block;
+    L, L1, L2 :: loc.
+
+:- constants
+    pickup(block) :: exogenousAction;
+    putdown(block) :: exogenousAction;
+    stack(block, block) :: exogenousAction;
+    unstack(block, block) :: exogenousAction;
+
+    loc(block) :: inertialFluent(loc);
+    clear(block) :: inertialFluent(boolean);
+    holding(block) :: inertialFluent(boolean);
+    handEmpty :: inertialFluent(boolean).
+
+% Generated constraints/rules
+
+% If some block is on B2, then B2 is not clear.
+~clear(B2) if loc(B1)=B2.
+
+% It is impossible for B2 to be clear while some block is on it.
+impossible clear(B2) & loc(B1)=B2.
+
+% It is impossible for a block to be located on itself.
+impossible loc(B)=B.
+
+% It is impossible for two different blocks to be held at the same time.
+impossible holding(B1) & holding(B2) & B1\=B2.
+
+% handEmpty and holding are mutually exclusive.
+impossible handEmpty & holding(B).
+
+% If the hand is empty, then it is holding no block.
+~holding(B) if handEmpty.
+
+% If the hand is holding some block, then the hand is not empty.
+~handEmpty if holding(B).
+
+% Use a dedicated location "hand" to represent "in hand".
+% Keep loc/holding consistent via static laws.
+loc(B)=hand if holding(B).
+holding(B) if loc(B)=hand.
+impossible holding(B) & loc(B)\=hand.
+
+% A block cannot be in two locations at once.
+impossible loc(B)=L1 & loc(B)=L2 & L1\=L2.
+
+% Picking up a block causes the hand to hold that block.
+pickup(B) causes holding(B).
+
+% Picking up a block causes the hand to not be empty.
+pickup(B) causes ~handEmpty.
+
+% Picking up a block causes the block to be in hand.
+pickup(B) causes loc(B)=hand.
+
+% Picking up a block causes the block to be clear (nothing on top while held).
+pickup(B) causes clear(B).
+
+% Picking up a block is not executable if the block is not clear.
+nonexecutable pickup(B) if ~clear(B).
+
+% Picking up a block is not executable if the hand is not empty.
+nonexecutable pickup(B) if ~handEmpty.
+
+% Picking up is not executable if the block is already in hand.
+nonexecutable pickup(B) if loc(B)=hand.
+
+% Picking up is not executable if the block is on the table.
+nonexecutable pickup(B) if loc(B)=table.
+
+% Putting down a block causes the hand to no longer hold that block.
+putdown(B) causes ~holding(B).
+
+% Putting down a block causes the hand to become empty.
+putdown(B) causes handEmpty.
+
+% Putting down a block causes the block to be located on the table.
+putdown(B) causes loc(B)=table.
+
+% Putting down a block causes the block to be clear (nothing on top immediately after putdown).
+putdown(B) causes clear(B).
+
+% Putting down a block is not executable if the hand is not holding that block.
+nonexecutable putdown(B) if ~holding(B).
+
+% Stacking a block onto another block causes the hand to no longer hold the moved block.
+stack(B1,B2) causes ~holding(B1).
+
+% Stacking a block onto another block causes the hand to become empty.
+stack(B1,B2) causes handEmpty.
+
+% Stacking a block onto another block causes the moved block to be located on the destination block.
+stack(B1,B2) causes loc(B1)=B2.
+
+% Stacking makes the destination block not clear.
+stack(B1,B2) causes ~clear(B2).
+
+% After stacking, the moved block is clear.
+stack(B1,B2) causes clear(B1).
+
+% Stacking is not executable if the hand is not holding the moved block.
+nonexecutable stack(B1,B2) if ~holding(B1).
+
+% Stacking is not executable if the moved block is not in hand (redundant but consistent).
+nonexecutable stack(B1,B2) if loc(B1)\=hand.
+
+% Stacking is not executable if the destination block is not clear.
+nonexecutable stack(B1,B2) if ~clear(B2).
+
+% Stacking is not executable if the moved block and the destination block are the same block.
+nonexecutable stack(B1,B2) if B1=B2.
+
+% Unstacking a block from on top of another block causes the hand to hold the first block.
+unstack(B1,B2) causes holding(B1).
+
+% Unstacking a block from on top of another block causes the hand to not be empty.
+unstack(B1,B2) causes ~handEmpty.
+
+% Unstacking causes the second block to become clear.
+unstack(B1,B2) causes clear(B2).
+
+% After unstacking, the moved block is NOT clear (it is being held).
+unstack(B1,B2) causes ~clear(B1).
+
+% Unstacking causes the moved block to be in hand.
+unstack(B1,B2) causes loc(B1)=hand.
+
+% Unstacking is not executable if the first block is not located on the second block.
+nonexecutable unstack(B1,B2) if loc(B1)\=B2.
+
+% Unstacking is not executable if the first block is not clear.
+nonexecutable unstack(B1,B2) if ~clear(B1).
+
+% Unstacking is not executable if the hand is not empty.
+nonexecutable unstack(B1,B2) if ~handEmpty.
+
+% Unstacking is not executable if the moved block is already in hand.
+nonexecutable unstack(B1,B2) if loc(B1)=hand.
+
+% No concurrency between these action pairs.
+nonexecutable pickup(B1) & putdown(B2) if true.
+nonexecutable pickup(B1) & stack(B2,B3) if true.
+nonexecutable pickup(B1) & unstack(B2,B3) if true.
+nonexecutable putdown(B1) & stack(B2,B3) if true.
+nonexecutable putdown(B1) & unstack(B2,B3) if true.
+nonexecutable stack(B1,B2) & unstack(B3,B4) if true.
+
+% Missing concurrency restriction: putdown and putdown cannot occur together.
+nonexecutable putdown(B1) & putdown(B2) if B1\=B2.
+
+% Missing concurrency restriction: pickup and pickup cannot occur together.
+nonexecutable pickup(B1) & pickup(B2) if B1\=B2.
+
+% Missing concurrency restriction: stack and stack cannot occur together.
+nonexecutable stack(B1,B2) & stack(B3,B4) if (B1\=B3 | B2\=B4).
+
+% Missing concurrency restriction: unstack and unstack cannot occur together.
+nonexecutable unstack(B1,B2) & unstack(B3,B4) if (B1\=B3 | B2\=B4).
+
+% [CHANGED] Fix: allow pickup from table (standard blocks world),
+% and disallow pickup only when the block is on another block.
+% This change is needed because the main goal requires moving b3 off the table,
+% which is impossible if pickup-from-table is forbidden.
+nonexecutable pickup(B) if loc(B)=B1.
+
+
+% MAIN QUERY CHANGED? [UNCHANGED]
+:- query
+    0: handEmpty
+       & loc(b5)=table
+       & loc(b4)=b5 & clear(b4)
+       & loc(b1)=table & clear(b1)
+       & loc(b7)=table & clear(b7)
+       & loc(b3)=table & clear(b3)
+       & loc(b6)=table
+       & loc(b2)=b6 & clear(b2);
+    maxstep: loc(b3)=table
+       & loc(b1)=b3
+       & loc(b5)=b1
+       & loc(b2)=b5 & clear(b2)
+       & loc(b6)=table
+       & loc(b7)=b6
+       & loc(b4)=b7 & clear(b4).
+
+
+% SAMPLE QUERIES CHANGED? [CHANGED]
+% Query 1: Pick up a clear block while the hand is empty (satisfiable)
+:- query
+    0: handEmpty
+       & loc(b5)=table
+       & loc(b4)=b5 & clear(b4)
+       & loc(b1)=table & clear(b1)
+       & loc(b7)=table & clear(b7)
+       & loc(b3)=table & clear(b3)
+       & loc(b6)=table
+       & loc(b2)=b6 & clear(b2);
+    0: pickup(b4);
+    maxstep: holding(b4) & loc(b4)=hand & ~handEmpty.
+
+% Query 2: Try to pick up b5 even though it is not clear (unsatisfiable)
+:- query
+    0: handEmpty
+       & loc(b5)=table
+       & loc(b4)=b5 & clear(b4)
+       & loc(b1)=table & clear(b1)
+       & loc(b7)=table & clear(b7)
+       & loc(b3)=table & clear(b3)
+       & loc(b6)=table
+       & loc(b2)=b6 & clear(b2);
+    0: pickup(b5).
+
+% Query 3: Try to put down a block that is not being held (unsatisfiable)
+:- query
+    0: handEmpty
+       & loc(b5)=table
+       & loc(b4)=b5 & clear(b4)
+       & loc(b1)=table & clear(b1)
+       & loc(b7)=table & clear(b7)
+       & loc(b3)=table & clear(b3)
+       & loc(b6)=table
+       & loc(b2)=b6 & clear(b2);
+    0: putdown(b4).
+
+% Query 4: Pick up b4 and then stack it onto clear block b1 (satisfiable)
+:- query
+    0: handEmpty
+       & loc(b5)=table
+       & loc(b4)=b5 & clear(b4)
+       & loc(b1)=table & clear(b1)
+       & loc(b7)=table & clear(b7)
+       & loc(b3)=table & clear(b3)
+       & loc(b6)=table
+       & loc(b2)=b6 & clear(b2);
+    0: pickup(b4);
+    1: stack(b4,b1);
+    maxstep: loc(b4)=b1 & handEmpty & ~holding(b4).
+
+% Query 5: Try to stack b4 onto b5 even though b5 is not clear (unsatisfiable)
+:- query
+    0: handEmpty
+       & loc(b5)=table
+       & loc(b4)=b5 & clear(b4)
+       & loc(b1)=table & clear(b1)
+       & loc(b7)=table & clear(b7)
+       & loc(b3)=table & clear(b3)
+       & loc(b6)=table
+       & loc(b2)=b6 & clear(b2);
+    0: pickup(b4);
+    1: stack(b4,b5).

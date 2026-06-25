@@ -1,0 +1,18 @@
+There are two types of things: "ant" and "place".
+
+ant1 is an ant.
+p1 and p2 are places.
+
+Fluents
+Whether an (ant) is at a (place) is an inertial fluent (boolean).
+Whether a (place) is adjacent to another (place) is an inertial fluent (boolean).
+Whether a (place) is clear is an inertial fluent (boolean).
+Whether food is present at a (place) is an inertial fluent (boolean).
+Whether an (ant) is carrying food is an inertial fluent (boolean).
+Whether a (place) is a nest is an inertial fluent (boolean).
+
+Actions
+Moving an (ant) from a (place) to a (place) is an action.
+An (ant) picking up food at a (place) is an action.
+An (ant) dropping food at a (place) is an action.
+An (ant) clearing an obstacle at a (place) from a (place) is an action.

@@ -1,0 +1,109 @@
+% There is 1 ant and 2 places. ant1 starts at p1. Nest: p1. Food at: p2. Blocked: none. The goal is food at the nest.
+% (satisfiable)
+% horizon: 4
+:- objects
+    ant1 :: ant;
+    p1, p2 :: place.
+:- query
+    0: loc(ant1, p1) & ~loc(ant1, p2) & adjacent(p1, p2) & adjacent(p2, p1) & clear(p1) & clear(p2) & ~food(p1) & food(p2) & ~has_food(ant1) & nest(p1) & ~nest(p2);
+    maxstep: food(p1).
+---
+
+% There is 1 ant and 11 places. ant1 starts at p1. Nest: p1. Food at: p11. Blocked: none. The goal is food at the nest.
+% (satisfiable)
+% horizon: 25
+:- objects
+    ant1 :: ant;
+    p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11 :: place.
+:- query
+    0: loc(ant1, p1) & ~loc(ant1, p2) & ~loc(ant1, p3) & ~loc(ant1, p4) & ~loc(ant1, p5) & ~loc(ant1, p6) & ~loc(ant1, p7) & ~loc(ant1, p8) & ~loc(ant1, p9) & ~loc(ant1, p10) & ~loc(ant1, p11) & adjacent(p1, p2) & ~adjacent(p1, p3) & ~adjacent(p1, p4) & ~adjacent(p1, p5) & ~adjacent(p1, p6) & ~adjacent(p1, p7) & ~adjacent(p1, p8) & ~adjacent(p1, p9) & ~adjacent(p1, p10) & ~adjacent(p1, p11) & adjacent(p2, p1) & adjacent(p2, p3) & ~adjacent(p2, p4) & ~adjacent(p2, p5) & ~adjacent(p2, p6) & ~adjacent(p2, p7) & ~adjacent(p2, p8) & ~adjacent(p2, p9) & ~adjacent(p2, p10) & ~adjacent(p2, p11) & ~adjacent(p3, p1) & adjacent(p3, p2) & adjacent(p3, p4) & ~adjacent(p3, p5) & ~adjacent(p3, p6) & ~adjacent(p3, p7) & ~adjacent(p3, p8) & ~adjacent(p3, p9) & ~adjacent(p3, p10) & ~adjacent(p3, p11) & ~adjacent(p4, p1) & ~adjacent(p4, p2) & adjacent(p4, p3) & adjacent(p4, p5) & ~adjacent(p4, p6) & ~adjacent(p4, p7) & ~adjacent(p4, p8) & ~adjacent(p4, p9) & ~adjacent(p4, p10) & ~adjacent(p4, p11) & ~adjacent(p5, p1) & ~adjacent(p5, p2) & ~adjacent(p5, p3) & adjacent(p5, p4) & adjacent(p5, p6) & ~adjacent(p5, p7) & ~adjacent(p5, p8) & ~adjacent(p5, p9) & ~adjacent(p5, p10) & ~adjacent(p5, p11) & ~adjacent(p6, p1) & ~adjacent(p6, p2) & ~adjacent(p6, p3) & ~adjacent(p6, p4) & adjacent(p6, p5) & adjacent(p6, p7) & ~adjacent(p6, p8) & ~adjacent(p6, p9) & ~adjacent(p6, p10) & ~adjacent(p6, p11) & ~adjacent(p7, p1) & ~adjacent(p7, p2) & ~adjacent(p7, p3) & ~adjacent(p7, p4) & ~adjacent(p7, p5) & adjacent(p7, p6) & adjacent(p7, p8) & ~adjacent(p7, p9) & ~adjacent(p7, p10) & ~adjacent(p7, p11) & ~adjacent(p8, p1) & ~adjacent(p8, p2) & ~adjacent(p8, p3) & ~adjacent(p8, p4) & ~adjacent(p8, p5) & ~adjacent(p8, p6) & adjacent(p8, p7) & adjacent(p8, p9) & ~adjacent(p8, p10) & ~adjacent(p8, p11) & ~adjacent(p9, p1) & ~adjacent(p9, p2) & ~adjacent(p9, p3) & ~adjacent(p9, p4) & ~adjacent(p9, p5) & ~adjacent(p9, p6) & ~adjacent(p9, p7) & adjacent(p9, p8) & adjacent(p9, p10) & ~adjacent(p9, p11) & ~adjacent(p10, p1) & ~adjacent(p10, p2) & ~adjacent(p10, p3) & ~adjacent(p10, p4) & ~adjacent(p10, p5) & ~adjacent(p10, p6) & ~adjacent(p10, p7) & ~adjacent(p10, p8) & adjacent(p10, p9) & adjacent(p10, p11) & ~adjacent(p11, p1) & ~adjacent(p11, p2) & ~adjacent(p11, p3) & ~adjacent(p11, p4) & ~adjacent(p11, p5) & ~adjacent(p11, p6) & ~adjacent(p11, p7) & ~adjacent(p11, p8) & ~adjacent(p11, p9) & adjacent(p11, p10) & clear(p1) & clear(p2) & clear(p3) & ~clear(p4) & clear(p5) & clear(p6) & ~clear(p7) & clear(p8) & clear(p9) & ~clear(p10) & clear(p11) & ~food(p1) & ~food(p2) & ~food(p3) & ~food(p4) & ~food(p5) & ~food(p6) & ~food(p7) & ~food(p8) & ~food(p9) & ~food(p10) & food(p11) & ~has_food(ant1) & nest(p1) & ~nest(p2) & ~nest(p3) & ~nest(p4) & ~nest(p5) & ~nest(p6) & ~nest(p7) & ~nest(p8) & ~nest(p9) & ~nest(p10) & ~nest(p11);
+    maxstep: food(p1).
+---
+
+% There is 1 ant and 3 places. ant1 starts at p1. Nest: p1. Food at: p3. Blocked: none. The goal is food at the nest.
+% (satisfiable)
+% horizon: 6
+:- objects
+    ant1 :: ant;
+    p1, p2, p3 :: place.
+:- query
+    0: loc(ant1, p1) & ~loc(ant1, p2) & ~loc(ant1, p3) & adjacent(p1, p2) & ~adjacent(p1, p3) & adjacent(p2, p1) & adjacent(p2, p3) & ~adjacent(p3, p1) & adjacent(p3, p2) & clear(p1) & clear(p2) & clear(p3) & ~food(p1) & ~food(p2) & food(p3) & ~has_food(ant1) & nest(p1) & ~nest(p2) & ~nest(p3);
+    maxstep: food(p1).
+---
+
+% There is 1 ant and 4 places. ant1 starts at p1. Nest: p1. Food at: p4. Blocked: none. The goal is food at the nest.
+% (satisfiable)
+% horizon: 9
+:- objects
+    ant1 :: ant;
+    p1, p2, p3, p4 :: place.
+:- query
+    0: loc(ant1, p1) & ~loc(ant1, p2) & ~loc(ant1, p3) & ~loc(ant1, p4) & adjacent(p1, p2) & ~adjacent(p1, p3) & ~adjacent(p1, p4) & adjacent(p2, p1) & adjacent(p2, p3) & ~adjacent(p2, p4) & ~adjacent(p3, p1) & adjacent(p3, p2) & adjacent(p3, p4) & ~adjacent(p4, p1) & ~adjacent(p4, p2) & adjacent(p4, p3) & clear(p1) & clear(p2) & ~clear(p3) & clear(p4) & ~food(p1) & ~food(p2) & ~food(p3) & food(p4) & ~has_food(ant1) & nest(p1) & ~nest(p2) & ~nest(p3) & ~nest(p4);
+    maxstep: food(p1).
+---
+
+% There is 1 ant and 5 places. ant1 starts at p1. Nest: p1. Food at: p5. Blocked: none. The goal is food at the nest.
+% (satisfiable)
+% horizon: 11
+:- objects
+    ant1 :: ant;
+    p1, p2, p3, p4, p5 :: place.
+:- query
+    0: loc(ant1, p1) & ~loc(ant1, p2) & ~loc(ant1, p3) & ~loc(ant1, p4) & ~loc(ant1, p5) & adjacent(p1, p2) & ~adjacent(p1, p3) & ~adjacent(p1, p4) & ~adjacent(p1, p5) & adjacent(p2, p1) & adjacent(p2, p3) & ~adjacent(p2, p4) & ~adjacent(p2, p5) & ~adjacent(p3, p1) & adjacent(p3, p2) & adjacent(p3, p4) & ~adjacent(p3, p5) & ~adjacent(p4, p1) & ~adjacent(p4, p2) & adjacent(p4, p3) & adjacent(p4, p5) & ~adjacent(p5, p1) & ~adjacent(p5, p2) & ~adjacent(p5, p3) & adjacent(p5, p4) & clear(p1) & clear(p2) & clear(p3) & ~clear(p4) & clear(p5) & ~food(p1) & ~food(p2) & ~food(p3) & ~food(p4) & food(p5) & ~has_food(ant1) & nest(p1) & ~nest(p2) & ~nest(p3) & ~nest(p4) & ~nest(p5);
+    maxstep: food(p1).
+---
+
+% There is 1 ant and 6 places. ant1 starts at p1. Nest: p1. Food at: p6. Blocked: none. The goal is food at the nest.
+% (satisfiable)
+% horizon: 13
+:- objects
+    ant1 :: ant;
+    p1, p2, p3, p4, p5, p6 :: place.
+:- query
+    0: loc(ant1, p1) & ~loc(ant1, p2) & ~loc(ant1, p3) & ~loc(ant1, p4) & ~loc(ant1, p5) & ~loc(ant1, p6) & adjacent(p1, p2) & ~adjacent(p1, p3) & ~adjacent(p1, p4) & ~adjacent(p1, p5) & ~adjacent(p1, p6) & adjacent(p2, p1) & adjacent(p2, p3) & ~adjacent(p2, p4) & ~adjacent(p2, p5) & ~adjacent(p2, p6) & ~adjacent(p3, p1) & adjacent(p3, p2) & adjacent(p3, p4) & ~adjacent(p3, p5) & ~adjacent(p3, p6) & ~adjacent(p4, p1) & ~adjacent(p4, p2) & adjacent(p4, p3) & adjacent(p4, p5) & ~adjacent(p4, p6) & ~adjacent(p5, p1) & ~adjacent(p5, p2) & ~adjacent(p5, p3) & adjacent(p5, p4) & adjacent(p5, p6) & ~adjacent(p6, p1) & ~adjacent(p6, p2) & ~adjacent(p6, p3) & ~adjacent(p6, p4) & adjacent(p6, p5) & clear(p1) & clear(p2) & ~clear(p3) & clear(p4) & clear(p5) & clear(p6) & ~food(p1) & ~food(p2) & ~food(p3) & ~food(p4) & ~food(p5) & food(p6) & ~has_food(ant1) & nest(p1) & ~nest(p2) & ~nest(p3) & ~nest(p4) & ~nest(p5) & ~nest(p6);
+    maxstep: food(p1).
+---
+
+% There is 1 ant and 7 places. ant1 starts at p1. Nest: p1. Food at: p7. Blocked: none. The goal is food at the nest.
+% (satisfiable)
+% horizon: 16
+:- objects
+    ant1 :: ant;
+    p1, p2, p3, p4, p5, p6, p7 :: place.
+:- query
+    0: loc(ant1, p1) & ~loc(ant1, p2) & ~loc(ant1, p3) & ~loc(ant1, p4) & ~loc(ant1, p5) & ~loc(ant1, p6) & ~loc(ant1, p7) & adjacent(p1, p2) & ~adjacent(p1, p3) & ~adjacent(p1, p4) & ~adjacent(p1, p5) & ~adjacent(p1, p6) & ~adjacent(p1, p7) & adjacent(p2, p1) & adjacent(p2, p3) & ~adjacent(p2, p4) & ~adjacent(p2, p5) & ~adjacent(p2, p6) & ~adjacent(p2, p7) & ~adjacent(p3, p1) & adjacent(p3, p2) & adjacent(p3, p4) & ~adjacent(p3, p5) & ~adjacent(p3, p6) & ~adjacent(p3, p7) & ~adjacent(p4, p1) & ~adjacent(p4, p2) & adjacent(p4, p3) & adjacent(p4, p5) & ~adjacent(p4, p6) & ~adjacent(p4, p7) & ~adjacent(p5, p1) & ~adjacent(p5, p2) & ~adjacent(p5, p3) & adjacent(p5, p4) & adjacent(p5, p6) & ~adjacent(p5, p7) & ~adjacent(p6, p1) & ~adjacent(p6, p2) & ~adjacent(p6, p3) & ~adjacent(p6, p4) & adjacent(p6, p5) & adjacent(p6, p7) & ~adjacent(p7, p1) & ~adjacent(p7, p2) & ~adjacent(p7, p3) & ~adjacent(p7, p4) & ~adjacent(p7, p5) & adjacent(p7, p6) & clear(p1) & clear(p2) & clear(p3) & ~clear(p4) & clear(p5) & ~clear(p6) & clear(p7) & ~food(p1) & ~food(p2) & ~food(p3) & ~food(p4) & ~food(p5) & ~food(p6) & food(p7) & ~has_food(ant1) & nest(p1) & ~nest(p2) & ~nest(p3) & ~nest(p4) & ~nest(p5) & ~nest(p6) & ~nest(p7);
+    maxstep: food(p1).
+---
+
+% There is 1 ant and 8 places. ant1 starts at p1. Nest: p1. Food at: p8. Blocked: none. The goal is food at the nest.
+% (satisfiable)
+% horizon: 18
+:- objects
+    ant1 :: ant;
+    p1, p2, p3, p4, p5, p6, p7, p8 :: place.
+:- query
+    0: loc(ant1, p1) & ~loc(ant1, p2) & ~loc(ant1, p3) & ~loc(ant1, p4) & ~loc(ant1, p5) & ~loc(ant1, p6) & ~loc(ant1, p7) & ~loc(ant1, p8) & adjacent(p1, p2) & ~adjacent(p1, p3) & ~adjacent(p1, p4) & ~adjacent(p1, p5) & ~adjacent(p1, p6) & ~adjacent(p1, p7) & ~adjacent(p1, p8) & adjacent(p2, p1) & adjacent(p2, p3) & ~adjacent(p2, p4) & ~adjacent(p2, p5) & ~adjacent(p2, p6) & ~adjacent(p2, p7) & ~adjacent(p2, p8) & ~adjacent(p3, p1) & adjacent(p3, p2) & adjacent(p3, p4) & ~adjacent(p3, p5) & ~adjacent(p3, p6) & ~adjacent(p3, p7) & ~adjacent(p3, p8) & ~adjacent(p4, p1) & ~adjacent(p4, p2) & adjacent(p4, p3) & adjacent(p4, p5) & ~adjacent(p4, p6) & ~adjacent(p4, p7) & ~adjacent(p4, p8) & ~adjacent(p5, p1) & ~adjacent(p5, p2) & ~adjacent(p5, p3) & adjacent(p5, p4) & adjacent(p5, p6) & ~adjacent(p5, p7) & ~adjacent(p5, p8) & ~adjacent(p6, p1) & ~adjacent(p6, p2) & ~adjacent(p6, p3) & ~adjacent(p6, p4) & adjacent(p6, p5) & adjacent(p6, p7) & ~adjacent(p6, p8) & ~adjacent(p7, p1) & ~adjacent(p7, p2) & ~adjacent(p7, p3) & ~adjacent(p7, p4) & ~adjacent(p7, p5) & adjacent(p7, p6) & adjacent(p7, p8) & ~adjacent(p8, p1) & ~adjacent(p8, p2) & ~adjacent(p8, p3) & ~adjacent(p8, p4) & ~adjacent(p8, p5) & ~adjacent(p8, p6) & adjacent(p8, p7) & clear(p1) & clear(p2) & ~clear(p3) & clear(p4) & clear(p5) & ~clear(p6) & clear(p7) & clear(p8) & ~food(p1) & ~food(p2) & ~food(p3) & ~food(p4) & ~food(p5) & ~food(p6) & ~food(p7) & food(p8) & ~has_food(ant1) & nest(p1) & ~nest(p2) & ~nest(p3) & ~nest(p4) & ~nest(p5) & ~nest(p6) & ~nest(p7) & ~nest(p8);
+    maxstep: food(p1).
+---
+
+% There is 1 ant and 9 places. ant1 starts at p1. Nest: p1. Food at: p9. Blocked: none. The goal is food at the nest.
+% (satisfiable)
+% horizon: 20
+:- objects
+    ant1 :: ant;
+    p1, p2, p3, p4, p5, p6, p7, p8, p9 :: place.
+:- query
+    0: loc(ant1, p1) & ~loc(ant1, p2) & ~loc(ant1, p3) & ~loc(ant1, p4) & ~loc(ant1, p5) & ~loc(ant1, p6) & ~loc(ant1, p7) & ~loc(ant1, p8) & ~loc(ant1, p9) & adjacent(p1, p2) & ~adjacent(p1, p3) & ~adjacent(p1, p4) & ~adjacent(p1, p5) & ~adjacent(p1, p6) & ~adjacent(p1, p7) & ~adjacent(p1, p8) & ~adjacent(p1, p9) & adjacent(p2, p1) & adjacent(p2, p3) & ~adjacent(p2, p4) & ~adjacent(p2, p5) & ~adjacent(p2, p6) & ~adjacent(p2, p7) & ~adjacent(p2, p8) & ~adjacent(p2, p9) & ~adjacent(p3, p1) & adjacent(p3, p2) & adjacent(p3, p4) & ~adjacent(p3, p5) & ~adjacent(p3, p6) & ~adjacent(p3, p7) & ~adjacent(p3, p8) & ~adjacent(p3, p9) & ~adjacent(p4, p1) & ~adjacent(p4, p2) & adjacent(p4, p3) & adjacent(p4, p5) & ~adjacent(p4, p6) & ~adjacent(p4, p7) & ~adjacent(p4, p8) & ~adjacent(p4, p9) & ~adjacent(p5, p1) & ~adjacent(p5, p2) & ~adjacent(p5, p3) & adjacent(p5, p4) & adjacent(p5, p6) & ~adjacent(p5, p7) & ~adjacent(p5, p8) & ~adjacent(p5, p9) & ~adjacent(p6, p1) & ~adjacent(p6, p2) & ~adjacent(p6, p3) & ~adjacent(p6, p4) & adjacent(p6, p5) & adjacent(p6, p7) & ~adjacent(p6, p8) & ~adjacent(p6, p9) & ~adjacent(p7, p1) & ~adjacent(p7, p2) & ~adjacent(p7, p3) & ~adjacent(p7, p4) & ~adjacent(p7, p5) & adjacent(p7, p6) & adjacent(p7, p8) & ~adjacent(p7, p9) & ~adjacent(p8, p1) & ~adjacent(p8, p2) & ~adjacent(p8, p3) & ~adjacent(p8, p4) & ~adjacent(p8, p5) & ~adjacent(p8, p6) & adjacent(p8, p7) & adjacent(p8, p9) & ~adjacent(p9, p1) & ~adjacent(p9, p2) & ~adjacent(p9, p3) & ~adjacent(p9, p4) & ~adjacent(p9, p5) & ~adjacent(p9, p6) & ~adjacent(p9, p7) & adjacent(p9, p8) & clear(p1) & clear(p2) & clear(p3) & ~clear(p4) & clear(p5) & clear(p6) & ~clear(p7) & clear(p8) & clear(p9) & ~food(p1) & ~food(p2) & ~food(p3) & ~food(p4) & ~food(p5) & ~food(p6) & ~food(p7) & ~food(p8) & food(p9) & ~has_food(ant1) & nest(p1) & ~nest(p2) & ~nest(p3) & ~nest(p4) & ~nest(p5) & ~nest(p6) & ~nest(p7) & ~nest(p8) & ~nest(p9);
+    maxstep: food(p1).
+---
+
+% There is 1 ant and 10 places. ant1 starts at p1. Nest: p1. Food at: p10. Blocked: none. The goal is food at the nest.
+% (satisfiable)
+% horizon: 23
+:- objects
+    ant1 :: ant;
+    p1, p2, p3, p4, p5, p6, p7, p8, p9, p10 :: place.
+:- query
+    0: loc(ant1, p1) & ~loc(ant1, p2) & ~loc(ant1, p3) & ~loc(ant1, p4) & ~loc(ant1, p5) & ~loc(ant1, p6) & ~loc(ant1, p7) & ~loc(ant1, p8) & ~loc(ant1, p9) & ~loc(ant1, p10) & adjacent(p1, p2) & ~adjacent(p1, p3) & ~adjacent(p1, p4) & ~adjacent(p1, p5) & ~adjacent(p1, p6) & ~adjacent(p1, p7) & ~adjacent(p1, p8) & ~adjacent(p1, p9) & ~adjacent(p1, p10) & adjacent(p2, p1) & adjacent(p2, p3) & ~adjacent(p2, p4) & ~adjacent(p2, p5) & ~adjacent(p2, p6) & ~adjacent(p2, p7) & ~adjacent(p2, p8) & ~adjacent(p2, p9) & ~adjacent(p2, p10) & ~adjacent(p3, p1) & adjacent(p3, p2) & adjacent(p3, p4) & ~adjacent(p3, p5) & ~adjacent(p3, p6) & ~adjacent(p3, p7) & ~adjacent(p3, p8) & ~adjacent(p3, p9) & ~adjacent(p3, p10) & ~adjacent(p4, p1) & ~adjacent(p4, p2) & adjacent(p4, p3) & adjacent(p4, p5) & ~adjacent(p4, p6) & ~adjacent(p4, p7) & ~adjacent(p4, p8) & ~adjacent(p4, p9) & ~adjacent(p4, p10) & ~adjacent(p5, p1) & ~adjacent(p5, p2) & ~adjacent(p5, p3) & adjacent(p5, p4) & adjacent(p5, p6) & ~adjacent(p5, p7) & ~adjacent(p5, p8) & ~adjacent(p5, p9) & ~adjacent(p5, p10) & ~adjacent(p6, p1) & ~adjacent(p6, p2) & ~adjacent(p6, p3) & ~adjacent(p6, p4) & adjacent(p6, p5) & adjacent(p6, p7) & ~adjacent(p6, p8) & ~adjacent(p6, p9) & ~adjacent(p6, p10) & ~adjacent(p7, p1) & ~adjacent(p7, p2) & ~adjacent(p7, p3) & ~adjacent(p7, p4) & ~adjacent(p7, p5) & adjacent(p7, p6) & adjacent(p7, p8) & ~adjacent(p7, p9) & ~adjacent(p7, p10) & ~adjacent(p8, p1) & ~adjacent(p8, p2) & ~adjacent(p8, p3) & ~adjacent(p8, p4) & ~adjacent(p8, p5) & ~adjacent(p8, p6) & adjacent(p8, p7) & adjacent(p8, p9) & ~adjacent(p8, p10) & ~adjacent(p9, p1) & ~adjacent(p9, p2) & ~adjacent(p9, p3) & ~adjacent(p9, p4) & ~adjacent(p9, p5) & ~adjacent(p9, p6) & ~adjacent(p9, p7) & adjacent(p9, p8) & adjacent(p9, p10) & ~adjacent(p10, p1) & ~adjacent(p10, p2) & ~adjacent(p10, p3) & ~adjacent(p10, p4) & ~adjacent(p10, p5) & ~adjacent(p10, p6) & ~adjacent(p10, p7) & ~adjacent(p10, p8) & adjacent(p10, p9) & clear(p1) & clear(p2) & ~clear(p3) & clear(p4) & clear(p5) & ~clear(p6) & clear(p7) & clear(p8) & ~clear(p9) & clear(p10) & ~food(p1) & ~food(p2) & ~food(p3) & ~food(p4) & ~food(p5) & ~food(p6) & ~food(p7) & ~food(p8) & ~food(p9) & food(p10) & ~has_food(ant1) & nest(p1) & ~nest(p2) & ~nest(p3) & ~nest(p4) & ~nest(p5) & ~nest(p6) & ~nest(p7) & ~nest(p8) & ~nest(p9) & ~nest(p10);
+    maxstep: food(p1).
+---

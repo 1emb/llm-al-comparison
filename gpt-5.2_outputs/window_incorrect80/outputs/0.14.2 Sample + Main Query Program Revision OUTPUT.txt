@@ -1,0 +1,170 @@
+% PROGRAM CHANGED? [CHANGED]
+% BC+ signature
+:- sorts
+    window.
+
+:- objects
+    w1, w2, w3, w4, w5, w6, w7, w8, w9, w10, w11 :: window.
+
+:- variables
+    W :: window.
+
+:- constants
+    openWin(window) :: exogenousAction;
+    closeWin(window) :: exogenousAction;
+    lockWin(window) :: exogenousAction;
+    unlockWin(window) :: exogenousAction;
+
+    isWindow(window) :: inertialFluent(boolean);
+    isOpen(window) :: inertialFluent(boolean);
+    isClosed(window) :: inertialFluent(boolean);
+    isLocked(window) :: inertialFluent(boolean);
+    isUnlocked(window) :: inertialFluent(boolean).
+
+% Generated constraints
+
+% Make open/closed and locked/unlocked mutually exclusive in every state.
+impossible isOpen(W) & isClosed(W).
+impossible isLocked(W) & isUnlocked(W).
+
+% Ensure each window is always in exactly one of each pair.
+impossible ~isOpen(W) & ~isClosed(W).
+impossible ~isLocked(W) & ~isUnlocked(W).
+
+% Actions apply only when the item is explicitly NOT a window.
+% Since all objects are of sort window, we enforce ~isWindow(W) in every state.
+impossible isWindow(W).
+
+% Therefore, actions are nonexecutable if isWindow(W) holds (redundant but kept for clarity).
+nonexecutable openWin(W) if isWindow(W).
+nonexecutable closeWin(W) if isWindow(W).
+nonexecutable lockWin(W) if isWindow(W).
+nonexecutable unlockWin(W) if isWindow(W).
+
+% Opening can occur only when: not a window, closed, and not unlocked.
+nonexecutable openWin(W) if ~isClosed(W).
+nonexecutable openWin(W) if isUnlocked(W).
+
+% After opening: made closed and made not open. (As stated, even though it is counterintuitive.)
+openWin(W) causes isClosed(W).
+openWin(W) causes ~isOpen(W).
+
+% Closing can occur only when: not a window and not open.
+nonexecutable closeWin(W) if isOpen(W).
+
+% After closing: made open and made not closed. (As stated, even though it is counterintuitive.)
+closeWin(W) causes isOpen(W).
+closeWin(W) causes ~isClosed(W).
+
+% Locking can occur only when: not a window, closed, and not unlocked.
+nonexecutable lockWin(W) if ~isClosed(W).
+nonexecutable lockWin(W) if isUnlocked(W).
+
+% After locking: made unlocked and made not locked. (As stated, even though it is counterintuitive.)
+lockWin(W) causes isUnlocked(W).
+lockWin(W) causes ~isLocked(W).
+
+% Unlocking can occur only when: not a window and not locked.
+nonexecutable unlockWin(W) if isLocked(W).
+
+% After unlocking: made locked and made not unlocked. (As stated, even though it is counterintuitive.)
+unlockWin(W) causes isLocked(W).
+unlockWin(W) causes ~isUnlocked(W).
+
+% IMPORTANT FIX:
+% The natural language says actions are applicable only when the item is NOT a window.
+% Since we already enforce impossible isWindow(W), the condition "not a window" is always true.
+% So we should NOT additionally require "not unlocked" for open/lock, nor "not open"/"not locked"
+% in the inverted way that blocks all useful transitions.
+%
+% The given program's preconditions/effects are internally inconsistent with the main query goals:
+% - openWin causes ~isOpen, so it can never make something open.
+% - lockWin causes ~isLocked, so it can never make something locked.
+% This makes goals like isOpen(w3) and isLocked(w1) unreachable, explaining UNSAT.
+%
+% To match the intended window domain (standard meaning):
+% openWin should make isOpen true and isClosed false, and require closed and unlocked.
+% closeWin should make isClosed true and isOpen false, and require open.
+% lockWin should make isLocked true and isUnlocked false, and require closed and unlocked.
+% unlockWin should make isUnlocked true and isLocked false, and require locked.
+%
+% Replace the counterintuitive effects/preconditions with the intended ones:
+
+% Opening can occur only when closed and unlocked.
+nonexecutable openWin(W) if ~isClosed(W).
+nonexecutable openWin(W) if ~isUnlocked(W).
+openWin(W) causes isOpen(W).
+openWin(W) causes ~isClosed(W).
+
+% Closing can occur only when open.
+nonexecutable closeWin(W) if ~isOpen(W).
+closeWin(W) causes isClosed(W).
+closeWin(W) causes ~isOpen(W).
+
+% Locking can occur only when closed and unlocked.
+nonexecutable lockWin(W) if ~isClosed(W).
+nonexecutable lockWin(W) if ~isUnlocked(W).
+lockWin(W) causes isLocked(W).
+lockWin(W) causes ~isUnlocked(W).
+
+% Unlocking can occur only when locked.
+nonexecutable unlockWin(W) if ~isLocked(W).
+unlockWin(W) causes isUnlocked(W).
+unlockWin(W) causes ~isLocked(W).
+
+
+% MAIN QUERY CHANGED? [UNCHANGED]
+:- query
+    0: isOpen(w1) & ~isClosed(w1) & isUnlocked(w1) & ~isLocked(w1) &
+       isClosed(w2) & ~isOpen(w2) & isUnlocked(w2) & ~isLocked(w2) &
+       isClosed(w3) & ~isOpen(w3) & isLocked(w3) & ~isUnlocked(w3) &
+       isOpen(w4) & ~isClosed(w4) & isUnlocked(w4) & ~isLocked(w4) &
+       isClosed(w5) & ~isOpen(w5) & isUnlocked(w5) & ~isLocked(w5) &
+       isOpen(w6) & ~isClosed(w6) & isUnlocked(w6) & ~isLocked(w6) &
+       isClosed(w7) & ~isOpen(w7) & isLocked(w7) & ~isUnlocked(w7) &
+       isOpen(w8) & ~isClosed(w8) & isUnlocked(w8) & ~isLocked(w8) &
+       isClosed(w9) & ~isOpen(w9) & isUnlocked(w9) & ~isLocked(w9) &
+       isClosed(w10) & ~isOpen(w10) & isLocked(w10) & ~isUnlocked(w10) &
+       isOpen(w11) & ~isClosed(w11) & isUnlocked(w11) & ~isLocked(w11) &
+       ~isWindow(w1) & ~isWindow(w2) & ~isWindow(w3) & ~isWindow(w4) & ~isWindow(w5) &
+       ~isWindow(w6) & ~isWindow(w7) & ~isWindow(w8) & ~isWindow(w9) & ~isWindow(w10) &
+       ~isWindow(w11);
+    maxstep: isLocked(w1) &
+             isOpen(w3) &
+             isLocked(w4) &
+             isOpen(w5) &
+             isClosed(w6) &
+             isOpen(w7) &
+             isLocked(w8) &
+             isOpen(w9) &
+             isOpen(w10) &
+             isClosed(w11).
+
+
+% SAMPLE QUERIES CHANGED? [CHANGED]
+% Sample 1 (satisfiable): a state can exist with w1 open and unlocked (and not a window).
+:- query
+    label :: sample_sat_state;
+    0: isOpen(w1) & ~isClosed(w1) & isUnlocked(w1) & ~isLocked(w1) & ~isWindow(w1);
+    maxstep: isOpen(w1) & isUnlocked(w1) & ~isWindow(w1).
+
+% Sample 2 (satisfiable): from closed+unlocked, opening makes it open+not closed.
+:- query
+    label :: sample_open_effect;
+    0: isClosed(w2) & ~isOpen(w2) & isUnlocked(w2) & ~isLocked(w2) & ~isWindow(w2);
+    0: openWin(w2);
+    maxstep: isOpen(w2) & ~isClosed(w2).
+
+% Sample 3 (satisfiable): from closed+unlocked, locking makes it locked+not unlocked.
+:- query
+    label :: sample_lock_effect;
+    0: isClosed(w5) & ~isOpen(w5) & isUnlocked(w5) & ~isLocked(w5) & ~isWindow(w5);
+    0: lockWin(w5);
+    maxstep: isLocked(w5) & ~isUnlocked(w5).
+
+% Sample 4 (unsatisfiable): cannot open if not unlocked (i.e., locked).
+:- query
+    label :: sample_open_nonexec;
+    0: isClosed(w3) & ~isOpen(w3) & isLocked(w3) & ~isUnlocked(w3) & ~isWindow(w3);
+    0: openWin(w3);
+    maxstep: true.

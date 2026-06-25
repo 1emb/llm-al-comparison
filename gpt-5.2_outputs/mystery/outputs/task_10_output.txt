@@ -1,0 +1,62 @@
+Objects:
+:- objects
+    a, b, c, d :: entity.
+
+Query:
+:- query
+    0: harmony
+       & ~inPain(a) & ~inPain(b) & ~inPain(c) & ~inPain(d)
+       & isProvince(a) & isProvince(b) & ~isProvince(c) & ~isProvince(d)
+       & ~isPlanet(a) & isPlanet(b) & isPlanet(c) & ~isPlanet(d)
+       & ~craves(a,a) & ~craves(a,b) & ~craves(a,c) & craves(a,d)
+       & ~craves(b,a) & ~craves(b,b) & ~craves(b,c) & ~craves(b,d)
+       & ~craves(c,a) & ~craves(c,b) & ~craves(c,c) & ~craves(c,d)
+       & ~craves(d,a) & ~craves(d,b) & craves(d,c) & ~craves(d,d);
+    maxstep: craves(b,c) & craves(c,d).
+
+Status: True
+
+Output:
+Solving...
+Solution: 1 (Time: 0.039s)
+	
+
+	0:  harmony isPlanet(b) isPlanet(c) isProvince(a) isProvince(b) craves(a, d) craves(d, c)
+
+	ACTIONS:  feast(a, d)
+
+	1:  inPain(a) isPlanet(b) isPlanet(c) isProvince(b) isProvince(d) craves(d, c)
+
+	ACTIONS:  succumb(a)
+
+	2:  harmony isPlanet(a) isPlanet(b) isPlanet(c) isProvince(a) isProvince(b) isProvince(d) craves(d, c)
+
+	ACTIONS:  feast(d, c)
+
+	3:  inPain(d) isPlanet(b) isPlanet(c) isProvince(a) isProvince(b) isProvince(c)
+
+	ACTIONS:  succumb(d)
+
+	4:  harmony isPlanet(b) isPlanet(c) isPlanet(d) isProvince(a) isProvince(b) isProvince(c) isProvince(d)
+
+	ACTIONS:  attack(c)
+
+	5:  inPain(c) isPlanet(b) isProvince(a) isProvince(b) isProvince(d)
+
+	ACTIONS:  overcome(c, d)
+
+	6:  harmony isPlanet(b) isProvince(a) isProvince(b) isProvince(c) craves(c, d)
+
+	ACTIONS:  attack(b)
+
+	7:  inPain(b) isProvince(a) isProvince(c) craves(c, d)
+
+	ACTIONS:  overcome(b, c)
+
+	8:  harmony isProvince(a) isProvince(b) craves(b, c) craves(c, d)
+
+SATISFIABLE
+Models       : 1+
+Calls        : 9
+Time         : 0.038s (Solving: 0.00s 1st Model: 0.00s Unsat: 0.00s)
+CPU Time     : 0.038s

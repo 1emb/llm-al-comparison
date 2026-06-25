@@ -1,0 +1,33 @@
+
+% The elevator is always at exactly one floor (it cannot be at two different floors at the same time).
+% Boarding a passenger at a floor causes that passenger to be boarded.
+% Boarding a passenger at a floor is not executable if the elevator is not at that floor.
+% Boarding a passenger at a floor is not executable if that floor is not the passenger's origin.
+% Boarding a passenger at a floor is not executable if the passenger is already boarded.
+% Boarding a passenger at a floor is not executable if the passenger is already served.
+
+% Departing a passenger at a floor causes that passenger to no longer be boarded.
+% Departing a passenger at a floor causes that passenger to be served.
+% Departing a passenger at a floor is not executable if the elevator is not at that floor.
+% Departing a passenger at a floor is not executable if that floor is not the passenger's destination.
+% Departing a passenger at a floor is not executable if the passenger is not boarded.
+% Departing a passenger at a floor is not executable if the passenger is already served.
+
+% Moving up from a starting floor to a destination floor causes the elevator to be at the destination floor.
+% Moving up from a starting floor to a destination floor causes the elevator to no longer be at the starting floor.
+% Moving up from a starting floor to a destination floor is not executable if the elevator is not at the starting floor.
+% Moving up from a starting floor to a destination floor is not executable if the starting floor is not above the destination floor.
+% Moving up from a starting floor to a destination floor is not executable if the starting floor and destination floor are the same floor.
+
+% Moving down from a starting floor to a destination floor causes the elevator to be at the destination floor.
+% Moving down from a starting floor to a destination floor causes the elevator to no longer be at the starting floor.
+% Moving down from a starting floor to a destination floor is not executable if the elevator is not at the starting floor.
+% Moving down from a starting floor to a destination floor is not executable if the destination floor is not above the starting floor.
+% Moving down from a starting floor to a destination floor is not executable if the starting floor and destination floor are the same floor.
+
+% It is not executable to move up and move down at the same time.
+% It is not executable to perform two different move up actions at the same time.
+% It is not executable to perform two different move down actions at the same time.
+% It is not executable to both move (up or down) and board a passenger at the same time.
+% It is not executable to both move (up or down) and depart a passenger at the same time.
+% It is not executable for the same passenger to both board and depart at the same time.

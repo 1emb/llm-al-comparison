@@ -1,0 +1,193 @@
+Given a description of a problem, write knowledge about the domain that we would expect to represent in an action language BC+ program. These should represent logical constraints and cause and effect in the problem.
+
+For example, a task about moving objects would involve some knowledge about what is required to move, what the effect of moving an object does, such as the location of the object changing or its previous location now being empty. These restrictions and effects are dependent on the context of the problem. Here we list some example problems and extract knowledge.
+
+[Example 1]
+Description:
+A monkey wants to get a bunch of bananas hanging from the ceiling. He can reach the bananas by first pushing a box to the empty place under the bananas and then climbing on top of the box. The task is to come up with a plan for retrieving the bananas.
+Some things to consider are the monkey, the bananas, the box, the location of objects, and the monkey's ability to move and push the box. Provide the relevant knowledge. Only use the terminology in the description/hint to write the knowledge.
+
+Hint:
+There are two main types of things: "things" and "location".
+
+monkey, bananas, and box are things.
+l1, l2, and l3 are locations.
+
+Actions:
+walk to a location
+push box to a location
+climb on the box
+climb off the box
+grasp the bananas
+
+Additional constants:
+loc(thing) - The location of something should stay the same unless explicitly changed, it is inertial. The location of a thing should be a location, therefore it will be declared as an inertialFluent(location).
+hasBananas - The monkey having the bananas should stay the same unless explicitly changed, it is inertial. Since whether the monkey has bananas or not is either true or false, it will be declared as inertialFluent(boolean).
+onBox - The monkey being on the box should stay the same unless explicitly changed, it is inertial. Since whether the monkey is on the box or not either true or false, it will be declared as inertialFluent(boolean).
+
+BC+ signature:
+:- sorts
+    thing;
+    location.
+
+:- objects
+    monkey,bananas,box :: thing;
+    l1,l2,l3 :: location.
+
+:- variables
+    T, T1, T2 :: thing;
+    Loc, Loc1, Loc2 :: location;
+    Bool, Bool1, Bool2 :: boolean.
+
+:- constants
+    loc(thing) :: inertialFluent(location);
+    hasBananas,onBox :: inertialFluent(boolean);
+    walk(location) :: exogenousAction;
+    pushBox(location) :: exogenousAction;
+    climbOn :: exogenousAction;
+    climbOff :: exogenousAction;
+    graspBananas :: exogenousAction.
+
+Generated knowledge:
+% The location of the bananas is where the monkey is if the monkey has bananas.
+% The location of the monkey is where the box is if the monkey is on the box.
+% Walking to a location causes the monkey's location to change.
+% Walking is not executable to a location if the monkey is already in that location.
+% Walking is not executable if the monkey is on the box.
+% Pushing the box to a location causes the location of the box to move.
+% Pushing the box to a location causes the location f the monkey to move.
+% Pushing the box is not executable to a location if the monkey is at that location
+% Pushing the box is not executable if the monkey is on the box.
+% Pushing the box is not executable if the location of the monkey is not the same as the location of the box.
+% Climbing on the box causes the monkey to be on the box.
+% Climbing on the box is not executable if the monkey is already on the box.
+% Climbing on the box is not executable if the location of the monkey is not the same as the box.
+% Climbing off of the box causes the monkey to not be on the box.
+% Climbing off of the box is not executable if the monkey is not on the box.
+% Grasping the bananas causes the monkey to have the bananas.
+% Grasping the bananas is not executable if the monkey already has the bananas.
+% Grasping the bananas is not executable if the monkey is not on the box.
+% Grasping the bananas is not executable if the location of the monkey is not the same as the location of the bananas.
+% It is not executable to both walk to a location and push the box to a location.
+% It is not executable to both walk to a location and climb on the box.
+% It is not executable to both push the box to a location and climb on the box.
+% It is not executable to both climb off of the box and grasp the bananas.
+
+[Example 2]
+Description:
+Blocks can be stacked on each other or directly on a table. The task is to stack blocks on each other in a specified order. Provide the relevant knowledge. Only use the terminology in the description/hint to write the knowledge.
+
+Hint:
+There are two main types of things: "block" and "loc".
+"loc" includes "block".
+
+b1, b2, b3, and b4 are blocks.
+table is a loc.
+
+Actions:
+Moving a block to a location
+
+Additional constants:
+loc(block) - The location of a block remains the same unless explicitly changed, so it is inertial. The value of the location of a block is a location, so loc(block) is declared as inertialFluent(loc).
+
+BC+ signature:
+:- sorts
+    loc >> block.
+:- objects
+    b1, b2, b3, b4 :: block;
+    table :: loc.
+:- constants
+    loc(block) :: inertialFluent(loc);
+    move(block, loc) :: exogenousAction.
+:- variables
+    B, B1, B2, B3, B4       :: block;
+    L, L1, L2, L3, L4           :: loc;
+    Bool, Bool1, Bool2, Bool3, Bool4 :: boolean.
+
+Generated knowledge:
+% It is impossible for two blocks to be at the same location.
+% Moving a block causes it's location to be at that location.
+% The move action is not executable if something is on the location to be moved to.
+% The move action is not executable if something is on top of the block which is being moved.
+
+[Problem]
+Description:
+This domain talks about objects, trucks, airplanes, locations, cities, and airports, along with facts that say an object or vehicle is at some location, that one thing is inside another, and that a location lies within a particular city. Loading something into a truck can happen only if the truck is a truck, the place is a location, the truck is at that location, the thing to be loaded is at that same location, and it is also required that the thing being loaded is not considered an object; after loading, the thing is stated to be inside the truck and it is also stated to be at that location. Loading something into an airplane can happen only if the thing is an object, the place is a location, both the object and the airplane are at that location, and it is required that the airplane is not considered an airplane; after loading, the object is no longer stated to be at that location and it is also no longer stated to be inside the airplane. Unloading something from a truck can happen only if the thing is an object, the vehicle is a truck, the truck is at the given place, the thing is inside the truck, and it is required that the place is not a location; after unloading, the thing is no longer stated to be inside the truck and it is also no longer stated to be at that place. Unloading something from an airplane can happen only if the thing is an object, the vehicle is an airplane, the airplane is at the given place, the thing is inside the airplane, and it is required that the place is not a location; after unloading, the thing is stated to be inside the airplane and it is also stated to be at that place. Driving a truck between two places within a city can happen only if the vehicle is a truck, both the origin and destination are locations, the city is a city, both the origin and destination are in that city, and it is required that the truck is not at the origin; after driving, the truck is no longer stated to be at the origin and it is also no longer stated to be at the destination. Flying an airplane between airports can happen only if the vehicle is an airplane, both the origin and destination are airports, and it is required that the airplane is not at the origin; after flying, the airplane is no longer stated to be at the origin and it is also no longer stated to be at the destination. Provide the relevant knowledge. Only use the terminology in the hint/description to write the knowledge.
+
+Hint:
+There are five types of objects: "package", "truck", "airplane", "location", and "city".
+"vehicle" is a common type for "truck" and "airplane".
+"thing" is a common type for "package" and "vehicle".
+
+Actions
+Loading a package into a truck at a location is an action.
+Loading a package into an airplane at a location is an action.
+Unloading a package from a truck at a location is an action.
+Unloading a package from an airplane at a location is an action.
+Driving a truck from a location to a location in a city is an action.
+Flying an airplane from a location to a location is an action.
+
+BC+ description
+Actions:
+loadTruck(package, truck, location)      - Load a package into a truck at a location.
+loadPlane(package, airplane, airport)    - Load a package into an airplane at an airport.
+unloadTruck(package, truck, location)    - Unload a package from a truck at a location.
+unloadPlane(package, airplane, airport)  - Unload a package from an airplane at an airport.
+drive(truck, location, location, city)   - Drive a truck from one location to another within a city.
+fly(airplane, airport, airport)          - Fly an airplane from one airport to another.
+
+Constants:
+at(thing)                                - The location (airport or non-airport location) of a thing (package or vehicle); inertial.
+in(package, vehicle)                     - Package is inside a vehicle; inertial.
+inCity(location, city)                   - A location is in a city; inertial.
+inCity(airport, city)                    - An airport is in a city; inertial.
+
+BC+ Signature:
+:- sorts
+    vehicle >> truck;
+    vehicle >> airplane;
+    thing >> package;
+    thing >> vehicle;
+    place >> location;
+    place >> airport;
+    city.
+
+:- objects
+    % (No specific domain objects given in the problem statement; to be added later.)
+
+:- variables
+    P, P1, P2, P3, P4 :: package;
+    T, T1, T2, T3, T4 :: truck;
+    A, A1, A2, A3, A4 :: airplane;
+    V, V1, V2, V3, V4 :: vehicle;
+    Th, Th1, Th2, Th3, Th4 :: thing;
+    L, L1, L2, L3, L4 :: location;
+    Ap, Ap1, Ap2, Ap3, Ap4 :: airport;
+    Pl, Pl1, Pl2, Pl3, Pl4 :: place;
+    C, C1, C2, C3, C4 :: city;
+    Bool, Bool1, Bool2, Bool3, Bool4 :: boolean.
+
+:- constants
+    loadTruck(package, truck, location) :: exogenousAction;
+    loadPlane(package, airplane, airport) :: exogenousAction;
+    unloadTruck(package, truck, location) :: exogenousAction;
+    unloadPlane(package, airplane, airport) :: exogenousAction;
+    drive(truck, location, location, city) :: exogenousAction;
+    fly(airplane, airport, airport) :: exogenousAction;
+
+    at(thing) :: inertialFluent(place);
+    in(package, vehicle) :: inertialFluent(boolean);
+    inCity(location, city) :: inertialFluent(boolean);
+    inCity(airport, city) :: inertialFluent(boolean).
+
+IMPORTANT: Use only plain ASCII characters in your output. Do NOT use Unicode smart quotes, curly apostrophes, em dashes, or any non-ASCII characters.
+IMPORTANT: Do NOT use reserved BC+ keywords (at, where, after, if, causes, default, always, true, false, not, etc.) as constant or sort names.
+
+Generate the the knowledge relevant to this problem, ONLY using natural langauge. Do not mention any of the program within this knowledge, though the signature should be considered when writing the knowledge. Encapsulate it in three backticks like so:
+
+```
+% generated knowledge
+% <knowledge #1>
+% <knowledge #2>
+...
+```

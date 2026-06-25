@@ -1,0 +1,31 @@
+Objects:
+:- objects
+    w1, w2, w3, w4, w5, w6, w7 :: window.
+
+
+Query:
+:- query
+    label :: main;
+    maxstep :: 1;
+    0: isWindow(w1) & isWindow(w2) & isWindow(w3) & isWindow(w4) & isWindow(w5) & isWindow(w6) & isWindow(w7)
+     & isOpen(w1) & ~isClosed(w1) & isUnlocked(w1) & ~isLocked(w1)
+     & isClosed(w2) & ~isOpen(w2) & isUnlocked(w2) & ~isLocked(w2)
+     & isClosed(w3) & ~isOpen(w3) & isLocked(w3) & ~isUnlocked(w3)
+     & isOpen(w4) & ~isClosed(w4) & isUnlocked(w4) & ~isLocked(w4)
+     & isClosed(w5) & ~isOpen(w5) & isUnlocked(w5) & ~isLocked(w5)
+     & isOpen(w6) & ~isClosed(w6) & isUnlocked(w6) & ~isLocked(w6)
+     & isClosed(w7) & ~isOpen(w7) & isLocked(w7) & ~isUnlocked(w7);
+    1: isLocked(w1) & isOpen(w3) & isLocked(w4) & isOpen(w5) & isClosed(w6) & isOpen(w7).
+
+
+Status: False
+
+Output:
+Solving...
+UNSATISFIABLE
+Models       : 0
+Calls        : 2
+Time         : 0.006s (Solving: 0.00s 1st Model: 0.00s Unsat: 0.00s)
+CPU Time     : 0.006s
+No solution.
+

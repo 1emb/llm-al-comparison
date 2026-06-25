@@ -1,0 +1,59 @@
+% BC+ signature
+:- sorts
+    loc >> disk;
+    loc >> peg;
+    integer.
+
+:- objects
+    a, b, c :: peg;
+    d1, d2, d3 :: disk.
+
+:- variables
+    D, D1, D2, D3, D4 :: disk;
+    P, P1, P2, P3, P4 :: peg;
+    L, L1, L2, L3, L4 :: loc;
+    N, N1, N2, N3, N4 :: integer;
+    Bool :: boolean.
+
+:- constants
+    loc(disk) :: inertialFluent(loc);
+    weight(disk) :: inertialFluent(integer);
+    onTop(disk) :: inertialFluent(boolean);
+    move(disk, loc) :: exogenousAction.
+
+% Generated constraints
+% 1. A disk cannot be moved if there is another disk on top of it.
+nonexecutable move(D, L) if onTop(D).
+
+% 2. A disk cannot be moved onto another disk if it is heavier than the disk it is being moved onto.
+nonexecutable move(D1, D2) if weight(D1) > weight(D2).
+
+% 3. Moving a disk causes its location to change to the new location.
+move(D, L) causes loc(D) = L.
+
+% 4. It is impossible for two disks to be at the same location simultaneously.
+impossible loc(D1) = L & loc(D2) = L & D1 \= D2.
+
+% 5. The move action is not executable if the location to be moved to is already occupied by another disk or peg.
+nonexecutable move(D, L) if loc(D1) = L & D1 \= D.
+
+% 6. The move action is not executable if the disk to be moved is not on top of the stack.
+nonexecutable move(D, L) if ~onTop(D).
+
+% 7. The weight of a disk remains constant unless explicitly changed.
+always (weight(D) = N) -> (weight(D) = N).
+
+% 8. The location of a peg remains constant unless explicitly changed.
+always (loc(P) = L) -> (loc(P) = L).
+
+% 9. The location of a disk remains constant unless explicitly changed.
+always (loc(D) = L) -> (loc(D) = L).
+
+% 10. Whether a disk is on top of another disk or peg remains constant unless explicitly changed.
+always (onTop(D) = Bool) -> (onTop(D) = Bool).
+
+% Main query
+% Original natural language query: Disk d1 is on peg a. Disk d2 is on disk d1. Disk d3 is on disk d2. In order of heaviest to lightest, the disks are d1, d2, and d3. Find a plan to stack all disks on peg c.
+:- query
+    0: loc(d1) = a & loc(d2) = d1 & loc(d3) = d2 & weight(d1) > weight(d2) & weight(d2) > weight(d3);
+    maxstep: loc(d1) = c & loc(d2) = d1 & loc(d3) = d2.

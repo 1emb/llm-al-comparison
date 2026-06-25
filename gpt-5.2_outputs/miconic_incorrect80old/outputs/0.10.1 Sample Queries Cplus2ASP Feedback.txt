@@ -1,0 +1,157 @@
+% Query 1: Board p1 at its origin floor f2 while the elevator is at f2 (satisfiable)
+:- query
+    0: isFloor(f0) & isFloor(f1) & isFloor(f2) & isFloor(f3);
+    0: above(f0,f1) & above(f0,f2) & above(f0,f3) & above(f1,f2) & above(f1,f3) & above(f2,f3);
+    0: origin(p0)=f3 & dest(p0)=f2 & origin(p1)=f2 & dest(p1)=f0;
+    0: elevAt(f2);
+    0: ~boarded(p0) & ~served(p0) & ~boarded(p1) & ~served(p1);
+    0: board(f2,p1).
+
+Cplus2ASP Output:
+
+Solving...
+	
+
+	0:  dest(p0)=f2 dest(p1)=f0 elevAt(f2) isFloor(f0) isFloor(f1) isFloor(f2) isFloor(f3) origin(p0)=f3 origin(p1)=f2 above(f0, f1) above(f0, f2) above(f0, f3) above(f1, f0) above(f1, f1) above(f1, f2) above(f1, f3) above(f2, f0) above(f2, f1) above(f2, f2) above(f2, f3) above(f3, f0) above(f3, f1) above(f3, f2) above(f3, f3)
+
+	ACTIONS:  board(f2, p1)
+
+	1:  boarded(p1) dest(p0)=f2 dest(p1)=f0 elevAt(f2) isFloor(f0) isFloor(f1) isFloor(f2) isFloor(f3) origin(p0)=f3 origin(p1)=f2 above(f0, f1) above(f0, f2) above(f0, f3) above(f1, f0) above(f1, f1) above(f1, f2) above(f1, f3) above(f2, f0) above(f2, f1) above(f2, f2) above(f2, f3) above(f3, f0) above(f3, f1) above(f3, f2) above(f3, f3)
+
+SATISFIABLE
+Models       : 1+
+
+
+% Query 2: Try to board p1 at the wrong floor (f3) even though the elevator is there (unsatisfiable)
+:- query
+    0: isFloor(f0) & isFloor(f1) & isFloor(f2) & isFloor(f3);
+    0: above(f0,f1) & above(f0,f2) & above(f0,f3) & above(f1,f2) & above(f1,f3) & above(f2,f3);
+    0: origin(p0)=f3 & dest(p0)=f2 & origin(p1)=f2 & dest(p1)=f0;
+    0: elevAt(f3);
+    0: ~boarded(p0) & ~served(p0) & ~boarded(p1) & ~served(p1);
+    0: board(f3,p1).
+
+Cplus2ASP Output:
+
+Solving...
+UNSATISFIABLE
+Models       : 0
+No solution.
+
+
+
+% Query 3: Move down from f0 to f2 (since f0 is above f2) (satisfiable)
+:- query
+    0: isFloor(f0) & isFloor(f1) & isFloor(f2) & isFloor(f3);
+    0: above(f0,f1) & above(f0,f2) & above(f0,f3) & above(f1,f2) & above(f1,f3) & above(f2,f3);
+    0: origin(p0)=f3 & dest(p0)=f2 & origin(p1)=f2 & dest(p1)=f0;
+    0: elevAt(f0);
+    0: ~boarded(p0) & ~served(p0) & ~boarded(p1) & ~served(p1);
+    0: down(f0,f2).
+
+Cplus2ASP Output:
+
+Solving...
+	
+
+	0:  dest(p0)=f2 dest(p1)=f0 elevAt(f0) isFloor(f0) isFloor(f1) isFloor(f2) isFloor(f3) origin(p0)=f3 origin(p1)=f2 above(f0, f1) above(f0, f2) above(f0, f3) above(f1, f0) above(f1, f1) above(f1, f2) above(f1, f3) above(f2, f0) above(f2, f1) above(f2, f2) above(f2, f3) above(f3, f0) above(f3, f1) above(f3, f2) above(f3, f3)
+
+	ACTIONS:  down(f0, f2)
+
+	1:  dest(p0)=f2 dest(p1)=f0 elevAt(f2) isFloor(f0) isFloor(f1) isFloor(f2) isFloor(f3) origin(p0)=f3 origin(p1)=f2 above(f0, f1) above(f0, f2) above(f0, f3) above(f1, f0) above(f1, f1) above(f1, f2) above(f1, f3) above(f2, f0) above(f2, f1) above(f2, f2) above(f2, f3) above(f3, f0) above(f3, f1) above(f3, f2) above(f3, f3)
+
+SATISFIABLE
+Models       : 1+
+
+
+% [CHANGED] Query 4: Try to move up from f0 to f2 (should be SAT because f2 is above f0)
+:- query
+    0: isFloor(f0) & isFloor(f1) & isFloor(f2) & isFloor(f3);
+    0: above(f0,f1) & above(f0,f2) & above(f0,f3) & above(f1,f2) & above(f1,f3) & above(f2,f3);
+    0: origin(p0)=f3 & dest(p0)=f2 & origin(p1)=f2 & dest(p1)=f0;
+    0: elevAt(f0);
+    0: ~boarded(p0) & ~served(p0) & ~boarded(p1) & ~served(p1);
+    0: up(f0,f2).
+
+Cplus2ASP Output:
+
+Solving...
+	
+
+	0:  dest(p0)=f2 dest(p1)=f0 elevAt(f0) isFloor(f0) isFloor(f1) isFloor(f2) isFloor(f3) origin(p0)=f3 origin(p1)=f2 above(f0, f1) above(f0, f2) above(f0, f3) above(f1, f0) above(f1, f1) above(f1, f2) above(f1, f3) above(f2, f0) above(f2, f1) above(f2, f2) above(f2, f3) above(f3, f0) above(f3, f1) above(f3, f2) above(f3, f3)
+
+	ACTIONS:  up(f0, f2)
+
+	1:  dest(p0)=f2 dest(p1)=f0 elevAt(f2) isFloor(f0) isFloor(f1) isFloor(f2) isFloor(f3) origin(p0)=f3 origin(p1)=f2 above(f0, f1) above(f0, f2) above(f0, f3) above(f1, f0) above(f1, f1) above(f1, f2) above(f1, f3) above(f2, f0) above(f2, f1) above(f2, f2) above(f2, f3) above(f3, f0) above(f3, f1) above(f3, f2) above(f3, f3)
+
+SATISFIABLE
+Models       : 1+
+
+
+% Query 5: Try to execute an up and a down action concurrently (explicitly forbidden) (unsatisfiable)
+:- query
+    0: isFloor(f0) & isFloor(f1) & isFloor(f2) & isFloor(f3);
+    0: above(f0,f1) & above(f0,f2) & above(f0,f3) & above(f1,f2) & above(f1,f3) & above(f2,f3);
+    0: origin(p0)=f3 & dest(p0)=f2 & origin(p1)=f2 & dest(p1)=f0;
+    0: elevAt(f0);
+    0: ~boarded(p0) & ~served(p0) & ~boarded(p1) & ~served(p1);
+    0: down(f0,f2) & up(f0,f1).
+
+Cplus2ASP Output:
+
+Solving...
+UNSATISFIABLE
+Models       : 0
+No solution.
+
+
+
+
+
+:- query
+    0: isFloor(f0) & isFloor(f1) & isFloor(f2) & isFloor(f3);
+    0: above(f0,f1) & above(f0,f2) & above(f0,f3) & above(f1,f2) & above(f1,f3) & above(f2,f3);
+    0: origin(p0)=f3 & dest(p0)=f2 & origin(p1)=f2 & dest(p1)=f0;
+    0: elevAt(f0);
+    0: ~boarded(p0) & ~served(p0) & ~boarded(p1) & ~served(p1);
+    maxstep: served(p0) & served(p1).
+
+
+Cplus2ASP Output:
+
+Solving...
+	
+
+	0:  dest(p0)=f2 dest(p1)=f0 elevAt(f0) isFloor(f0) isFloor(f1) isFloor(f2) isFloor(f3) origin(p0)=f3 origin(p1)=f2 above(f0, f1) above(f0, f2) above(f0, f3) above(f1, f1) above(f1, f2) above(f1, f3) above(f2, f2) above(f2, f3) above(f3, f0) above(f3, f3)
+
+	ACTIONS:  down(f0, f3)
+
+	1:  dest(p0)=f2 dest(p1)=f0 elevAt(f3) isFloor(f0) isFloor(f1) isFloor(f2) isFloor(f3) origin(p0)=f3 origin(p1)=f2 above(f0, f1) above(f0, f2) above(f0, f3) above(f1, f1) above(f1, f2) above(f1, f3) above(f2, f2) above(f2, f3) above(f3, f0) above(f3, f3)
+
+	ACTIONS:  board(f3, p0)
+
+	2:  boarded(p0) dest(p0)=f2 dest(p1)=f0 elevAt(f3) isFloor(f0) isFloor(f1) isFloor(f2) isFloor(f3) origin(p0)=f3 origin(p1)=f2 above(f0, f1) above(f0, f2) above(f0, f3) above(f1, f1) above(f1, f2) above(f1, f3) above(f2, f2) above(f2, f3) above(f3, f0) above(f3, f3)
+
+	ACTIONS:  up(f3, f2)
+
+	3:  boarded(p0) dest(p0)=f2 dest(p1)=f0 elevAt(f2) isFloor(f0) isFloor(f1) isFloor(f2) isFloor(f3) origin(p0)=f3 origin(p1)=f2 above(f0, f1) above(f0, f2) above(f0, f3) above(f1, f1) above(f1, f2) above(f1, f3) above(f2, f2) above(f2, f3) above(f3, f0) above(f3, f3)
+
+	ACTIONS:  depart(f2, p0)
+
+	4:  dest(p0)=f2 dest(p1)=f0 elevAt(f2) isFloor(f0) isFloor(f1) isFloor(f2) isFloor(f3) origin(p0)=f3 origin(p1)=f2 served(p0) above(f0, f1) above(f0, f2) above(f0, f3) above(f1, f1) above(f1, f2) above(f1, f3) above(f2, f2) above(f2, f3) above(f3, f0) above(f3, f3)
+
+	ACTIONS:  board(f2, p1)
+
+	5:  boarded(p1) dest(p0)=f2 dest(p1)=f0 elevAt(f2) isFloor(f0) isFloor(f1) isFloor(f2) isFloor(f3) origin(p0)=f3 origin(p1)=f2 served(p0) above(f0, f1) above(f0, f2) above(f0, f3) above(f1, f1) above(f1, f2) above(f1, f3) above(f2, f2) above(f2, f3) above(f3, f0) above(f3, f3)
+
+	ACTIONS:  up(f2, f0)
+
+	6:  boarded(p1) dest(p0)=f2 dest(p1)=f0 elevAt(f0) isFloor(f0) isFloor(f1) isFloor(f2) isFloor(f3) origin(p0)=f3 origin(p1)=f2 served(p0) above(f0, f1) above(f0, f2) above(f0, f3) above(f1, f1) above(f1, f2) above(f1, f3) above(f2, f2) above(f2, f3) above(f3, f0) above(f3, f3)
+
+	ACTIONS:  depart(f0, p1)
+
+	7:  dest(p0)=f2 dest(p1)=f0 elevAt(f0) isFloor(f0) isFloor(f1) isFloor(f2) isFloor(f3) origin(p0)=f3 origin(p1)=f2 served(p0) served(p1) above(f0, f1) above(f0, f2) above(f0, f3) above(f1, f1) above(f1, f2) above(f1, f3) above(f2, f2) above(f2, f3) above(f3, f0) above(f3, f3)
+
+SATISFIABLE
+Models       : 1+
+

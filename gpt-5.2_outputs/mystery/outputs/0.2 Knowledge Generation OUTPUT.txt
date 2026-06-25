@@ -1,0 +1,30 @@
+% An attack on an entity is not executable unless harmony holds.
+% An attack on an entity is not executable unless the chosen entity is a province.
+% An attack on an entity is not executable unless the chosen entity is a planet.
+% Attacking an entity causes that entity to be in pain.
+% Attacking an entity causes that entity to cease to be a province.
+% Attacking an entity causes that entity to cease to be a planet.
+% Attacking an entity causes harmony to not hold.
+
+% A succumb for an entity is not executable unless that entity is in pain.
+% Succumbing for an entity causes that entity to no longer be in pain.
+% Succumbing for an entity causes that entity to become a province.
+% Succumbing for an entity causes that entity to become a planet.
+% Succumbing for an entity causes harmony to hold.
+
+% An overcome by one entity over another entity is not executable unless the acting entity is in pain.
+% An overcome by one entity over another entity is not executable unless the other entity is a province.
+% Overcoming causes harmony to hold.
+% Overcoming causes the acting entity to become a province.
+% Overcoming causes the acting entity to crave the other entity.
+% Overcoming causes the other entity to cease to be a province.
+% Overcoming causes the acting entity to no longer be in pain.
+
+% A feast by one entity on another entity is not executable unless the acting entity craves the other entity.
+% A feast by one entity on another entity is not executable unless the acting entity is a province.
+% A feast by one entity on another entity is not executable unless harmony holds.
+% Feasting causes the acting entity to be in pain.
+% Feasting causes the other entity to become a province.
+% Feasting causes the acting entity to no longer crave the other entity.
+% Feasting causes the acting entity to cease to be a province.
+% Feasting causes harmony to not hold.

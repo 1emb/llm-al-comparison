@@ -1,0 +1,92 @@
+% Query 1: Load p0 into truck t0 at l0_0 (truck and package co-located, and p0 not already in any vehicle) (satisfiable)
+:- query
+    label :: q1_load_truck_ok;
+    0: inCity(l0_0)=c0 & inCity(l0_1)=c0 & inCity(l1_0)=c1 & inCity(l1_1)=c1;
+    0: airport(l0_0) & ~airport(l0_1) & airport(l1_0) & ~airport(l1_1);
+    0: loc(a0)=l1_0 & loc(a1)=l0_0 & loc(t0)=l0_0 & loc(t1)=l1_0;
+    0: loc(p0)=l0_0 & loc(p1)=l1_1;
+    0: ~in(p0,a0) & ~in(p0,a1) & ~in(p0,t0) & ~in(p0,t1);
+    0: ~in(p1,a0) & ~in(p1,a1) & ~in(p1,t0) & ~in(p1,t1);
+    0: loadTruck(p0,t0,l0_0);
+    maxstep: in(p0,t0).
+
+Cplus2ASP Output:
+
+ERROR: temp.bc:71:26]: "loc/1" is not a boolean valued constant and therefore cannot be used in a bare atomic formula.
+
+% Query 2: Try to load p0 into truck t0 at l0_1 even though both are at l0_0 (should be blocked by nonexecutable conditions) (unsatisfiable)
+:- query
+    label :: q2_load_truck_wrong_place;
+    0: inCity(l0_0)=c0 & inCity(l0_1)=c0 & inCity(l1_0)=c1 & inCity(l1_1)=c1;
+    0: airport(l0_0) & ~airport(l0_1) & airport(l1_0) & ~airport(l1_1);
+    0: loc(a0)=l1_0 & loc(a1)=l0_0 & loc(t0)=l0_0 & loc(t1)=l1_0;
+    0: loc(p0)=l0_0 & loc(p1)=l1_1;
+    0: ~in(p0,a0) & ~in(p0,a1) & ~in(p0,t0) & ~in(p0,t1);
+    0: ~in(p1,a0) & ~in(p1,a1) & ~in(p1,t0) & ~in(p1,t1);
+    0: loadTruck(p0,t0,l0_1).
+
+Cplus2ASP Output:
+
+ERROR: temp.bc:71:26]: "loc/1" is not a boolean valued constant and therefore cannot be used in a bare atomic formula.
+
+% Query 3: Drive truck t0 from l0_0 to l0_1 within city c0 (allowed because both locations are in c0 and t0 starts at l0_0) (satisfiable)
+:- query
+    label :: q3_drive_within_city_ok;
+    0: inCity(l0_0)=c0 & inCity(l0_1)=c0 & inCity(l1_0)=c1 & inCity(l1_1)=c1;
+    0: airport(l0_0) & ~airport(l0_1) & airport(l1_0) & ~airport(l1_1);
+    0: loc(a0)=l1_0 & loc(a1)=l0_0 & loc(t0)=l0_0 & loc(t1)=l1_0;
+    0: loc(p0)=l0_0 & loc(p1)=l1_1;
+    0: ~in(p0,a0) & ~in(p0,a1) & ~in(p0,t0) & ~in(p0,t1);
+    0: ~in(p1,a0) & ~in(p1,a1) & ~in(p1,t0) & ~in(p1,t1);
+    0: drive(t0,l0_0,l0_1,c0);
+    maxstep: loc(t0)=l0_1.
+
+Cplus2ASP Output:
+
+ERROR: temp.bc:71:26]: "loc/1" is not a boolean valued constant and therefore cannot be used in a bare atomic formula.
+
+% Query 4: Try to drive truck t0 from l0_0 to l1_0 while claiming city c0 (destination is in c1, so should be nonexecutable) (unsatisfiable)
+:- query
+    label :: q4_drive_cross_city_blocked;
+    0: inCity(l0_0)=c0 & inCity(l0_1)=c0 & inCity(l1_0)=c1 & inCity(l1_1)=c1;
+    0: airport(l0_0) & ~airport(l0_1) & airport(l1_0) & ~airport(l1_1);
+    0: loc(a0)=l1_0 & loc(a1)=l0_0 & loc(t0)=l0_0 & loc(t1)=l1_0;
+    0: loc(p0)=l0_0 & loc(p1)=l1_1;
+    0: ~in(p0,a0) & ~in(p0,a1) & ~in(p0,t0) & ~in(p0,t1);
+    0: ~in(p1,a0) & ~in(p1,a1) & ~in(p1,t0) & ~in(p1,t1);
+    0: drive(t0,l0_0,l1_0,c0).
+
+Cplus2ASP Output:
+
+ERROR: temp.bc:71:26]: "loc/1" is not a boolean valued constant and therefore cannot be used in a bare atomic formula.
+
+% Query 5: Try to fly airplane a1 from l0_0 to l0_1, but l0_1 is not an airport (should be nonexecutable) (unsatisfiable)
+:- query
+    label :: q5_fly_to_non_airport_blocked;
+    0: inCity(l0_0)=c0 & inCity(l0_1)=c0 & inCity(l1_0)=c1 & inCity(l1_1)=c1;
+    0: airport(l0_0) & ~airport(l0_1) & airport(l1_0) & ~airport(l1_1);
+    0: loc(a0)=l1_0 & loc(a1)=l0_0 & loc(t0)=l0_0 & loc(t1)=l1_0;
+    0: loc(p0)=l0_0 & loc(p1)=l1_1;
+    0: ~in(p0,a0) & ~in(p0,a1) & ~in(p0,t0) & ~in(p0,t1);
+    0: ~in(p1,a0) & ~in(p1,a1) & ~in(p1,t0) & ~in(p1,t1);
+    0: fly(a1,l0_0,l0_1).
+
+Cplus2ASP Output:
+
+ERROR: temp.bc:71:26]: "loc/1" is not a boolean valued constant and therefore cannot be used in a bare atomic formula.
+
+
+
+:- query
+    0: inCity(l0_0)=c0 & inCity(l0_1)=c0 & inCity(l1_0)=c1 & inCity(l1_1)=c1;
+    0: airport(l0_0) & ~airport(l0_1) & airport(l1_0) & ~airport(l1_1);
+    0: loc(a0)=l1_0 & loc(a1)=l0_0 & loc(t0)=l0_0 & loc(t1)=l1_0;
+    0: loc(p0)=l0_0 & loc(p1)=l1_1;
+    0: ~in(p0,a0) & ~in(p0,a1) & ~in(p0,t0) & ~in(p0,t1);
+    0: ~in(p1,a0) & ~in(p1,a1) & ~in(p1,t0) & ~in(p1,t1);
+    maxstep: loc(p0)=l0_1 & loc(p1)=l1_0.
+
+
+Cplus2ASP Output:
+
+ERROR: temp.bc:71:26]: "loc/1" is not a boolean valued constant and therefore cannot be used in a bare atomic formula.

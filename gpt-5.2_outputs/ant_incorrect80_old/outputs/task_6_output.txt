@@ -1,0 +1,31 @@
+Objects:
+:- objects
+    ant :: ant;
+    p1, p2, p3, p4, p5, p6, p7 :: place.
+
+Query:
+:- query
+    0: at(ant,p1) & ~at(ant,p2) & ~at(ant,p3) & ~at(ant,p4) & ~at(ant,p5) & ~at(ant,p6) & ~at(ant,p7)
+       & ~hasFood(ant)
+       & hasFoodAt(p1) & hasFoodAt(p2) & hasFoodAt(p3) & hasFoodAt(p4) & hasFoodAt(p5) & hasFoodAt(p6) & hasFoodAt(p7)
+       & isNest(p1) & ~isNest(p2) & ~isNest(p3) & ~isNest(p4) & ~isNest(p5) & ~isNest(p6) & ~isNest(p7)
+       & isClear(p1) & isClear(p2) & isClear(p3) & ~isClear(p4) & isClear(p5) & ~isClear(p6) & isClear(p7)
+       & adjacent(p1,p1) & adjacent(p1,p2) & adjacent(p1,p3) & adjacent(p1,p4) & adjacent(p1,p5) & adjacent(p1,p6) & adjacent(p1,p7)
+       & adjacent(p2,p1) & adjacent(p2,p2) & adjacent(p2,p3) & adjacent(p2,p4) & adjacent(p2,p5) & adjacent(p2,p6) & adjacent(p2,p7)
+       & adjacent(p3,p1) & adjacent(p3,p2) & adjacent(p3,p3) & adjacent(p3,p4) & adjacent(p3,p5) & adjacent(p3,p6) & adjacent(p3,p7)
+       & adjacent(p4,p1) & adjacent(p4,p2) & adjacent(p4,p3) & adjacent(p4,p4) & adjacent(p4,p5) & adjacent(p4,p6) & adjacent(p4,p7)
+       & adjacent(p5,p1) & adjacent(p5,p2) & adjacent(p5,p3) & adjacent(p5,p4) & adjacent(p5,p5) & adjacent(p5,p6) & adjacent(p5,p7)
+       & adjacent(p6,p1) & adjacent(p6,p2) & adjacent(p6,p3) & adjacent(p6,p4) & adjacent(p6,p5) & adjacent(p6,p6) & adjacent(p6,p7)
+       & adjacent(p7,p1) & adjacent(p7,p2) & adjacent(p7,p3) & adjacent(p7,p4) & adjacent(p7,p5) & adjacent(p7,p6) & adjacent(p7,p7);
+    maxstep: hasFoodAt(p1).
+
+Status: FAIL
+
+Output:
+/home/grad24/mnguyen/.cplus2asp.config: cannot open file
+
+
+Errors:
+ERROR: temp.bc:100:8]: "at": Syntax error.
+ERROR: temp.bc:111:133]: ";": Syntax error.
+% Error: An error occurred while executing the translator.

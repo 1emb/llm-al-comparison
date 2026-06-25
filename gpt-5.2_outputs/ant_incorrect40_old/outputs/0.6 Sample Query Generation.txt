@@ -1,0 +1,53 @@
+% Query 1: Simple move succeeds when destination is NOT clear and places are adjacent (satisfiable)
+:- query
+    0: loc(ant1)=p1
+       & adjacent(p1,p2) & adjacent(p2,p1)
+       & clear(p1) & ~clear(p2)
+       & isNest(p1)
+       & hasFood(p2)
+       & ~carryingFood(ant1);
+    0: move(ant1,p1,p2);
+    maxstep: loc(ant1)=p2.
+
+% Query 2: Move is blocked when destination IS clear (unsatisfiable)
+:- query
+    0: loc(ant1)=p1
+       & adjacent(p1,p2) & adjacent(p2,p1)
+       & clear(p1) & clear(p2)
+       & isNest(p1)
+       & hasFood(p2)
+       & ~carryingFood(ant1);
+    0: move(ant1,p1,p2).
+
+% Query 3: Pick up food is not executable if the ant is at that place (unsatisfiable)
+:- query
+    0: loc(ant1)=p2
+       & adjacent(p1,p2) & adjacent(p2,p1)
+       & clear(p1) & clear(p2)
+       & isNest(p1)
+       & hasFood(p2)
+       & ~carryingFood(ant1);
+    0: pickUpFood(ant1,p2).
+
+% Query 4: Pick up food succeeds when ant is NOT at the food place, the place has food, and ant is not carrying (satisfiable)
+:- query
+    0: loc(ant1)=p1
+       & adjacent(p1,p2) & adjacent(p2,p1)
+       & clear(p1) & clear(p2)
+       & isNest(p1)
+       & hasFood(p2)
+       & ~carryingFood(ant1);
+    0: pickUpFood(ant1,p2);
+    maxstep: carryingFood(ant1) & hasFood(p2).
+
+% Query 5: Drop food at nest succeeds when ant is NOT at the nest, the place is a nest, and ant is carrying (satisfiable)
+:- query
+    0: loc(ant1)=p2
+       & adjacent(p1,p2) & adjacent(p2,p1)
+       & clear(p1) & clear(p2)
+       & isNest(p1)
+       & ~hasFood(p1)
+       & hasFood(p2)
+       & carryingFood(ant1);
+    0: dropFoodAtNest(ant1,p1);
+    maxstep: hasFood(p1) & carryingFood(ant1).

@@ -1,0 +1,26 @@
+% Query 1: Attack is blocked when harmony is present (unsatisfiable)
+:- query
+    0: harmony & isProvince(b) & ~isPlanet(b);
+    0: attack(b).
+
+% Query 2: Attack is executable when target is a province, not a planet, and harmony is absent; after attack, effects hold (satisfiable)
+:- query
+    0: ~harmony & isProvince(b) & ~isPlanet(b) & ~inPain(b);
+    0: attack(b);
+    maxstep: inPain(b) & ~isProvince(b) & isPlanet(b) & harmony.
+
+% Query 3: Succumb is blocked if the entity is already in pain (unsatisfiable)
+:- query
+    0: inPain(a);
+    0: succumb(a).
+
+% Query 4: Overcome is blocked if the first entity is not in pain (unsatisfiable)
+:- query
+    0: ~inPain(a) & ~isProvince(b);
+    0: overcome(a,b).
+
+% Query 5: Feast is executable when the first entity is a province, does not crave the second, and harmony is absent; after feast, effects hold (satisfiable)
+:- query
+    0: ~harmony & isProvince(a) & ~craves(a,b) & inPain(a) & isProvince(b);
+    0: feast(a,b);
+    maxstep: ~inPain(a) & craves(a,b) & ~isProvince(a) & ~isProvince(b) & ~harmony.

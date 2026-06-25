@@ -1,0 +1,75 @@
+% BC+ signature
+:- sorts
+    floor;
+    passenger.
+
+:- objects
+    % Floors
+    f0, f1, f2, f3 :: floor;
+    % Passengers
+    p0, p1 :: passenger.
+
+:- variables
+    F, F1, F2 :: floor;
+    P :: passenger.
+
+:- constants
+    % Actions
+    board(passenger) :: exogenousAction;
+    depart(passenger) :: exogenousAction;
+    up(floor) :: exogenousAction;
+    down(floor) :: exogenousAction;
+
+    % Fluents
+    liftLoc :: inertialFluent(floor);
+    origin(passenger) :: inertialFluent(floor);
+    dest(passenger) :: inertialFluent(floor);
+
+    % Use inertialFluent(boolean) instead of rigid(boolean) to avoid rigid/simple fluents
+    above(floor,floor) :: inertialFluent(boolean);
+
+    isPassenger(passenger) :: inertialFluent(boolean);
+    boarded(passenger) :: inertialFluent(boolean);
+    served(passenger) :: inertialFluent(boolean).
+
+% Generated constraints
+
+% Boarding: only when lift is at passenger's origin, and passenger is not yet a passenger.
+nonexecutable board(P) if liftLoc\=origin(P).
+nonexecutable board(P) if isPassenger(P).
+
+% Boarding makes the person a passenger and boarded.
+board(P) causes isPassenger(P).
+board(P) causes boarded(P).
+
+% Departing: only when lift is at passenger's destination, passenger is a passenger, and is currently boarded.
+nonexecutable depart(P) if liftLoc\=dest(P).
+nonexecutable depart(P) if ~isPassenger(P).
+nonexecutable depart(P) if ~boarded(P).
+
+% Departing unboards and marks served.
+depart(P) causes ~boarded(P).
+depart(P) causes served(P).
+
+% Moving up/down: parameter is the destination floor.
+% Preconditions use above/2 to constrain direction.
+nonexecutable up(F2) if liftLoc=F2.
+nonexecutable up(F2) if ~above(liftLoc,F2).
+
+nonexecutable down(F2) if liftLoc=F2.
+nonexecutable down(F2) if ~above(F2,liftLoc).
+
+% Effects: movement changes lift location to destination.
+up(F2) causes liftLoc=F2.
+down(F2) causes liftLoc=F2.
+
+% Optional sanity constraints (help avoid degenerate models):
+impossible above(F,F).  % no floor is above itself
+
+% Main query
+:- query
+    0: above(f0,f1) & above(f0,f2) & above(f0,f3) & above(f1,f2) & above(f1,f3) & above(f2,f3);
+    0: origin(p0)=f3 & dest(p0)=f2 & origin(p1)=f1 & dest(p1)=f3;
+    0: liftLoc=f0;
+    0: ~isPassenger(p0) & ~isPassenger(p1) & ~boarded(p0) & ~boarded(p1) & ~served(p0) & ~served(p1);
+    maxstep: served(p0) & served(p1).

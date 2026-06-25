@@ -1,0 +1,111 @@
+% BC+ signature
+:- sorts
+    floor;
+    passenger.
+
+:- objects
+    f0, f1 :: floor;
+    p0 :: passenger.
+
+:- variables
+    F, F1, F2 :: floor;
+    P :: passenger.
+
+:- constants
+    board(passenger,floor) :: exogenousAction;
+    depart(passenger,floor) :: exogenousAction;
+    moveUp(floor,floor) :: exogenousAction;
+    moveDown(floor,floor) :: exogenousAction;
+
+    isFloor(floor) :: inertialFluent(boolean);
+    loc(floor) :: inertialFluent(boolean);
+    above(floor,floor) :: inertialFluent(boolean);
+
+    origin(passenger) :: inertialFluent(floor);
+    dest(passenger) :: inertialFluent(floor);
+
+    passengerFlag(passenger) :: inertialFluent(boolean);
+    boarded(passenger) :: inertialFluent(boolean);
+    served(passenger) :: inertialFluent(boolean).
+
+% Generated constraints
+% NOTE: "at" is a reserved keyword in BC+, so we use loc(F) instead.
+
+% 1. A passenger can board at a floor only if that floor is a valid floor.
+nonexecutable board(P,F) if ~isFloor(F).
+
+% 2. A passenger can board at a floor only if the elevator is currently at that floor.
+nonexecutable board(P,F) if ~loc(F).
+
+% 3. A passenger can board at a floor only if the passenger's origin is that floor.
+nonexecutable board(P,F) if origin(P)\=F.
+
+% 4. A passenger can board at a floor only if the passenger is not marked as a passenger.
+nonexecutable board(P,F) if passengerFlag(P).
+
+% 5. Boarding causes the passenger to no longer be marked as boarded.
+board(P,F) causes ~boarded(P).
+
+% 6. A passenger can depart at a floor only if that floor is a valid floor.
+nonexecutable depart(P,F) if ~isFloor(F).
+
+% 7. A passenger can depart at a floor only if the passenger is marked as a passenger.
+nonexecutable depart(P,F) if ~passengerFlag(P).
+
+% 8. A passenger can depart at a floor only if the elevator is not currently at that floor.
+nonexecutable depart(P,F) if loc(F).
+
+% 9. A passenger can depart at a floor only if the passenger's destination is that floor.
+nonexecutable depart(P,F) if dest(P)\=F.
+
+% 10. A passenger can depart at a floor only if the passenger is marked as boarded.
+nonexecutable depart(P,F) if ~boarded(P).
+
+% 11. Departing causes the passenger to be marked as boarded.
+depart(P,F) causes boarded(P).
+
+% 12. Departing causes the passenger to be marked as served.
+depart(P,F) causes served(P).
+
+% 13. The elevator can move up from one floor to another only if both floors are valid floors.
+nonexecutable moveUp(F1,F2) if ~isFloor(F1).
+nonexecutable moveUp(F1,F2) if ~isFloor(F2).
+
+% 14. The elevator can move up from a first floor to a second floor only if the elevator is not at the first floor.
+nonexecutable moveUp(F1,F2) if loc(F1).
+
+% 15. The elevator can move up from a first floor to a second floor only if the first floor is above the second floor.
+nonexecutable moveUp(F1,F2) if ~above(F1,F2).
+
+% 16. Moving up causes the elevator to no longer be at the second floor.
+moveUp(F1,F2) causes ~loc(F2).
+
+% 17. Moving up causes the elevator to no longer be at the first floor.
+moveUp(F1,F2) causes ~loc(F1).
+
+% 18. The elevator can move down from one floor to another only if both floors are valid floors.
+nonexecutable moveDown(F1,F2) if ~isFloor(F1).
+nonexecutable moveDown(F1,F2) if ~isFloor(F2).
+
+% 19. The elevator can move down from a first floor to a second floor only if the elevator is not at the first floor.
+nonexecutable moveDown(F1,F2) if loc(F1).
+
+% 20. The elevator can move down from a first floor to a second floor only if the second floor is above the first floor.
+nonexecutable moveDown(F1,F2) if ~above(F2,F1).
+
+% 21. Moving down causes the elevator to be at the second floor.
+moveDown(F1,F2) causes loc(F2).
+
+% 22. Moving down causes the elevator to be at the first floor.
+moveDown(F1,F2) causes loc(F1).
+
+% Main query
+% Original natural language query: There is one passenger p0 and two floors f0 and f1.
+% f0 is above f1. The origin of p0 is f0 and the destination of p0 is f1.
+% The elevator is at f0. Find a plan to serve passenger p0.
+:- query
+    0: isFloor(f0) & isFloor(f1) & above(f0,f1) &
+       origin(p0)=f0 & dest(p0)=f1 &
+       loc(f0) & ~loc(f1) &
+       ~passengerFlag(p0) & boarded(p0) & ~served(p0);
+    maxstep: served(p0).

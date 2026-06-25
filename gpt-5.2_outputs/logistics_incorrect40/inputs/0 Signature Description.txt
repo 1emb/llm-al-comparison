@@ -1,0 +1,11 @@
+There are five types of objects: "package", "truck", "airplane", "location", and "city".
+"vehicle" is a common type for "truck" and "airplane".
+"thing" is a common type for "package" and "vehicle".
+
+Actions
+Loading a package into a truck at a location is an action.
+Loading a package into an airplane at a location is an action.
+Unloading a package from a truck at a location is an action.
+Unloading a package from an airplane at a location is an action.
+Driving a truck from a location to a location in a city is an action.
+Flying an airplane from a location to a location is an action.

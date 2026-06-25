@@ -1,0 +1,65 @@
+Objects:
+:- objects
+    ant1 :: ant;
+    p1, p2, p3, p4 :: place.
+
+Query:
+:- query
+    0: loc(ant1)=p1 & carryingFood(ant1)=false &
+       adjacent(p1,p1)=false & adjacent(p1,p2)=true & adjacent(p1,p3)=false & adjacent(p1,p4)=false &
+       adjacent(p2,p1)=true & adjacent(p2,p2)=false & adjacent(p2,p3)=true & adjacent(p2,p4)=false &
+       adjacent(p3,p1)=false & adjacent(p3,p2)=true & adjacent(p3,p3)=false & adjacent(p3,p4)=true &
+       adjacent(p4,p1)=false & adjacent(p4,p2)=false & adjacent(p4,p3)=true & adjacent(p4,p4)=false &
+       hasFood(p1)=false & hasFood(p2)=false & hasFood(p3)=false & hasFood(p4)=true &
+       isNest(p1)=true & isNest(p2)=false & isNest(p3)=false & isNest(p4)=false &
+       isClear(p1)=true & isClear(p2)=true & isClear(p3)=true & isClear(p4)=true;
+    maxstep: hasFood(p1)=true.
+
+Status: True
+
+Output:
+Solving...
+Solution: 1 (Time: 0.047s)
+	
+
+	0:  hasFood(p4) isClear(p1) isClear(p2) isClear(p3) isClear(p4) isNest(p1) loc(ant1)=p1 adjacent(p1, p2) adjacent(p2, p1) adjacent(p2, p3) adjacent(p3, p2) adjacent(p3, p4) adjacent(p4, p3)
+
+	1:  hasFood(p4) isClear(p1) isClear(p3) isNest(p1) loc(ant1)=p1 adjacent(p1, p2) adjacent(p2, p1) adjacent(p2, p3) adjacent(p3, p2) adjacent(p3, p4) adjacent(p4, p3)
+
+	ACTIONS:  move(ant1, p1, p2)
+
+	2:  hasFood(p4) isNest(p1) loc(ant1)=p2 adjacent(p2, p1) adjacent(p2, p3) adjacent(p3, p2) adjacent(p3, p4) adjacent(p4, p3)
+
+	ACTIONS:  move(ant1, p2, p3)
+
+	3:  hasFood(p4) isNest(p1) loc(ant1)=p3 adjacent(p2, p1) adjacent(p3, p2) adjacent(p3, p4) adjacent(p4, p3)
+
+	ACTIONS:  move(ant1, p3, p4)
+
+	4:  hasFood(p4) isNest(p1) loc(ant1)=p4 adjacent(p2, p1) adjacent(p3, p2) adjacent(p4, p3)
+
+	ACTIONS:  pickUpFood(ant1, p4)
+
+	5:  carryingFood(ant1) hasFood(p4) isNest(p1) loc(ant1)=p4 adjacent(p2, p1) adjacent(p3, p2) adjacent(p4, p3)
+
+	ACTIONS:  move(ant1, p4, p3)
+
+	6:  carryingFood(ant1) isNest(p1) loc(ant1)=p3 adjacent(p2, p1) adjacent(p3, p2)
+
+	ACTIONS:  move(ant1, p3, p2)
+
+	7:  carryingFood(ant1) isNest(p1) loc(ant1)=p2 adjacent(p2, p1)
+
+	ACTIONS:  move(ant1, p2, p1)
+
+	8:  carryingFood(ant1) isNest(p1) loc(ant1)=p1
+
+	ACTIONS:  dropFoodAtNest(ant1, p1)
+
+	9:  hasFood(p1) loc(ant1)=p1
+
+SATISFIABLE
+Models       : 1+
+Calls        : 10
+Time         : 0.047s (Solving: 0.00s 1st Model: 0.00s Unsat: 0.00s)
+CPU Time     : 0.047s

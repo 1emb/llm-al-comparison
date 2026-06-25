@@ -1,0 +1,87 @@
+Objects:
+:- objects
+    c0, c1 :: city;
+    l0_0, l0_1, l1_0, l1_1 :: location;
+    a0 :: airplane;
+    t0, t1 :: truck;
+    p0, p1, p2 :: package.
+
+Query:
+:- query
+    0: inCity(l0_0)=c0 & inCity(l0_1)=c0 & inCity(l1_0)=c1 & inCity(l1_1)=c1;
+    0: airport(l0_0) & ~airport(l0_1) & airport(l1_0) & ~airport(l1_1);
+    0: loc(a0)=l0_0 & loc(t0)=l0_0 & loc(t1)=l1_0;
+    0: atPkg(p0,l0_0) & loc(p0)=l0_0;
+    0: atPkg(p1,l1_1) & loc(p1)=l1_1;
+    0: atPkg(p2,l0_1) & loc(p2)=l0_1;
+    0: ~in(p0,a0) & ~in(p0,t0) & ~in(p0,t1);
+    0: ~in(p1,a0) & ~in(p1,t0) & ~in(p1,t1);
+    0: ~in(p2,a0) & ~in(p2,t0) & ~in(p2,t1);
+    maxstep: atPkg(p0,l1_0) & atPkg(p1,l1_0) & atPkg(p2,l1_0).
+
+Status: True
+
+Output:
+Solving...
+Solution: 1 (Time: 0.342s)
+	
+
+	0:  airport(l0_0) airport(l1_0) inCity(l0_0)=c0 inCity(l0_1)=c0 inCity(l1_0)=c1 inCity(l1_1)=c1 loc(a0)=l0_0 loc(p0)=l0_0 loc(p1)=l1_1 loc(p2)=l0_1 loc(t0)=l0_0 loc(t1)=l1_0 atPkg(p0, l0_0) atPkg(p1, l1_1) atPkg(p2, l0_1)
+
+	ACTIONS:  drive(t1, l1_0, l1_1, c1)
+
+	1:  airport(l0_0) airport(l1_0) inCity(l0_0)=c0 inCity(l0_1)=c0 inCity(l1_0)=c1 inCity(l1_1)=c1 loc(a0)=l0_0 loc(p0)=l0_0 loc(p1)=l1_1 loc(p2)=l0_1 loc(t0)=l0_0 loc(t1)=l1_1 atPkg(p0, l0_0) atPkg(p1, l1_1) atPkg(p2, l0_1)
+
+	ACTIONS:  loadPlane(p0, a0, l0_0)
+
+	2:  airport(l0_0) airport(l1_0) inCity(l0_0)=c0 inCity(l0_1)=c0 inCity(l1_0)=c1 inCity(l1_1)=c1 loc(a0)=l0_0 loc(p0)=l0_0 loc(p1)=l1_1 loc(p2)=l0_1 loc(t0)=l0_0 loc(t1)=l1_1 atPkg(p1, l1_1) atPkg(p2, l0_1) in(p0, a0)
+
+	ACTIONS:  drive(t0, l0_0, l0_1, c0)
+
+	3:  airport(l0_0) airport(l1_0) inCity(l0_0)=c0 inCity(l0_1)=c0 inCity(l1_0)=c1 inCity(l1_1)=c1 loc(a0)=l0_0 loc(p0)=l0_0 loc(p1)=l1_1 loc(p2)=l0_1 loc(t0)=l0_1 loc(t1)=l1_1 atPkg(p1, l1_1) atPkg(p2, l0_1) in(p0, a0)
+
+	ACTIONS:  loadTruck(p2, t0, l0_1)
+
+	4:  airport(l0_0) airport(l1_0) inCity(l0_0)=c0 inCity(l0_1)=c0 inCity(l1_0)=c1 inCity(l1_1)=c1 loc(a0)=l0_0 loc(p0)=l0_0 loc(p1)=l1_1 loc(p2)=l0_1 loc(t0)=l0_1 loc(t1)=l1_1 atPkg(p1, l1_1) in(p0, a0) in(p2, t0)
+
+	ACTIONS:  drive(t0, l0_1, l0_0, c0)
+
+	5:  airport(l0_0) airport(l1_0) inCity(l0_0)=c0 inCity(l0_1)=c0 inCity(l1_0)=c1 inCity(l1_1)=c1 loc(a0)=l0_0 loc(p0)=l0_0 loc(p1)=l1_1 loc(p2)=l0_0 loc(t0)=l0_0 loc(t1)=l1_1 atPkg(p1, l1_1) in(p0, a0) in(p2, t0)
+
+	ACTIONS:  loadTruck(p1, t1, l1_1)
+
+	6:  airport(l0_0) airport(l1_0) inCity(l0_0)=c0 inCity(l0_1)=c0 inCity(l1_0)=c1 inCity(l1_1)=c1 loc(a0)=l0_0 loc(p0)=l0_0 loc(p1)=l1_1 loc(p2)=l0_0 loc(t0)=l0_0 loc(t1)=l1_1 in(p0, a0) in(p1, t1) in(p2, t0)
+
+	ACTIONS:  unloadTruck(p2, t0, l0_0)
+
+	7:  airport(l0_0) airport(l1_0) inCity(l0_0)=c0 inCity(l0_1)=c0 inCity(l1_0)=c1 inCity(l1_1)=c1 loc(a0)=l0_0 loc(p0)=l0_0 loc(p1)=l1_1 loc(p2)=l0_0 loc(t0)=l0_0 loc(t1)=l1_1 atPkg(p2, l0_0) in(p0, a0) in(p1, t1)
+
+	ACTIONS:  loadPlane(p2, a0, l0_0)
+
+	8:  airport(l0_0) airport(l1_0) inCity(l0_0)=c0 inCity(l0_1)=c0 inCity(l1_0)=c1 inCity(l1_1)=c1 loc(a0)=l0_0 loc(p0)=l0_0 loc(p1)=l1_1 loc(p2)=l0_0 loc(t0)=l0_0 loc(t1)=l1_1 in(p0, a0) in(p1, t1) in(p2, a0)
+
+	ACTIONS:  fly(a0, l0_0, l1_0)
+
+	9:  airport(l0_0) airport(l1_0) inCity(l0_0)=c0 inCity(l0_1)=c0 inCity(l1_0)=c1 inCity(l1_1)=c1 loc(a0)=l1_0 loc(p0)=l1_0 loc(p1)=l1_1 loc(p2)=l1_0 loc(t0)=l0_0 loc(t1)=l1_1 in(p0, a0) in(p1, t1) in(p2, a0)
+
+	ACTIONS:  unloadPlane(p2, a0, l1_0)
+
+	10:  airport(l0_0) airport(l1_0) inCity(l0_0)=c0 inCity(l0_1)=c0 inCity(l1_0)=c1 inCity(l1_1)=c1 loc(a0)=l1_0 loc(p0)=l1_0 loc(p1)=l1_1 loc(p2)=l1_0 loc(t0)=l0_0 loc(t1)=l1_1 atPkg(p2, l1_0) in(p0, a0) in(p1, t1)
+
+	ACTIONS:  drive(t1, l1_1, l1_0, c1)
+
+	11:  airport(l0_0) airport(l1_0) inCity(l0_0)=c0 inCity(l0_1)=c0 inCity(l1_0)=c1 inCity(l1_1)=c1 loc(a0)=l1_0 loc(p0)=l1_0 loc(p1)=l1_0 loc(p2)=l1_0 loc(t0)=l0_0 loc(t1)=l1_0 atPkg(p2, l1_0) in(p0, a0) in(p1, t1)
+
+	ACTIONS:  unloadTruck(p1, t1, l1_0)
+
+	12:  airport(l0_0) airport(l1_0) inCity(l0_0)=c0 inCity(l0_1)=c0 inCity(l1_0)=c1 inCity(l1_1)=c1 loc(a0)=l1_0 loc(p0)=l1_0 loc(p1)=l1_0 loc(p2)=l1_0 loc(t0)=l0_0 loc(t1)=l1_0 atPkg(p1, l1_0) atPkg(p2, l1_0) in(p0, a0)
+
+	ACTIONS:  unloadPlane(p0, a0, l1_0)
+
+	13:  airport(l0_0) airport(l1_0) inCity(l0_0)=c0 inCity(l0_1)=c0 inCity(l1_0)=c1 inCity(l1_1)=c1 loc(a0)=l1_0 loc(p0)=l1_0 loc(p1)=l1_0 loc(p2)=l1_0 loc(t0)=l0_0 loc(t1)=l1_0 atPkg(p0, l1_0) atPkg(p1, l1_0) atPkg(p2, l1_0)
+
+SATISFIABLE
+Models       : 1+
+Calls        : 14
+Time         : 0.341s (Solving: 0.04s 1st Model: 0.00s Unsat: 0.04s)
+CPU Time     : 0.341s

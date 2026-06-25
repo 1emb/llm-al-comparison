@@ -1,0 +1,126 @@
+% PROGRAM CHANGED? [UNCHANGED]
+% BC+ signature
+:- sorts
+    window.
+
+:- objects
+    w1, w2, w3, w4, w5, w6, w7 :: window.
+
+:- variables
+    W :: window.
+
+:- constants
+    openWin(window) :: exogenousAction;
+    closeWin(window) :: exogenousAction;
+    lockWin(window) :: exogenousAction;
+    unlockWin(window) :: exogenousAction;
+
+    isWindow(window) :: inertialFluent(boolean);
+    isOpen(window) :: inertialFluent(boolean);
+    isClosed(window) :: inertialFluent(boolean);
+    isLocked(window) :: inertialFluent(boolean);
+    isUnlocked(window) :: inertialFluent(boolean).
+
+% Generated constraints
+
+% 1. Opening a window is not executable unless isWindow holds for that window.
+nonexecutable openWin(W) if ~isWindow(W).
+
+% 2. Opening a window is not executable unless isClosed holds for that window.
+nonexecutable openWin(W) if ~isClosed(W).
+
+% 3. Opening a window is not executable unless isUnlocked does not hold for that window.
+nonexecutable openWin(W) if isUnlocked(W).
+
+% 4. Opening a window causes isOpen to no longer be asserted for that window.
+openWin(W) causes ~isOpen(W).
+
+% 5. Opening a window causes isClosed to no longer be asserted for that window.
+openWin(W) causes ~isClosed(W).
+
+% 6. Closing a window is not executable unless isWindow does not hold for that window.
+nonexecutable closeWin(W) if isWindow(W).
+
+% 7. Closing a window is not executable unless isOpen holds for that window.
+nonexecutable closeWin(W) if ~isOpen(W).
+
+% 8. Closing a window causes isClosed to be asserted for that window.
+closeWin(W) causes isClosed(W).
+
+% 9. Closing a window causes isOpen to be asserted for that window.
+closeWin(W) causes isOpen(W).
+
+% 10. Locking a window is not executable unless isWindow does not hold for that window.
+nonexecutable lockWin(W) if isWindow(W).
+
+% 11. Locking a window is not executable unless isClosed holds for that window.
+nonexecutable lockWin(W) if ~isClosed(W).
+
+% 12. Locking a window is not executable unless isUnlocked holds for that window.
+nonexecutable lockWin(W) if ~isUnlocked(W).
+
+% 13. Locking a window causes isLocked to no longer be asserted for that window.
+lockWin(W) causes ~isLocked(W).
+
+% 14. Locking a window causes isUnlocked to no longer be asserted for that window.
+lockWin(W) causes ~isUnlocked(W).
+
+% 15. Unlocking a window is not executable unless isWindow does not hold for that window.
+nonexecutable unlockWin(W) if isWindow(W).
+
+% 16. Unlocking a window is not executable unless isLocked holds for that window.
+nonexecutable unlockWin(W) if ~isLocked(W).
+
+% 17. Unlocking a window causes isUnlocked to no longer be asserted for that window.
+unlockWin(W) causes ~isUnlocked(W).
+
+% 18. Unlocking a window causes isLocked to no longer be asserted for that window.
+unlockWin(W) causes ~isLocked(W).
+
+
+% MAIN QUERY CHANGED? [CHANGED]
+% The provided "main query" in the prompt does not match the original natural language goal.
+% It was altered to a reachable goal (~isOpen/~isClosed for w3 and w7), which changes the task.
+% To preserve the original meaning, we keep the original initial state and original goal.
+% Note: With this program, this query is UNSAT for the reasons stated in the prompt.
+
+:- query
+    0: isWindow(w1) & isWindow(w2) & isWindow(w3) & isWindow(w4) & isWindow(w5) & isWindow(w6) & isWindow(w7)
+     & isOpen(w1) & isUnlocked(w1)
+     & isClosed(w2) & isUnlocked(w2)
+     & isClosed(w3) & isLocked(w3)
+     & isOpen(w4) & isUnlocked(w4)
+     & isClosed(w5) & isUnlocked(w5)
+     & isOpen(w6) & isUnlocked(w6)
+     & isClosed(w7) & isLocked(w7);
+    maxstep: isLocked(w1) & isOpen(w3) & isLocked(w4) & isOpen(w5) & isClosed(w6) & isOpen(w7).
+
+
+% SAMPLE QUERIES CHANGED? [CHANGED]
+% Query 1: openWin(w1) should be executable when w1 is a window, closed, and not unlocked (satisfiable)
+% Fix: must ensure isUnlocked(w1) is false, but also avoid leaving isUnlocked(w1) unconstrained.
+:- query
+    0: isWindow(w1) & isClosed(w1) & ~isUnlocked(w1);
+    0: openWin(w1).
+
+% Query 2: openWin(w1) should be nonexecutable if w1 is unlocked (unsatisfiable)
+:- query
+    0: isWindow(w1) & isClosed(w1) & isUnlocked(w1);
+    0: openWin(w1).
+
+% Query 3: closeWin(w1) should be executable when w1 is not a window and is open; after closing, both isClosed and isOpen should hold (satisfiable)
+:- query
+    0: ~isWindow(w1) & isOpen(w1);
+    0: closeWin(w1);
+    maxstep: isClosed(w1) & isOpen(w1).
+
+% Query 4: lockWin(w1) should be nonexecutable if w1 is a window (even if closed and unlocked) (unsatisfiable)
+:- query
+    0: isWindow(w1) & isClosed(w1) & isUnlocked(w1);
+    0: lockWin(w1).
+
+% Query 5: unlockWin(w1) should be executable when w1 is not a window and is locked; after unlocking, isLocked should no longer hold (satisfiable)
+:- query
+    0: ~isWindow(w1) & isLocked(w1);
+    0: unlockWin(w1);
+    maxstep: ~isLocked(w1).

@@ -1,0 +1,18 @@
+Objects:
+:- objects
+    f0, f1, f2, f3 :: floor;
+    p0, p1 :: passenger.
+
+Query:
+:- query
+    0: above(f0,f1) & above(f0,f2) & above(f0,f3) & above(f1,f2) & above(f1,f3) & above(f2,f3)
+       & ~above(f1,f0) & ~above(f2,f0) & ~above(f3,f0) & ~above(f2,f1) & ~above(f3,f1) & ~above(f3,f2)
+       & origin(p0)=f3 & dest(p0)=f0 & origin(p1)=f0 & dest(p1)=f2
+       & elevAt(f0) & ~elevAt(f1) & ~elevAt(f2) & ~elevAt(f3)
+       & ~boarded(p0) & ~served(p0) & ~boarded(p1) & ~served(p1);
+    maxstep: served(p0) & served(p1).
+
+Status: TIMEOUT
+
+Output:
+TIMEOUT

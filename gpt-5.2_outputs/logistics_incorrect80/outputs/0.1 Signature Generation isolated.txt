@@ -1,0 +1,36 @@
+BC+ Signature:
+:- sorts
+    thing;
+    vehicle;
+    package;
+    truck;
+    airplane;
+    location;
+    airport;
+    city.
+
+:- objects
+    % (No specific objects provided in the problem statement.)
+
+:- variables
+    T, T1, T2, T3, T4 :: thing;
+    V, V1, V2, V3, V4 :: vehicle;
+    P, P1, P2, P3, P4 :: package;
+    Tr, Tr1, Tr2, Tr3, Tr4 :: truck;
+    A, A1, A2, A3, A4 :: airplane;
+    L, L1, L2, L3, L4 :: location;
+    Ap, Ap1, Ap2, Ap3, Ap4 :: airport;
+    C, C1, C2, C3, C4 :: city;
+    Bool, Bool1, Bool2, Bool3, Bool4 :: boolean.
+
+:- constants
+    loadTruck(package,truck,location) :: exogenousAction;
+    loadAirplane(package,airplane,location) :: exogenousAction;
+    unloadTruck(package,truck,location) :: exogenousAction;
+    unloadAirplane(package,airplane,location) :: exogenousAction;
+    drive(truck,location,location,city) :: exogenousAction;
+    fly(airplane,airport,airport) :: exogenousAction;
+
+    loc(thing) :: inertialFluent(location);
+    inVehicle(package,vehicle) :: inertialFluent(boolean);
+    inCity(location) :: inertialFluent(city).

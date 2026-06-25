@@ -1,0 +1,116 @@
+:- sorts
+    entity.
+
+
+:- objects
+    a, b, c, d :: entity.
+
+
+:- variables
+    E, E1, E2, E3, E4 :: entity;
+    Bool, Bool1, Bool2, Bool3, Bool4 :: boolean.
+
+
+:- constants
+    attack(entity) :: exogenousAction;
+    succumb(entity) :: exogenousAction;
+    overcome(entity, entity) :: exogenousAction;
+    feast(entity, entity) :: exogenousAction;
+
+    isProvince(entity) :: inertialFluent(boolean);
+    isPlanet(entity) :: inertialFluent(boolean);
+    harmony :: inertialFluent(boolean);
+    pain(entity) :: inertialFluent(boolean);
+    craves(entity, entity) :: inertialFluent(boolean).
+
+
+% constraints/rules
+% 1. An attack on an entity is not executable if that entity is not a province.
+nonexecutable attack(E) if ~isProvince(E).
+
+% 2. An attack on an entity is not executable if that entity is a planet.
+nonexecutable attack(E) if isPlanet(E).
+
+% 3. An attack on an entity is not executable if harmony is present.
+nonexecutable attack(E) if harmony.
+
+% 4. Attacking an entity causes pain on that entity to be removed.
+attack(E) causes ~pain(E).
+
+% 5. Attacking an entity causes that entity to stop being a province.
+attack(E) causes ~isProvince(E).
+
+% 6. Attacking an entity causes that entity to become a planet.
+attack(E) causes isPlanet(E).
+
+% 7. Attacking an entity causes harmony to become present.
+attack(E) causes harmony.
+
+% 8. Succumbing for an entity is not executable if that entity is in pain.
+nonexecutable succumb(E) if pain(E).
+
+% 9. Succumbing for an entity causes that entity to stop being a province.
+succumb(E) causes ~isProvince(E).
+
+% 10. Succumbing for an entity causes harmony to be removed.
+succumb(E) causes ~harmony.
+
+% 11. Succumbing for an entity causes that entity to stop being a planet.
+succumb(E) causes ~isPlanet(E).
+
+% 12. Succumbing for an entity causes pain on that entity to be removed.
+succumb(E) causes ~pain(E).
+
+% 13. Overcoming by an entity over another entity is not executable if the second entity is a province.
+nonexecutable overcome(E1,E2) if isProvince(E2).
+
+% 14. Overcoming by an entity over another entity is not executable if the actor entity is in pain.
+nonexecutable overcome(E1,E2) if pain(E1).
+
+% 15. Overcoming by an entity over another entity causes harmony to be removed.
+overcome(E1,E2) causes ~harmony.
+
+% 16. Overcoming by an entity over another entity causes the actor entity to stop being a province.
+overcome(E1,E2) causes ~isProvince(E1).
+
+% 17. Overcoming by an entity over another entity causes any craving from the actor entity toward the second entity to be removed.
+overcome(E1,E2) causes ~craves(E1,E2).
+
+% 18. Overcoming by an entity over another entity causes the second entity to stop being a province.
+overcome(E1,E2) causes ~isProvince(E2).
+
+% 19. Overcoming by an entity over another entity causes the actor entity to be put into pain.
+overcome(E1,E2) causes pain(E1).
+
+% 20. Feasting by an entity on another entity is not executable if the actor entity craves the other entity.
+nonexecutable feast(E1,E2) if craves(E1,E2).
+
+% 21. Feasting by an entity on another entity is not executable if the actor entity is a province.
+nonexecutable feast(E1,E2) if isProvince(E1).
+
+% 22. Feasting by an entity on another entity is not executable if harmony is absent.
+nonexecutable feast(E1,E2) if ~harmony.
+
+% 23. Feasting by an entity on another entity causes the actor entity's pain to be removed.
+feast(E1,E2) causes ~pain(E1).
+
+% 24. Feasting by an entity on another entity causes the other entity to stop being a province.
+feast(E1,E2) causes ~isProvince(E2).
+
+% 25. Feasting by an entity on another entity causes the actor entity to crave the other entity.
+feast(E1,E2) causes craves(E1,E2).
+
+% 26. Feasting by an entity on another entity causes the actor entity to stop being a province.
+feast(E1,E2) causes ~isProvince(E1).
+
+% 27. Feasting by an entity on another entity causes harmony to become present.
+feast(E1,E2) causes harmony.
+
+
+% query
+:- query
+    0: harmony
+       & craves(a,c) & craves(b,a) & craves(c,d)
+       & isPlanet(d)
+       & isProvince(b);
+    maxstep: craves(b,c) & craves(d,b).

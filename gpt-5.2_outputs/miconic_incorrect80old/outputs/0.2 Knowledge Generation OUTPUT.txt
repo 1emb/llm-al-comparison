@@ -1,0 +1,41 @@
+
+% A passenger's origin is a floor, and a passenger's destination is a floor.
+% If a passenger is boarded, then the elevator is at that passenger's origin.
+% If a passenger is served, then the elevator is at that passenger's destination.
+
+% The elevator cannot be at two different floors at the same time.
+
+% Boarding at a floor by a passenger is not executable if that floor is not marked as a floor.
+% Boarding at a floor by a passenger is not executable if the referenced passenger is not a passenger.
+% Boarding at a floor by a passenger is not executable if the elevator is not at that floor.
+% Boarding at a floor by a passenger is not executable if that floor is not the passenger's origin.
+% Boarding at a floor by a passenger is not executable if the passenger is already boarded.
+% Boarding at a floor by a passenger causes the passenger to be boarded.
+% Boarding at a floor by a passenger causes the passenger to not be served.
+
+% Departing at a floor by a passenger is not executable if that floor is not marked as a floor.
+% Departing at a floor by a passenger is not executable if the referenced passenger is not a passenger.
+% Departing at a floor by a passenger is not executable if the elevator is not at that floor.
+% Departing at a floor by a passenger is not executable if that floor is not the passenger's destination.
+% Departing at a floor by a passenger is not executable if the passenger is not boarded.
+% Departing at a floor by a passenger causes the passenger to not be boarded.
+% Departing at a floor by a passenger causes the passenger to be served.
+
+% Moving up from one floor to another is not executable if the first referenced floor is not marked as a floor.
+% Moving up from one floor to another is not executable if the second referenced floor is not marked as a floor.
+% Moving up from one floor to another is not executable if the elevator is not at the first referenced floor.
+% Moving up from one floor to another is not executable if the first referenced floor is not above the second referenced floor.
+% Moving up from one floor to another causes the elevator to not be at the first referenced floor.
+% Moving up from one floor to another causes the elevator to be at the second referenced floor.
+
+% Moving down from one floor to another is not executable if the first referenced floor is not marked as a floor.
+% Moving down from one floor to another is not executable if the second referenced floor is not marked as a floor.
+% Moving down from one floor to another is not executable if the elevator is not at the first referenced floor.
+% Moving down from one floor to another is not executable if the second referenced floor is not above the first referenced floor.
+% Moving down from one floor to another causes the elevator to not be at the first referenced floor.
+% Moving down from one floor to another causes the elevator to be at the second referenced floor.
+
+% It is not executable to perform an up action and a down action at the same time.
+% It is not executable to perform two different up actions at the same time.
+% It is not executable to perform two different down actions at the same time.
+% It is not executable to board and depart the same passenger at the same time.

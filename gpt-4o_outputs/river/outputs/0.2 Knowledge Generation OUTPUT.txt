@@ -1,0 +1,14 @@
+% The location of the boat determines the location of any thing on the boat.
+% Moving the boat to a side causes the location of the boat to change to that side.
+% Moving the boat is not executable if there is more than one thing on the boat.
+% Boarding the boat causes the thing to be on the boat.
+% Boarding the boat is not executable if the thing is already on the boat.
+% Boarding the boat is not executable if the location of the thing is not the same as the location of the boat.
+% Unboarding the boat causes the thing to not be on the boat.
+% Unboarding the boat is not executable if the thing is not on the boat.
+% Unboarding the boat causes the location of the thing to be the same as the location of the boat.
+% The mouse cannot be left alone with the cheese on the same side without the snake or the boat.
+% The snake cannot be left alone with the mouse on the same side without the cheese or the boat.
+% It is not executable to both move the boat to a side and board a thing on the boat.
+% It is not executable to both move the boat to a side and unboard a thing from the boat.
+% It is not executable to both board a thing on the boat and unboard a thing from the boat.

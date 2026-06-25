@@ -1,0 +1,39 @@
+Objects:
+:- objects
+    f0, f1 :: floor;
+    p0 :: passenger.
+
+Query:
+:- query
+    0: above(f0,f1);
+    0: origin(p0)=f0 & dest(p0)=f1;
+    0: liftLoc=f0;
+    0: ~isPassenger(p0) & ~boarded(p0) & ~served(p0);
+    maxstep: served(p0).
+
+Status: True
+
+Output:
+Solving...
+Solution: 1 (Time: 0.009s)
+	
+
+	0:  liftLoc=f0 dest(p0)=f1 origin(p0)=f0 above(f0, f1)
+
+	ACTIONS:  board(p0)
+
+	1:  liftLoc=f0 boarded(p0) dest(p0)=f1 isPassenger(p0) origin(p0)=f0 above(f0, f1)
+
+	ACTIONS:  up(f1)
+
+	2:  liftLoc=f1 boarded(p0) dest(p0)=f1 isPassenger(p0) origin(p0)=f0 above(f0, f1)
+
+	ACTIONS:  depart(p0)
+
+	3:  liftLoc=f1 dest(p0)=f1 isPassenger(p0) origin(p0)=f0 served(p0) above(f0, f1)
+
+SATISFIABLE
+Models       : 1+
+Calls        : 4
+Time         : 0.009s (Solving: 0.00s 1st Model: 0.00s Unsat: 0.00s)
+CPU Time     : 0.009s

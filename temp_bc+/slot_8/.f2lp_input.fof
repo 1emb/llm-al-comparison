@@ -1,0 +1,320 @@
+#base.
+
+% -------------------------------------------------------------------------
+% preamble ----------------------------------------------------------------
+% -------------------------------------------------------------------------
+
+
+% -------------------------------------------------------------------------
+% main body ---------------------------------------------------------------
+% -------------------------------------------------------------------------
+
+
+% Sort Declarations ---------------------------------------------------
+
+#hide s_thing/1.
+s_thing(VAR) <- s_vehicle(VAR).
+#hide s_vehicle/1.
+s_vehicle(VAR) <- s_truck(VAR).
+#hide s_truck/1.
+s_vehicle(VAR) <- s_airplane(VAR).
+#hide s_airplane/1.
+s_thing(VAR) <- s_package(VAR).
+#hide s_package/1.
+#hide s_location/1.
+s_airport(VAR) <- s_location(VAR).
+#hide s_airport/1.
+#hide s_city/1.
+
+% ---------------------------------------------------------------------
+
+
+
+% Object Declarations -------------------------------------------------
+
+s_city(o_c0).
+s_city(o_c1).
+s_airport(o_l0_0).
+s_location(o_l0_1).
+s_airport(o_l1_0).
+s_location(o_l1_1).
+s_truck(o_t0).
+s_truck(o_t1).
+s_airplane(o_a0).
+s_airplane(o_a1).
+s_package(o_p0).
+s_package(o_p1).
+s_package(o_p2).
+
+% ---------------------------------------------------------------------
+
+
+
+% Variable Declarations -----------------------------------------------
+
+#domain s_package(V_P).
+#domain s_package(V_P1).
+#domain s_package(V_P2).
+#domain s_vehicle(V_V).
+#domain s_vehicle(V_V1).
+#domain s_vehicle(V_V2).
+#domain s_truck(V_Tr).
+#domain s_airplane(V_A).
+#domain s_location(V_L).
+#domain s_location(V_L1).
+#domain s_location(V_L2).
+#domain s_airport(V_Ap1).
+#domain s_airport(V_Ap2).
+#domain s_city(V_C).
+
+% ---------------------------------------------------------------------
+
+
+
+% Constant Declarations -----------------------------------------------
+
+s_boolean(o_true).
+s_boolean(o_false).
+#hide s_boolean/1.
+#domain s_package(GVAR_package_1).
+#domain s_truck(GVAR_truck_1).
+#domain s_location(GVAR_location_1).
+#domain s_package(GVAR_package_2).
+#domain s_truck(GVAR_truck_2).
+#domain s_location(GVAR_location_2).
+#cumulative t.
+<- not 1{ c_a_3_loadTruck(GVAR_package_2, GVAR_truck_2, GVAR_location_2, LVAR_boolean_1, t-1) : s_boolean(LVAR_boolean_1)}1.
+#domain s_boolean(GVAR_boolean_1).
+{c_a_3_loadTruck(GVAR_package_1, GVAR_truck_1, GVAR_location_1, GVAR_boolean_1, t-1)}.
+false <- c_a_3_loadTruck(GVAR_package_1, GVAR_truck_1, GVAR_location_1, VAR, t-1) &  not s_boolean(VAR).
+#domain s_airplane(GVAR_airplane_1).
+#domain s_airplane(GVAR_airplane_2).
+<- not 1{ c_a_3_loadAirplane(GVAR_package_2, GVAR_airplane_2, GVAR_location_2, LVAR_boolean_1, t-1) : s_boolean(LVAR_boolean_1)}1.
+{c_a_3_loadAirplane(GVAR_package_1, GVAR_airplane_1, GVAR_location_1, GVAR_boolean_1, t-1)}.
+false <- c_a_3_loadAirplane(GVAR_package_1, GVAR_airplane_1, GVAR_location_1, VAR, t-1) &  not s_boolean(VAR).
+<- not 1{ c_a_3_unloadTruck(GVAR_package_2, GVAR_truck_2, GVAR_location_2, LVAR_boolean_1, t-1) : s_boolean(LVAR_boolean_1)}1.
+{c_a_3_unloadTruck(GVAR_package_1, GVAR_truck_1, GVAR_location_1, GVAR_boolean_1, t-1)}.
+false <- c_a_3_unloadTruck(GVAR_package_1, GVAR_truck_1, GVAR_location_1, VAR, t-1) &  not s_boolean(VAR).
+<- not 1{ c_a_3_unloadAirplane(GVAR_package_2, GVAR_airplane_2, GVAR_location_2, LVAR_boolean_1, t-1) : s_boolean(LVAR_boolean_1)}1.
+{c_a_3_unloadAirplane(GVAR_package_1, GVAR_airplane_1, GVAR_location_1, GVAR_boolean_1, t-1)}.
+false <- c_a_3_unloadAirplane(GVAR_package_1, GVAR_airplane_1, GVAR_location_1, VAR, t-1) &  not s_boolean(VAR).
+#domain s_city(GVAR_city_1).
+#domain s_location(GVAR_location_3).
+#domain s_location(GVAR_location_4).
+#domain s_city(GVAR_city_2).
+<- not 1{ c_a_4_drive(GVAR_truck_2, GVAR_location_3, GVAR_location_4, GVAR_city_2, LVAR_boolean_1, t-1) : s_boolean(LVAR_boolean_1)}1.
+{c_a_4_drive(GVAR_truck_1, GVAR_location_1, GVAR_location_2, GVAR_city_1, GVAR_boolean_1, t-1)}.
+false <- c_a_4_drive(GVAR_truck_1, GVAR_location_1, GVAR_location_2, GVAR_city_1, VAR, t-1) &  not s_boolean(VAR).
+#domain s_airport(GVAR_airport_1).
+#domain s_airport(GVAR_airport_2).
+#domain s_airport(GVAR_airport_3).
+#domain s_airport(GVAR_airport_4).
+<- not 1{ c_a_3_fly(GVAR_airplane_2, GVAR_airport_3, GVAR_airport_4, LVAR_boolean_1, t-1) : s_boolean(LVAR_boolean_1)}1.
+{c_a_3_fly(GVAR_airplane_1, GVAR_airport_1, GVAR_airport_2, GVAR_boolean_1, t-1)}.
+false <- c_a_3_fly(GVAR_airplane_1, GVAR_airport_1, GVAR_airport_2, VAR, t-1) &  not s_boolean(VAR).
+#domain s_thing(GVAR_thing_1).
+#domain s_thing(GVAR_thing_2).
+#base.
+<- not 1{ c_f_1_loc(GVAR_thing_2, LVAR_location_1, 0) : s_location(LVAR_location_1)}1.
+#cumulative t.
+<- not 1{ c_f_1_loc(GVAR_thing_1, LVAR_location_1, t) : s_location(LVAR_location_1)}1.
+{c_f_1_loc(GVAR_thing_1, GVAR_location_1, t)} <- c_f_1_loc(GVAR_thing_1, GVAR_location_1, t-1).
+#base.
+{c_f_1_loc(GVAR_thing_1, GVAR_location_1, 0)}.
+false <- c_f_1_loc(GVAR_thing_1, VAR, 0) & not s_location(VAR).
+#cumulative t.
+false <- c_f_1_loc(GVAR_thing_1, VAR, t) &  not s_location(VAR).
+#domain s_vehicle(GVAR_vehicle_1).
+#domain s_vehicle(GVAR_vehicle_2).
+#base.
+<- not 1{ c_f_2_inVehicle(GVAR_package_2, GVAR_vehicle_2, LVAR_boolean_1, 0) : s_boolean(LVAR_boolean_1)}1.
+#cumulative t.
+<- not 1{ c_f_2_inVehicle(GVAR_package_1, GVAR_vehicle_1, LVAR_boolean_1, t) : s_boolean(LVAR_boolean_1)}1.
+{c_f_2_inVehicle(GVAR_package_1, GVAR_vehicle_1, GVAR_boolean_1, t)} <- c_f_2_inVehicle(GVAR_package_1, GVAR_vehicle_1, GVAR_boolean_1, t-1).
+#base.
+{c_f_2_inVehicle(GVAR_package_1, GVAR_vehicle_1, GVAR_boolean_1, 0)}.
+false <- c_f_2_inVehicle(GVAR_package_1, GVAR_vehicle_1, VAR, 0) & not s_boolean(VAR).
+#cumulative t.
+false <- c_f_2_inVehicle(GVAR_package_1, GVAR_vehicle_1, VAR, t) &  not s_boolean(VAR).
+#base.
+<- not 1{ c_f_1_inCity(GVAR_location_2, LVAR_city_1, 0) : s_city(LVAR_city_1)}1.
+#cumulative t.
+<- not 1{ c_f_1_inCity(GVAR_location_1, LVAR_city_1, t) : s_city(LVAR_city_1)}1.
+{c_f_1_inCity(GVAR_location_1, GVAR_city_1, t)} <- c_f_1_inCity(GVAR_location_1, GVAR_city_1, t-1).
+#base.
+{c_f_1_inCity(GVAR_location_1, GVAR_city_1, 0)}.
+false <- c_f_1_inCity(GVAR_location_1, VAR, 0) & not s_city(VAR).
+#cumulative t.
+false <- c_f_1_inCity(GVAR_location_1, VAR, t) &  not s_city(VAR).
+#base.
+
+% ---------------------------------------------------------------------
+
+
+% Actions
+% Fluents
+% Generated constraints / domain rules
+% If a package is inside a vehicle, then the package's location is the same as the vehicle's location.
+
+c_f_1_loc(V_P, V_L, 0) <- c_f_2_inVehicle(V_P, V_V, o_true, 0) & c_f_1_loc(V_V, V_L, 0).
+#cumulative t.
+c_f_1_loc(V_P, V_L, t) <- c_f_2_inVehicle(V_P, V_V, o_true, t) & c_f_1_loc(V_V, V_L, t).
+
+% A package cannot be inside a vehicle unless the package and the vehicle are at the same location.
+
+#base.
+false <- c_f_2_inVehicle(V_P, V_V, o_true, 0) & c_f_1_loc(V_P, V_L1, 0) & c_f_1_loc(V_V, V_L2, 0) & V_L1!=V_L2.
+#cumulative t.
+false <- c_f_2_inVehicle(V_P, V_V, o_true, t) & c_f_1_loc(V_P, V_L1, t) & c_f_1_loc(V_V, V_L2, t) & V_L1!=V_L2.
+
+% A package cannot be inside two different vehicles at the same time.
+
+#base.
+false <- c_f_2_inVehicle(V_P, V_V1, o_true, 0) & c_f_2_inVehicle(V_P, V_V2, o_true, 0) & V_V1!=V_V2.
+#cumulative t.
+false <- c_f_2_inVehicle(V_P, V_V1, o_true, t) & c_f_2_inVehicle(V_P, V_V2, o_true, t) & V_V1!=V_V2.
+
+% Loading into a truck puts the package in that truck.
+
+c_f_2_inVehicle(V_P, V_Tr, o_true, t) <- c_a_3_loadTruck(V_P, V_Tr, V_L, o_true, t-1).
+
+% Loading into a truck requires truck and package at the loading location, and package not already in any vehicle.
+
+false <- c_a_3_loadTruck(V_P, V_Tr, V_L, o_true, t-1) & GVAR_location_1!=V_L & c_f_1_loc(V_Tr, GVAR_location_1, t-1).
+
+false <- c_a_3_loadTruck(V_P, V_Tr, V_L, o_true, t-1) & GVAR_location_1!=V_L & c_f_1_loc(V_P, GVAR_location_1, t-1).
+
+false <- c_a_3_loadTruck(V_P, V_Tr, V_L, o_true, t-1) & c_f_2_inVehicle(V_P, V_V, o_true, t-1).
+
+% Loading into an airplane puts the package in that airplane.
+
+c_f_2_inVehicle(V_P, V_A, o_true, t) <- c_a_3_loadAirplane(V_P, V_A, V_L, o_true, t-1).
+
+% Loading into an airplane requires airplane and package at the loading location, and package not already in any vehicle.
+
+false <- c_a_3_loadAirplane(V_P, V_A, V_L, o_true, t-1) & GVAR_location_1!=V_L & c_f_1_loc(V_A, GVAR_location_1, t-1).
+
+false <- c_a_3_loadAirplane(V_P, V_A, V_L, o_true, t-1) & GVAR_location_1!=V_L & c_f_1_loc(V_P, GVAR_location_1, t-1).
+
+false <- c_a_3_loadAirplane(V_P, V_A, V_L, o_true, t-1) & c_f_2_inVehicle(V_P, V_V, o_true, t-1).
+
+% Unloading from a truck makes the package be at that location and not in that truck.
+
+c_f_1_loc(V_P, V_L, t) <- c_a_3_unloadTruck(V_P, V_Tr, V_L, o_true, t-1).
+
+c_f_2_inVehicle(V_P, V_Tr, o_false, t) <- c_a_3_unloadTruck(V_P, V_Tr, V_L, o_true, t-1).
+
+% Unloading from a truck requires truck at location and package in that truck.
+
+false <- c_a_3_unloadTruck(V_P, V_Tr, V_L, o_true, t-1) & GVAR_location_1!=V_L & c_f_1_loc(V_Tr, GVAR_location_1, t-1).
+
+false <- c_a_3_unloadTruck(V_P, V_Tr, V_L, o_true, t-1) & c_f_2_inVehicle(V_P, V_Tr, o_false, t-1).
+
+% Unloading from an airplane makes the package be at that location and not in that airplane.
+
+c_f_1_loc(V_P, V_L, t) <- c_a_3_unloadAirplane(V_P, V_A, V_L, o_true, t-1).
+
+c_f_2_inVehicle(V_P, V_A, o_false, t) <- c_a_3_unloadAirplane(V_P, V_A, V_L, o_true, t-1).
+
+% Unloading from an airplane requires airplane at location and package in that airplane.
+
+false <- c_a_3_unloadAirplane(V_P, V_A, V_L, o_true, t-1) & GVAR_location_1!=V_L & c_f_1_loc(V_A, GVAR_location_1, t-1).
+
+false <- c_a_3_unloadAirplane(V_P, V_A, V_L, o_true, t-1) & c_f_2_inVehicle(V_P, V_A, o_false, t-1).
+
+% Driving moves the truck to the destination location.
+
+c_f_1_loc(V_Tr, V_L2, t) <- c_a_4_drive(V_Tr, V_L1, V_L2, V_C, o_true, t-1).
+
+% Driving requires truck at start, and both start and destination in the given city.
+
+false <- c_a_4_drive(V_Tr, V_L1, V_L2, V_C, o_true, t-1) & GVAR_location_1!=V_L1 & c_f_1_loc(V_Tr, GVAR_location_1, t-1).
+
+false <- c_a_4_drive(V_Tr, V_L1, V_L2, V_C, o_true, t-1) & GVAR_city_1!=V_C & c_f_1_inCity(V_L1, GVAR_city_1, t-1).
+
+false <- c_a_4_drive(V_Tr, V_L1, V_L2, V_C, o_true, t-1) & GVAR_city_1!=V_C & c_f_1_inCity(V_L2, GVAR_city_1, t-1).
+
+% Flying moves the airplane to the destination airport.
+
+c_f_1_loc(V_A, V_Ap2, t) <- c_a_3_fly(V_A, V_Ap1, V_Ap2, o_true, t-1).
+
+% Flying requires airplane at start airport.
+
+false <- c_a_3_fly(V_A, V_Ap1, V_Ap2, o_true, t-1) & GVAR_location_1!=V_Ap1 & c_f_1_loc(V_A, GVAR_location_1, t-1).
+
+% No simultaneous load and unload of same package with same vehicle at same location.
+
+false <- c_a_3_loadTruck(V_P, V_Tr, V_L, o_true, t-1) & c_a_3_unloadTruck(V_P, V_Tr, V_L, o_true, t-1).
+
+false <- c_a_3_loadAirplane(V_P, V_A, V_L, o_true, t-1) & c_a_3_unloadAirplane(V_P, V_A, V_L, o_true, t-1).
+
+% No driving while loading/unloading that same truck (at the truck's start location).
+
+false <- c_a_4_drive(V_Tr, V_L1, V_L2, V_C, o_true, t-1) & c_a_3_loadTruck(V_P, V_Tr, V_L1, o_true, t-1).
+
+false <- c_a_4_drive(V_Tr, V_L1, V_L2, V_C, o_true, t-1) & c_a_3_unloadTruck(V_P, V_Tr, V_L1, o_true, t-1).
+
+% No flying while loading/unloading that same airplane (at the airplane's start airport).
+
+false <- c_a_3_fly(V_A, V_Ap1, V_Ap2, o_true, t-1) & c_a_3_loadAirplane(V_P, V_A, V_Ap1, o_true, t-1).
+
+false <- c_a_3_fly(V_A, V_Ap1, V_Ap2, o_true, t-1) & c_a_3_unloadAirplane(V_P, V_A, V_Ap1, o_true, t-1).
+
+% IMPORTANT FIX (corrected):
+% Make "not in any vehicle" the default in every state.
+
+#base.
+c_f_2_inVehicle(V_P, V_V, o_false, 0) <- not not ( (c_f_2_inVehicle(V_P, V_V, o_false, 0))).
+#cumulative t.
+c_f_2_inVehicle(V_P, V_V, o_false, t) <- not not ( (c_f_2_inVehicle(V_P, V_V, o_false, t))).
+
+% noconcurrency.
+
+% Query: 0
+% Maxstep: ..
+#base.
+<- not ((c_f_1_inCity(o_l0_0, o_c0, 0) & c_f_1_inCity(o_l0_1, o_c0, 0) & c_f_1_inCity(o_l1_0, o_c1, 0) & c_f_1_inCity(o_l1_1, o_c1, 0) & c_f_1_loc(o_a0, o_l0_0, 0) & c_f_1_loc(o_a1, o_l1_0, 0) & c_f_1_loc(o_t0, o_l0_1, 0) & c_f_1_loc(o_t1, o_l1_0, 0) & c_f_1_loc(o_p0, o_l1_1, 0) & c_f_1_loc(o_p1, o_l0_0, 0) & c_f_1_loc(o_p2, o_l0_0, 0) & c_f_2_inVehicle(o_p0, o_t0, o_false, 0) & c_f_2_inVehicle(o_p0, o_t1, o_false, 0) & c_f_2_inVehicle(o_p0, o_a0, o_false, 0) & c_f_2_inVehicle(o_p0, o_a1, o_false, 0) & c_f_2_inVehicle(o_p1, o_t0, o_false, 0) & c_f_2_inVehicle(o_p1, o_t1, o_false, 0) & c_f_2_inVehicle(o_p1, o_a0, o_false, 0) & c_f_2_inVehicle(o_p1, o_a1, o_false, 0) & c_f_2_inVehicle(o_p2, o_t0, o_false, 0) & c_f_2_inVehicle(o_p2, o_t1, o_false, 0) & c_f_2_inVehicle(o_p2, o_a0, o_false, 0) & c_f_2_inVehicle(o_p2, o_a1, o_false, 0))) & query_label(q_0).
+<- not ((c_f_1_loc(o_p0, o_l0_1, 0) & c_f_1_loc(o_p1, o_l1_1, 0) & c_f_1_loc(o_p2, o_l1_0, 0) & c_f_2_inVehicle(o_p0, o_t0, o_false, 0) & c_f_2_inVehicle(o_p0, o_t1, o_false, 0) & c_f_2_inVehicle(o_p0, o_a0, o_false, 0) & c_f_2_inVehicle(o_p0, o_a1, o_false, 0) & c_f_2_inVehicle(o_p1, o_t0, o_false, 0) & c_f_2_inVehicle(o_p1, o_t1, o_false, 0) & c_f_2_inVehicle(o_p1, o_a0, o_false, 0) & c_f_2_inVehicle(o_p1, o_a1, o_false, 0) & c_f_2_inVehicle(o_p2, o_t0, o_false, 0) & c_f_2_inVehicle(o_p2, o_t1, o_false, 0) & c_f_2_inVehicle(o_p2, o_a0, o_false, 0) & c_f_2_inVehicle(o_p2, o_a1, o_false, 0))) & query_label(q_0) & maxstep == 0.
+#volatile t.
+<- not ((c_f_1_loc(o_p0, o_l0_1, t) & c_f_1_loc(o_p1, o_l1_1, t) & c_f_1_loc(o_p2, o_l1_0, t) & c_f_2_inVehicle(o_p0, o_t0, o_false, t) & c_f_2_inVehicle(o_p0, o_t1, o_false, t) & c_f_2_inVehicle(o_p0, o_a0, o_false, t) & c_f_2_inVehicle(o_p0, o_a1, o_false, t) & c_f_2_inVehicle(o_p1, o_t0, o_false, t) & c_f_2_inVehicle(o_p1, o_t1, o_false, t) & c_f_2_inVehicle(o_p1, o_a0, o_false, t) & c_f_2_inVehicle(o_p1, o_a1, o_false, t) & c_f_2_inVehicle(o_p2, o_t0, o_false, t) & c_f_2_inVehicle(o_p2, o_t1, o_false, t) & c_f_2_inVehicle(o_p2, o_a0, o_false, t) & c_f_2_inVehicle(o_p2, o_a1, o_false, t))) & query_label(q_0).
+
+
+% -------------------------------------------------------------------------
+% noconcurrency -----------------------------------------------------------
+% -------------------------------------------------------------------------
+
+#cumulative t.
+<- c_a_4_drive(GVAR_truck_1, GVAR_location_1, GVAR_location_2, GVAR_city_1, o_true, t-1) & c_a_4_drive(GVAR_truck_2, GVAR_location_3, GVAR_location_4, GVAR_city_2, o_true, t-1) & (GVAR_truck_1 != GVAR_truck_2 | GVAR_location_1 != GVAR_location_3 | GVAR_location_2 != GVAR_location_4 | GVAR_city_1 != GVAR_city_2).
+<- c_a_4_drive(GVAR_truck_1, GVAR_location_1, GVAR_location_2, GVAR_city_1, o_true, t-1) & c_a_3_fly(GVAR_airplane_1, GVAR_airport_1, GVAR_airport_2, o_true, t-1).
+<- c_a_4_drive(GVAR_truck_1, GVAR_location_1, GVAR_location_2, GVAR_city_1, o_true, t-1) & c_a_3_loadAirplane(GVAR_package_1, GVAR_airplane_1, GVAR_location_3, o_true, t-1).
+<- c_a_4_drive(GVAR_truck_1, GVAR_location_1, GVAR_location_2, GVAR_city_1, o_true, t-1) & c_a_3_loadTruck(GVAR_package_1, GVAR_truck_2, GVAR_location_3, o_true, t-1).
+<- c_a_4_drive(GVAR_truck_1, GVAR_location_1, GVAR_location_2, GVAR_city_1, o_true, t-1) & c_a_3_unloadAirplane(GVAR_package_1, GVAR_airplane_1, GVAR_location_3, o_true, t-1).
+<- c_a_4_drive(GVAR_truck_1, GVAR_location_1, GVAR_location_2, GVAR_city_1, o_true, t-1) & c_a_3_unloadTruck(GVAR_package_1, GVAR_truck_2, GVAR_location_3, o_true, t-1).
+<- c_a_3_fly(GVAR_airplane_1, GVAR_airport_1, GVAR_airport_2, o_true, t-1) & c_a_3_fly(GVAR_airplane_2, GVAR_airport_3, GVAR_airport_4, o_true, t-1) & (GVAR_airplane_1 != GVAR_airplane_2 | GVAR_airport_1 != GVAR_airport_3 | GVAR_airport_2 != GVAR_airport_4).
+<- c_a_3_fly(GVAR_airplane_1, GVAR_airport_1, GVAR_airport_2, o_true, t-1) & c_a_3_loadAirplane(GVAR_package_1, GVAR_airplane_2, GVAR_location_1, o_true, t-1).
+<- c_a_3_fly(GVAR_airplane_1, GVAR_airport_1, GVAR_airport_2, o_true, t-1) & c_a_3_loadTruck(GVAR_package_1, GVAR_truck_1, GVAR_location_1, o_true, t-1).
+<- c_a_3_fly(GVAR_airplane_1, GVAR_airport_1, GVAR_airport_2, o_true, t-1) & c_a_3_unloadAirplane(GVAR_package_1, GVAR_airplane_2, GVAR_location_1, o_true, t-1).
+<- c_a_3_fly(GVAR_airplane_1, GVAR_airport_1, GVAR_airport_2, o_true, t-1) & c_a_3_unloadTruck(GVAR_package_1, GVAR_truck_1, GVAR_location_1, o_true, t-1).
+<- c_a_3_loadAirplane(GVAR_package_1, GVAR_airplane_1, GVAR_location_1, o_true, t-1) & c_a_3_loadAirplane(GVAR_package_2, GVAR_airplane_2, GVAR_location_2, o_true, t-1) & (GVAR_package_1 != GVAR_package_2 | GVAR_airplane_1 != GVAR_airplane_2 | GVAR_location_1 != GVAR_location_2).
+<- c_a_3_loadAirplane(GVAR_package_1, GVAR_airplane_1, GVAR_location_1, o_true, t-1) & c_a_3_loadTruck(GVAR_package_2, GVAR_truck_1, GVAR_location_2, o_true, t-1).
+<- c_a_3_loadAirplane(GVAR_package_1, GVAR_airplane_1, GVAR_location_1, o_true, t-1) & c_a_3_unloadAirplane(GVAR_package_2, GVAR_airplane_2, GVAR_location_2, o_true, t-1).
+<- c_a_3_loadAirplane(GVAR_package_1, GVAR_airplane_1, GVAR_location_1, o_true, t-1) & c_a_3_unloadTruck(GVAR_package_2, GVAR_truck_1, GVAR_location_2, o_true, t-1).
+<- c_a_3_loadTruck(GVAR_package_1, GVAR_truck_1, GVAR_location_1, o_true, t-1) & c_a_3_loadTruck(GVAR_package_2, GVAR_truck_2, GVAR_location_2, o_true, t-1) & (GVAR_package_1 != GVAR_package_2 | GVAR_truck_1 != GVAR_truck_2 | GVAR_location_1 != GVAR_location_2).
+<- c_a_3_loadTruck(GVAR_package_1, GVAR_truck_1, GVAR_location_1, o_true, t-1) & c_a_3_unloadAirplane(GVAR_package_2, GVAR_airplane_1, GVAR_location_2, o_true, t-1).
+<- c_a_3_loadTruck(GVAR_package_1, GVAR_truck_1, GVAR_location_1, o_true, t-1) & c_a_3_unloadTruck(GVAR_package_2, GVAR_truck_2, GVAR_location_2, o_true, t-1).
+<- c_a_3_unloadAirplane(GVAR_package_1, GVAR_airplane_1, GVAR_location_1, o_true, t-1) & c_a_3_unloadAirplane(GVAR_package_2, GVAR_airplane_2, GVAR_location_2, o_true, t-1) & (GVAR_package_1 != GVAR_package_2 | GVAR_airplane_1 != GVAR_airplane_2 | GVAR_location_1 != GVAR_location_2).
+<- c_a_3_unloadAirplane(GVAR_package_1, GVAR_airplane_1, GVAR_location_1, o_true, t-1) & c_a_3_unloadTruck(GVAR_package_2, GVAR_truck_1, GVAR_location_2, o_true, t-1).
+<- c_a_3_unloadTruck(GVAR_package_1, GVAR_truck_1, GVAR_location_1, o_true, t-1) & c_a_3_unloadTruck(GVAR_package_2, GVAR_truck_2, GVAR_location_2, o_true, t-1) & (GVAR_package_1 != GVAR_package_2 | GVAR_truck_1 != GVAR_truck_2 | GVAR_location_1 != GVAR_location_2).
+#base.
+
+% -------------------------------------------------------------------------
+% epilogue ----------------------------------------------------------------
+% -------------------------------------------------------------------------
+
+query_label(query).
+#volatile t.
+false <- t < minstep.
+% -------------------------------------------------------------------------
+
+#hide s_computed/1.
+#hide query_label/1.

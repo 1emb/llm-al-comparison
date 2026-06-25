@@ -1,0 +1,85 @@
+% Query 1: Load a package into a truck when both are at the same location and the package is not already in any vehicle. (satisfiable)
+:- query
+    label :: q1_load_truck_ok;
+    0: at(t0)=l00 & at(p0)=l00;
+    0: loadTruck(p0,t0,l00);
+    maxstep: in(p0,t0) & at(p0)=l00.
+
+Cplus2ASP Output:
+
+ERROR: temp.bc:99:8]: "at": Syntax error.
+
+% Query 2: Try to load a package into a truck when the truck is not at the loading location. (unsatisfiable)
+:- query
+    label :: q2_load_truck_wrong_place;
+    0: at(t0)=l00 & at(p0)=l10;
+    0: loadTruck(p0,t0,l10).
+
+Cplus2ASP Output:
+
+ERROR: temp.bc:99:8]: "at": Syntax error.
+
+% Query 3: Try to load a package into a truck when the package is already inside an airplane. (unsatisfiable)
+:- query
+    label :: q3_load_truck_already_in_vehicle;
+    0: at(a0)=l00 & at(t0)=l00 & in(p0,a0);
+    0: loadTruck(p0,t0,l00).
+
+Cplus2ASP Output:
+
+ERROR: temp.bc:99:8]: "at": Syntax error.
+
+% Query 4: Drive a truck within a city when both locations are in that city and the truck starts at the origin. (satisfiable)
+:- query
+    label :: q4_drive_ok;
+    0: inCity(l00,c0) & inCity(l01,c0) & at(t0)=l00;
+    0: drive(t0,l00,l01,c0).
+
+Cplus2ASP Output:
+
+ERROR: temp.bc:99:33]: Encountered undeclared identifier "l01/0".
+ERROR: temp.bc:100:22]: Encountered undeclared identifier "l01/0".
+
+% Query 5: Attempt two different drives for the same truck from the same origin to two different destinations at the same time. (unsatisfiable)
+:- query
+    label :: q5_two_drives_same_time;
+    0: inCity(l00,c0) & inCity(l01,c0) & inCity(l02,c0) & at(t0)=l00;
+    0: drive(t0,l00,l01,c0) & drive(t0,l00,l02,c0).
+
+Cplus2ASP Output:
+
+ERROR: temp.bc:99:33]: Encountered undeclared identifier "l01/0".
+ERROR: temp.bc:99:50]: Encountered undeclared identifier "l02/0".
+ERROR: temp.bc:100:22]: Encountered undeclared identifier "l01/0".
+ERROR: temp.bc:100:45]: Encountered undeclared identifier "l02/0".
+
+
+
+:- query
+    0: inCity(l00,c0) & inCity(l10,c1) &
+       loc(a0)=l00 & loc(t0)=l00 & loc(t1)=l10 & loc(p0)=l10;
+    maxstep: loc(p0)=l00.
+
+
+Cplus2ASP Output:
+
+Solving...
+	
+
+	0:  loc(a0)=l00 loc(p0)=l10 loc(t0)=l00 loc(t1)=l10 inCity(l00, c0) inCity(l10, c0) inCity(l10, c1)
+
+	ACTIONS:  fly(a0, l00, l10)
+
+	1:  loc(a0)=l10 loc(p0)=l10 loc(t0)=l00 loc(t1)=l10 inCity(l00, c0) inCity(l10, c0) inCity(l10, c1)
+
+	ACTIONS:  loadPlane(p0, a0, l10)
+
+	2:  loc(a0)=l10 loc(p0)=l10 loc(t0)=l00 loc(t1)=l10 in(p0, a0) inCity(l00, c0) inCity(l10, c0) inCity(l10, c1)
+
+	ACTIONS:  fly(a0, l10, l00)
+
+	3:  loc(a0)=l00 loc(p0)=l00 loc(t0)=l00 loc(t1)=l10 in(p0, a0) inCity(l00, c0) inCity(l10, c0) inCity(l10, c1)
+
+SATISFIABLE
+Models       : 1+
+

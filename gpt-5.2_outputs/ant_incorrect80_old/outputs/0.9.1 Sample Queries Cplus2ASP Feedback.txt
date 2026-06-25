@@ -1,0 +1,166 @@
+% Query 1: Simple move from p1 to p2 when adjacent and destination is not clear (satisfiable)
+:- query
+    0: loc(ant1)=p1
+       & adjacent(p1,p2) & adjacent(p2,p1)
+       & ~isClear(p2)
+       & ~hasFood(ant1)
+       & ~hasFoodAt(p1) & ~hasFoodAt(p2)
+       & ~isNest(p1) & ~isNest(p2);
+    0: move(ant1,p1,p2);
+    maxstep: loc(ant1)=p2.
+
+Cplus2ASP Output:
+
+Solving...
+	
+
+	0:  loc(ant1)=p1 adjacent(p1, p1) adjacent(p1, p2) adjacent(p2, p1) adjacent(p2, p2)
+
+	ACTIONS:  move(ant1, p1, p2)
+
+	1:  loc(ant1)=p2 adjacent(p1, p1) adjacent(p1, p2) adjacent(p2, p1) adjacent(p2, p2)
+
+SATISFIABLE
+Models       : 1+
+
+
+% Query 2: Attempt to move when the destination is clear (should be blocked by nonexecutable) (unsatisfiable)
+:- query
+    0: loc(ant1)=p1
+       & adjacent(p1,p2) & adjacent(p2,p1)
+       & isClear(p2)
+       & ~hasFood(ant1)
+       & ~hasFoodAt(p1) & ~hasFoodAt(p2)
+       & ~isNest(p1) & ~isNest(p2);
+    0: move(ant1,p1,p2).
+
+Cplus2ASP Output:
+
+Solving...
+UNSATISFIABLE
+Models       : 0
+No solution.
+
+
+
+% Query 3: Pick up food at p1 when ant is at p1, food is there, and ant does not already have food (satisfiable)
+:- query
+    0: loc(ant1)=p1
+       & adjacent(p1,p2) & adjacent(p2,p1)
+       & ~isClear(p1) & ~isClear(p2)
+       & hasFoodAt(p1) & ~hasFoodAt(p2)
+       & ~hasFood(ant1)
+       & ~isNest(p1) & ~isNest(p2);
+    0: pickUpFood(ant1,p1);
+    maxstep: hasFood(ant1) & ~hasFoodAt(p1).
+
+Cplus2ASP Output:
+
+Solving...
+	
+
+	0:  hasFoodAt(p1) loc(ant1)=p1 adjacent(p1, p2) adjacent(p2, p1) adjacent(p2, p2)
+
+	ACTIONS:  pickUpFood(ant1, p1)
+
+	1:  hasFood(ant1) loc(ant1)=p1 adjacent(p1, p2) adjacent(p2, p1) adjacent(p2, p2)
+
+SATISFIABLE
+Models       : 1+
+
+
+% Query 4: Drop food at a nest when ant is at the nest and has food (satisfiable)
+:- query
+    0: loc(ant1)=p1
+       & adjacent(p1,p2) & adjacent(p2,p1)
+       & ~isClear(p1) & ~isClear(p2)
+       & isNest(p1) & ~isNest(p2)
+       & hasFood(ant1)
+       & ~hasFoodAt(p1) & ~hasFoodAt(p2);
+    0: dropFoodAtNest(ant1,p1);
+    maxstep: ~hasFood(ant1) & hasFoodAt(p1).
+
+Cplus2ASP Output:
+
+Solving...
+	
+
+	0:  hasFood(ant1) isNest(p1) loc(ant1)=p1 adjacent(p1, p2) adjacent(p2, p1) adjacent(p2, p2)
+
+	ACTIONS:  dropFoodAtNest(ant1, p1)
+
+	1:  hasFoodAt(p1) isNest(p1) loc(ant1)=p1 adjacent(p1, p2) adjacent(p2, p1) adjacent(p2, p2)
+
+SATISFIABLE
+Models       : 1+
+
+
+% Query 5: Try to execute two different move actions for the same ant at the same time (blocked by concurrency constraint) (unsatisfiable)
+:- query
+    0: loc(ant1)=p1
+       & adjacent(p1,p2) & adjacent(p2,p1)
+       & ~isClear(p1) & ~isClear(p2)
+       & ~hasFood(ant1)
+       & ~hasFoodAt(p1) & ~hasFoodAt(p2)
+       & ~isNest(p1) & ~isNest(p2);
+    0: move(ant1,p1,p2) & move(ant1,p2,p1).
+
+Cplus2ASP Output:
+
+Solving...
+UNSATISFIABLE
+Models       : 0
+No solution.
+
+
+
+
+
+% Fix: initial state in the provided run made the goal trivially satisfiable because
+% hasFoodAt(p1) was not constrained initially, so the solver could set it true at step 0.
+% Also, to "bring the food to the nest", we should start with food at p2 and no food at p1.
+:- query
+    0: loc(ant1)=p1
+       & adjacent(p1,p2) & adjacent(p2,p1)
+       & isClear(p1) & isClear(p2)
+       & isNest(p1)
+       & hasFoodAt(p2) & ~hasFoodAt(p1)
+       & ~hasFood(ant1);
+    maxstep: hasFoodAt(p1).
+
+
+
+Cplus2ASP Output:
+
+Solving...
+	
+
+	0:  hasFoodAt(p2) isClear(p1) isClear(p2) isNest(p1) loc(ant1)=p1 adjacent(p1, p1) adjacent(p1, p2) adjacent(p2, p1)
+
+	ACTIONS:  clearObstacle(ant1, p1, p2)
+
+	1:  hasFoodAt(p2) isClear(p1) isNest(p1) loc(ant1)=p1 adjacent(p1, p1) adjacent(p1, p2) adjacent(p2, p1)
+
+	ACTIONS:  move(ant1, p1, p2)
+
+	2:  hasFoodAt(p2) isClear(p1) isNest(p1) loc(ant1)=p2 adjacent(p1, p1) adjacent(p1, p2) adjacent(p2, p1)
+
+	ACTIONS:  pickUpFood(ant1, p2)
+
+	3:  hasFood(ant1) isClear(p1) isNest(p1) loc(ant1)=p2 adjacent(p1, p1) adjacent(p1, p2) adjacent(p2, p1)
+
+	ACTIONS:  clearObstacle(ant1, p2, p1)
+
+	4:  hasFood(ant1) isNest(p1) loc(ant1)=p2 adjacent(p1, p1) adjacent(p1, p2) adjacent(p2, p1)
+
+	ACTIONS:  move(ant1, p2, p1)
+
+	5:  hasFood(ant1) isNest(p1) loc(ant1)=p1 adjacent(p1, p1) adjacent(p1, p2) adjacent(p2, p1)
+
+	ACTIONS:  dropFoodAtNest(ant1, p1)
+
+	6:  hasFoodAt(p1) isNest(p1) loc(ant1)=p1 adjacent(p1, p1) adjacent(p1, p2) adjacent(p2, p1)
+
+SATISFIABLE
+Models       : 1+
+

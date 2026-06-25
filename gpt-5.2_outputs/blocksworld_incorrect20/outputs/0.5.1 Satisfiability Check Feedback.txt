@@ -1,0 +1,26 @@
+% Query 0: Check satisfiability of program signature and rules (ignores other queries). (satisfiable)
+:- query = sat.
+
+Cplus2ASP Output:
+
+ERROR: temp.bc:32:12]: Encountered undeclared identifier "on/1".
+ERROR: temp.bc:32:23]: Encountered undeclared identifier "on/1".
+ERROR: temp.bc:35:12]: Encountered undeclared identifier "on/1".
+ERROR: temp.bc:35:23]: Encountered undeclared identifier "on/1".
+ERROR: temp.bc:38:25]: Encountered undeclared identifier "on/1".
+ERROR: temp.bc:41:12]: Encountered undeclared identifier "on/1".
+ERROR: temp.bc:41:23]: Encountered undeclared identifier "on/1".
+ERROR: temp.bc:44:12]: Encountered undeclared identifier "on/1".
+ERROR: temp.bc:44:26]: Encountered undeclared identifier "on/1".
+ERROR: temp.bc:56:12]: Encountered undeclared identifier "on/1".
+ERROR: temp.bc:68:23]: Encountered undeclared identifier "on/1".
+ERROR: temp.bc:68:34]: Encountered undeclared identifier "on/1".
+ERROR: temp.bc:77:33]: Encountered undeclared identifier "on/1".
+ERROR: temp.bc:86:24]: Encountered undeclared identifier "on/1".
+ERROR: temp.bc:98:26]: Encountered undeclared identifier "on/1".
+ERROR: temp.bc:122:28]: Encountered undeclared identifier "on/1".
+ERROR: temp.bc:122:40]: Encountered undeclared identifier "on/1".
+ERROR: temp.bc:134:38]: Encountered undeclared identifier "on/1".
+
+Since this fails, check the error message(s).
+

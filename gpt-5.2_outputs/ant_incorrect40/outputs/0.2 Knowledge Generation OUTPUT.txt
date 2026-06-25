@@ -1,0 +1,22 @@
+% Moving an ant from a starting place to a destination place causes the ant to be at the destination place.
+% Moving an ant from a starting place to a destination place causes the ant to be at the starting place.
+% Moving an ant from a starting place to a destination place is not executable if the ant is not at the starting place.
+% Moving an ant from a starting place to a destination place is not executable if the starting place is not adjacent to the destination place.
+% Moving an ant from a starting place to a destination place is not executable if the destination place is clear.
+
+% Picking up food at a place causes the ant to be carrying food.
+% Picking up food at a place causes the place to have food.
+% Picking up food at a place is not executable if the ant is at the place.
+% Picking up food at a place is not executable if the place does not have food.
+% Picking up food at a place is not executable if the ant is already carrying food.
+
+% Dropping food at a nest place causes the ant to be carrying food.
+% Dropping food at a nest place causes the nest place to have food.
+% Dropping food at a nest place is not executable if the ant is at the place.
+% Dropping food at a nest place is not executable if the place is not a nest.
+% Dropping food at a nest place is not executable if the ant is not carrying food.
+
+% Clearing an obstacle at a blocked place from a starting place causes the blocked place to not be clear.
+% Clearing an obstacle at a blocked place from a starting place is not executable if the ant is at the starting place.
+% Clearing an obstacle at a blocked place from a starting place is not executable if the starting place is not adjacent to the blocked place.
+% Clearing an obstacle at a blocked place from a starting place is not executable if the blocked place is clear.

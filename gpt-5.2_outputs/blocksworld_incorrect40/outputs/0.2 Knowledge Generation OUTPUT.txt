@@ -1,0 +1,44 @@
+
+% A block is clear exactly when there is no other block whose location is that block.
+% It is impossible for a block to be located on itself.
+% It is impossible for two different blocks to be holding in the hand at the same time.
+% If the hand is empty, then the hand is not holding any block.
+% If the hand is holding some block, then the hand is not empty.
+
+% Picking up a block causes the hand to hold that block.
+% Picking up a block causes the hand to not be empty.
+% Picking up a block causes the picked up block to no longer be located on the table.
+
+% Picking up a block is not executable if the block is not clear.
+% Picking up a block is not executable if the hand is not empty.
+% Picking up a block is not executable if the block is located on the table.
+
+% Putting down a block causes the hand to no longer hold that block.
+% Putting down a block causes the hand to become empty.
+% Putting down a block causes the block to be located on the table.
+
+% Putting down a block is not executable if the hand is not holding that block.
+
+% Stacking a block onto another block causes the hand to no longer hold the moved block.
+% Stacking a block onto another block causes the hand to become empty.
+% Stacking a block onto another block causes the moved block to be located on the destination block.
+% Stacking a block onto another block causes the destination block to no longer be clear.
+
+% Stacking is not executable if the hand is not holding the moved block.
+% Stacking is not executable if the destination block is not clear.
+% Stacking is not executable if the moved block and the destination block are the same block.
+
+% Unstacking a block from on top of another block causes the hand to hold the first block.
+% Unstacking a block from on top of another block causes the hand to not be empty.
+% Unstacking a block from on top of another block causes the second block to become clear.
+
+% Unstacking is not executable if it is not the case that the first block is located on the second block.
+% Unstacking is not executable if the first block is not clear.
+% Unstacking is not executable if the hand is not empty.
+
+% It is not executable to perform pickup and putdown at the same time.
+% It is not executable to perform pickup and stack at the same time.
+% It is not executable to perform pickup and unstack at the same time.
+% It is not executable to perform putdown and stack at the same time.
+% It is not executable to perform putdown and unstack at the same time.
+% It is not executable to perform stack and unstack at the same time.

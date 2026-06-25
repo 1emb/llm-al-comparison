@@ -1,0 +1,24 @@
+Objects:
+:- objects
+    c0, c1 :: city;
+    l0_0, l0_1 :: location;
+    l1_0 :: airport;
+    l1_1 :: location;
+    t0, t1 :: truck;
+    a0 :: airplane;
+    p0 :: package.
+
+Query:
+:- query
+    0: inCity(l0_0)=c0 & inCity(l0_1)=c0 & inCity(l1_0)=c1 & inCity(l1_1)=c1
+       & loc(a0)=l0_0
+       & loc(t0)=l0_0 & loc(t1)=l1_1
+       & loc(p0)=l0_1
+       & ~inVehicle(p0,t0) & ~inVehicle(p0,t1) & ~inVehicle(p0,a0);
+    maxstep: loc(p0)=l1_0
+             & ~inVehicle(p0,t0) & ~inVehicle(p0,t1) & ~inVehicle(p0,a0).
+
+Status: TIMEOUT
+
+Output:
+TIMEOUT

@@ -1,0 +1,40 @@
+Objects:
+:- objects
+    b1, b2, b3, b4 :: block;
+    table :: loc.
+
+Query:
+:- query
+    0: handEmpty
+       & ~holding(b1) & ~holding(b2) & ~holding(b3) & ~holding(b4)
+       & onTable(b3) & loc(b3)=table & clear(b3)
+       & onTable(b1) & loc(b1)=table & clear(b1)
+       & onTable(b2) & loc(b2)=table & ~clear(b2)
+       & ~onTable(b4) & loc(b4)=b2 & clear(b4);
+    maxstep: onTable(b3) & loc(b3)=table & clear(b3)
+             & onTable(b2) & loc(b2)=table
+             & ~onTable(b4) & loc(b4)=b2
+             & ~onTable(b1) & loc(b1)=b4 & clear(b1).
+
+Status: True
+
+Output:
+Solving...
+Solution: 1 (Time: 0.012s)
+	
+
+	0:  handEmpty clear(b1) clear(b3) clear(b4) loc(b1)=table loc(b2)=table loc(b3)=table loc(b4)=b2 onTable(b1) onTable(b2) onTable(b3)
+
+	ACTIONS:  pickup(b1)
+
+	1:  clear(b1) clear(b3) clear(b4) holding(b1) loc(b1)=table loc(b2)=table loc(b3)=table loc(b4)=b2 onTable(b2) onTable(b3)
+
+	ACTIONS:  stack(b1, b4)
+
+	2:  handEmpty clear(b1) clear(b3) loc(b1)=b4 loc(b2)=table loc(b3)=table loc(b4)=b2 onTable(b2) onTable(b3)
+
+SATISFIABLE
+Models       : 1+
+Calls        : 3
+Time         : 0.012s (Solving: 0.00s 1st Model: 0.00s Unsat: 0.00s)
+CPU Time     : 0.012s

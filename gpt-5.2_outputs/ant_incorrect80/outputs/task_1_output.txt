@@ -1,0 +1,47 @@
+Objects:
+:- objects
+    ant :: ant;
+    p1, p2 :: place.
+
+Query:
+:- query
+    0: loc(ant)=p1 &
+       hasFood(ant)=false &
+       hasFoodAt(p1)=false & hasFoodAt(p2)=true &
+       isNest(p1)=true & isNest(p2)=false &
+       isClear(p1)=true & isClear(p2)=true &
+       adjacent(p1,p2)=true & adjacent(p2,p1)=true;
+    maxstep: hasFoodAt(p1)=true.
+
+Status: True
+
+Output:
+Solving...
+Solution: 1 (Time: 0.020s)
+	
+
+	0:  hasFoodAt(p2) isClear(p1) isClear(p2) isNest(p1) loc(ant)=p1 adjacent(p1, p2) adjacent(p2, p1)
+
+	1:  hasFoodAt(p2) isClear(p1) isNest(p1) loc(ant)=p1 adjacent(p1, p2) adjacent(p2, p1)
+
+	ACTIONS:  move(ant, p1, p2)
+
+	2:  hasFoodAt(p2) isNest(p1) loc(ant)=p2 adjacent(p1, p2) adjacent(p2, p1)
+
+	ACTIONS:  pickUpFood(ant, p2)
+
+	3:  hasFood(ant) isNest(p1) loc(ant)=p2 adjacent(p1, p2) adjacent(p2, p1)
+
+	ACTIONS:  move(ant, p2, p1)
+
+	4:  hasFood(ant) isNest(p1) loc(ant)=p1 adjacent(p1, p2) adjacent(p2, p1)
+
+	ACTIONS:  dropFoodAtNest(ant, p1)
+
+	5:  hasFoodAt(p1) loc(ant)=p1 adjacent(p1, p2) adjacent(p2, p1)
+
+SATISFIABLE
+Models       : 1+
+Calls        : 6
+Time         : 0.020s (Solving: 0.00s 1st Model: 0.00s Unsat: 0.00s)
+CPU Time     : 0.020s

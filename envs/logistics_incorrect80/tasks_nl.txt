@@ -1,0 +1,19 @@
+There are two cities, c0 and c1. Each has one location: l0-0 is in c0 and is an airport, l1-0 is in c1 and is an airport. Airplane a0 is at l0-0, airplane a1 is at l0-0. Truck t0 is at l0-0, truck t1 is at l1-0. Package p0 is at l1-0. Find a plan to transport p0 to l0-0.
+---
+There are two cities, c0 and c1. Each has one location: l0-0 is in c0 and is an airport, l1-0 is in c1 and is an airport. Airplane a0 is at l1-0, airplane a1 is at l1-0. Truck t0 is at l0-0, truck t1 is at l1-0. Package p0 is at l1-0. Find a plan to transport p0 to l0-0.
+---
+There are two cities, c0 and c1. Each has one location: l0-0 is in c0 and is an airport, l1-0 is in c1 and is an airport. Airplane a0 is at l1-0. Truck t0 is at l0-0, truck t1 is at l1-0. Package p0 is at l1-0, package p1 is at l0-0. Find a plan to transport p0 to l1-0 and p1 to l1-0.
+---
+There are two cities, c0 and c1. Each has one location: l0-0 is in c0 and is an airport, l1-0 is in c1 and is an airport. Airplane a0 is at l1-0. Truck t0 is at l0-0, truck t1 is at l1-0. Package p0 is at l1-0, package p1 is at l1-0. Find a plan to transport p0 to l0-0 and p1 to l0-0.
+---
+There are two cities, c0 and c1. c0 has two locations, l0-0 and l0-1, where l0-0 is an airport. c1 has two locations, l1-0 and l1-1, where l1-0 is an airport. Airplane a0 is at l0-0. Truck t0 is at l0-0, truck t1 is at l1-1. Package p0 is at l0-1. Find a plan to transport p0 to l1-0.
+---
+There are two cities, c0 and c1. c0 has two locations, l0-0 and l0-1, where l0-0 is an airport. c1 has two locations, l1-0 and l1-1, where l1-0 is an airport. Airplane a0 is at l0-0. Truck t0 is at l0-0, truck t1 is at l1-1. Package p0 is at l0-0, package p1 is at l0-0. Find a plan to transport p0 to l0-1 and p1 to l0-1.
+---
+There are two cities, c0 and c1. c0 has two locations, l0-0 and l0-1, where l0-0 is an airport. c1 has two locations, l1-0 and l1-1, where l1-0 is an airport. Airplane a0 is at l1-0, airplane a1 is at l0-0. Truck t0 is at l0-0, truck t1 is at l1-0. Package p0 is at l0-0, package p1 is at l1-1. Find a plan to transport p0 to l0-1 and p1 to l1-0.
+---
+There are two cities, c0 and c1. c0 has two locations, l0-0 and l0-1, where l0-0 is an airport. c1 has two locations, l1-0 and l1-1, where l1-0 is an airport. Airplane a0 is at l0-0. Truck t0 is at l0-0, truck t1 is at l1-0. Package p0 is at l0-0, package p1 is at l1-1, package p2 is at l0-1. Find a plan to transport p0 to l1-0, p1 to l1-0, and p2 to l1-0.
+---
+There are two cities, c0 and c1. c0 has two locations, l0-0 and l0-1, where l0-0 is an airport. c1 has two locations, l1-0 and l1-1, where l1-0 is an airport. Airplane a0 is at l0-0, airplane a1 is at l1-0. Truck t0 is at l0-1, truck t1 is at l1-0. Package p0 is at l1-1, package p1 is at l0-0, package p2 is at l0-0. Find a plan to transport p0 to l0-1, p1 to l1-1, and p2 to l1-0.
+---
+There are two cities, c0 and c1. c0 has two locations, l0-0 and l0-1, where l0-0 is an airport. c1 has two locations, l1-0 and l1-1, where l1-0 is an airport. Airplane a0 is at l0-0. Truck t0 is at l0-1, truck t1 is at l1-1. Package p0 is at l1-1, package p1 is at l1-0, package p2 is at l1-1, package p3 is at l0-0. Find a plan to transport p0 to l0-0, p1 to l1-1, p2 to l0-1, and p3 to l1-1.

@@ -1,0 +1,42 @@
+Objects:
+:- objects
+    w1, w2, w3, w4 :: window.
+
+Query:
+:- query
+    0: isClosed(w1) & isUnlocked(w1) & ~isOpen(w1) & ~isLocked(w1)
+     & isOpen(w2) & isUnlocked(w2) & ~isClosed(w2) & ~isLocked(w2)
+     & isClosed(w3) & isLocked(w3) & ~isOpen(w3) & ~isUnlocked(w3)
+     & isOpen(w4) & isUnlocked(w4) & ~isClosed(w4) & ~isLocked(w4);
+    maxstep: isLocked(w1) & isOpen(w3) & isClosed(w4).
+
+Status: True
+
+Output:
+Solving...
+Solution: 1 (Time: 0.011s)
+	
+
+	0:  isClosed(w1) isClosed(w3) isLocked(w3) isOpen(w2) isOpen(w4) isUnlocked(w1) isUnlocked(w2) isUnlocked(w4)
+
+	ACTIONS:  closeWin(w4)
+
+	1:  isClosed(w1) isClosed(w3) isClosed(w4) isLocked(w3) isOpen(w2) isUnlocked(w1) isUnlocked(w2) isUnlocked(w4)
+
+	ACTIONS:  unlockWin(w3)
+
+	2:  isClosed(w1) isClosed(w3) isClosed(w4) isOpen(w2) isUnlocked(w1) isUnlocked(w2) isUnlocked(w3) isUnlocked(w4)
+
+	ACTIONS:  lockWin(w1)
+
+	3:  isClosed(w1) isClosed(w3) isClosed(w4) isLocked(w1) isOpen(w2) isUnlocked(w2) isUnlocked(w3) isUnlocked(w4)
+
+	ACTIONS:  openWin(w3)
+
+	4:  isClosed(w1) isClosed(w4) isLocked(w1) isOpen(w2) isOpen(w3) isUnlocked(w2) isUnlocked(w3) isUnlocked(w4)
+
+SATISFIABLE
+Models       : 1+
+Calls        : 5
+Time         : 0.011s (Solving: 0.00s 1st Model: 0.00s Unsat: 0.00s)
+CPU Time     : 0.011s

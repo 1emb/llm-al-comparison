@@ -1,0 +1,9 @@
+There is one type of thing: "entity".
+
+a, b, c, and d are entities.
+
+Actions
+Attacking an entity is an action.
+Succumbing for an entity is an action.
+Overcoming by an entity over another entity is an action.
+Feasting by an entity on another entity is an action.

@@ -1,0 +1,110 @@
+% constraints/rules
+% 1. A passenger's origin floor must be marked as a floor.
+isFloor(F) if origin(P)=F.
+
+% 2. A passenger's destination floor must be marked as a floor.
+isFloor(F) if dest(P)=F.
+
+% 3. If a passenger is boarded, then the elevator is at that passenger's origin.
+elevAt(F) if boarded(P) & origin(P)=F.
+
+% 4. If a passenger is served, then the elevator is at that passenger's destination.
+elevAt(F) if served(P) & dest(P)=F.
+
+% 5. The elevator cannot be at two different floors at the same time.
+impossible elevAt(F1) & elevAt(F2) & F1\=F2.
+
+% 6. Boarding is not executable if the referenced floor is not marked as a floor.
+nonexecutable board(F,P) if ~isFloor(F).
+
+% 7. Boarding is not executable if the elevator is not at that floor.
+nonexecutable board(F,P) if ~elevAt(F).
+
+% 8. Boarding is not executable if that floor is not the passenger's origin.
+nonexecutable board(F,P) if origin(P)\=F.
+
+% 9. Boarding is not executable if the passenger is already boarded.
+nonexecutable board(F,P) if boarded(P).
+
+% 10. Boarding causes the passenger to be boarded.
+board(F,P) causes boarded(P).
+
+% 11. Boarding causes the passenger to not be served.
+board(F,P) causes ~served(P).
+
+% 12. Departing is not executable if the referenced floor is not marked as a floor.
+nonexecutable depart(F,P) if ~isFloor(F).
+
+% 13. Departing is not executable if the elevator is not at that floor.
+nonexecutable depart(F,P) if ~elevAt(F).
+
+% 14. Departing is not executable if that floor is not the passenger's destination.
+nonexecutable depart(F,P) if dest(P)\=F.
+
+% 15. Departing is not executable if the passenger is not boarded.
+nonexecutable depart(F,P) if ~boarded(P).
+
+% 16. Departing causes the passenger to not be boarded.
+depart(F,P) causes ~boarded(P).
+
+% 17. Departing causes the passenger to be served.
+depart(F,P) causes served(P).
+
+% 18. Moving up is not executable if the first referenced floor is not marked as a floor.
+nonexecutable up(F1,F2) if ~isFloor(F1).
+
+% 19. Moving up is not executable if the second referenced floor is not marked as a floor.
+nonexecutable up(F1,F2) if ~isFloor(F2).
+
+% 20. Moving up is not executable if the elevator is not at the first referenced floor.
+nonexecutable up(F1,F2) if ~elevAt(F1).
+
+% 21. Moving up is not executable if the first referenced floor is not above the second referenced floor.
+nonexecutable up(F1,F2) if ~above(F1,F2).
+
+% 22. Moving up causes the elevator to not be at the first referenced floor.
+up(F1,F2) causes ~elevAt(F1).
+
+% 23. Moving up causes the elevator to be at the second referenced floor.
+up(F1,F2) causes elevAt(F2).
+
+% 24. Moving down is not executable if the first referenced floor is not marked as a floor.
+nonexecutable down(F1,F2) if ~isFloor(F1).
+
+% 25. Moving down is not executable if the second referenced floor is not marked as a floor.
+nonexecutable down(F1,F2) if ~isFloor(F2).
+
+% 26. Moving down is not executable if the elevator is not at the first referenced floor.
+nonexecutable down(F1,F2) if ~elevAt(F1).
+
+% 27. Moving down is not executable if the second referenced floor is not above the first referenced floor.
+nonexecutable down(F1,F2) if ~above(F2,F1).
+
+% 28. Moving down causes the elevator to not be at the first referenced floor.
+down(F1,F2) causes ~elevAt(F1).
+
+% 29. Moving down causes the elevator to be at the second referenced floor.
+down(F1,F2) causes elevAt(F2).
+
+% 30. It is not executable to perform an up action and a down action at the same time.
+nonexecutable up(F1,F2) & down(F3,F4).
+
+% 31. It is not executable to perform two different up actions at the same time.
+nonexecutable up(F1,F2) & up(F3,F4) if F1\=F3.
+nonexecutable up(F1,F2) & up(F3,F4) if F2\=F4.
+
+% 32. It is not executable to perform two different down actions at the same time.
+nonexecutable down(F1,F2) & down(F3,F4) if F1\=F3.
+nonexecutable down(F1,F2) & down(F3,F4) if F2\=F4.
+
+% 33. It is not executable to board and depart the same passenger at the same time.
+nonexecutable board(F1,P) & depart(F2,P).
+
+% query
+:- query
+    0: isFloor(f0) & isFloor(f1) & isFloor(f2) & isFloor(f3);
+    0: above(f0,f1) & above(f0,f2) & above(f0,f3) & above(f1,f2) & above(f1,f3) & above(f2,f3);
+    0: origin(p0)=f3 & dest(p0)=f2 & origin(p1)=f2 & dest(p1)=f0;
+    0: elevAt(f0);
+    0: ~boarded(p0) & ~served(p0) & ~boarded(p1) & ~served(p1);
+    maxstep: served(p0) & served(p1).

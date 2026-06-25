@@ -1,0 +1,27 @@
+% Query 1: A valid attack: b is a province, not a planet, and harmony is absent; after attack(b), b becomes a planet, stops being a province, loses pain, and harmony becomes present. (satisfiable)
+:- query
+    0: ~harmony & isProvince(b) & ~isPlanet(b) & pain(b);
+    0: attack(b);
+    maxstep: harmony & isPlanet(b) & ~isProvince(b) & ~pain(b).
+
+% Query 2: An invalid attack because harmony is present. (unsatisfiable)
+:- query
+    0: harmony & isProvince(b) & ~isPlanet(b);
+    0: attack(b).
+
+% Query 3: A valid succumb: requires the entity not be in pain; after succumb(a), harmony is removed, a is not a province, not a planet, and not in pain. (satisfiable)
+:- query
+    0: harmony & pain(a)=false & isProvince(a) & isPlanet(a);
+    0: succumb(a);
+    maxstep: ~harmony & ~isProvince(a) & ~isPlanet(a) & ~pain(a).
+
+% Query 4: An invalid overcome because the second entity is a province. (unsatisfiable)
+:- query
+    0: ~harmony & pain(a)=false & isProvince(b);
+    0: overcome(a,b).
+
+% Query 5: A valid feast: actor a does not crave b, a is not a province, and harmony is present; after feast(a,b), a craves b, a is not in pain, b is not a province, and harmony is present. (satisfiable)
+:- query
+    0: harmony & ~isProvince(a) & ~craves(a,b) & pain(a);
+    0: feast(a,b);
+    maxstep: harmony & craves(a,b) & ~pain(a) & ~isProvince(b) & ~isProvince(a).

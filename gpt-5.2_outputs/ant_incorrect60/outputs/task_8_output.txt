@@ -1,0 +1,52 @@
+Objects:
+:- objects
+    ant1 :: ant;
+    p1, p2, p3, p4, p5, p6, p7, p8, p9 :: place.
+
+Query:
+:- query
+    0: loc(ant1)=p1
+       & adj(p1,p2) & adj(p2,p1)
+       & adj(p2,p3) & adj(p3,p2)
+       & adj(p3,p4) & adj(p4,p3)
+       & adj(p4,p5) & adj(p5,p4)
+       & adj(p5,p6) & adj(p6,p5)
+       & adj(p6,p7) & adj(p7,p6)
+       & adj(p7,p8) & adj(p8,p7)
+       & adj(p8,p9) & adj(p9,p8)
+       & clear(p1) & clear(p2) & clear(p3) & clear(p4)=false & clear(p5) & clear(p6) & clear(p7)=false & clear(p8) & clear(p9)
+       & hasFood(p1)=false & hasFood(p2)=false & hasFood(p3)=false & hasFood(p4)=false & hasFood(p5)=false & hasFood(p6)=false & hasFood(p7)=false & hasFood(p8)=false & hasFood(p9)=true
+       & isNest(p1)=true & isNest(p2)=false & isNest(p3)=false & isNest(p4)=false & isNest(p5)=false & isNest(p6)=false & isNest(p7)=false & isNest(p8)=false & isNest(p9)=false
+       & carryingFood(ant1)=false;
+    maxstep: hasFood(p1)=true.
+
+Status: True
+
+Output:
+Solving...
+Solution: 1 (Time: 0.147s)
+	
+
+	0:  clear(p1) clear(p2) clear(p3) clear(p5) clear(p6) clear(p8) clear(p9) hasFood(p9) isNest(p1) loc(ant1)=p1 adj(p1, p2) adj(p1, p9) adj(p2, p1) adj(p2, p3) adj(p2, p4) adj(p2, p5) adj(p2, p8) adj(p2, p9) adj(p3, p2) adj(p3, p4) adj(p3, p8) adj(p3, p9) adj(p4, p1) adj(p4, p2) adj(p4, p3) adj(p4, p4) adj(p4, p5) adj(p4, p6) adj(p4, p7) adj(p4, p8) adj(p4, p9) adj(p5, p1) adj(p5, p2) adj(p5, p3) adj(p5, p4) adj(p5, p5) adj(p5, p6) adj(p5, p8) adj(p5, p9) adj(p6, p2) adj(p6, p3) adj(p6, p4) adj(p6, p5) adj(p6, p6) adj(p6, p7) adj(p6, p8) adj(p7, p6) adj(p7, p8) adj(p8, p7) adj(p8, p9) adj(p9, p1) adj(p9, p6) adj(p9, p8) adj(p9, p9)
+
+	ACTIONS:  move(ant1, p1, p9)
+
+	1:  clear(p1) hasFood(p9) isNest(p1) loc(ant1)=p9 adj(p1, p2) adj(p2, p1) adj(p2, p3) adj(p3, p2) adj(p3, p4) adj(p4, p3) adj(p4, p5) adj(p5, p4) adj(p5, p6) adj(p6, p5) adj(p6, p7) adj(p7, p6) adj(p9, p1)
+
+	ACTIONS:  pickUpFood(ant1, p9)
+
+	2:  carryingFood(ant1) clear(p1) isNest(p1) loc(ant1)=p9 adj(p9, p1)
+
+	ACTIONS:  move(ant1, p9, p1)
+
+	3:  carryingFood(ant1) isNest(p1) loc(ant1)=p1
+
+	ACTIONS:  dropFoodAtNest(ant1, p1)
+
+	4:  hasFood(p1) loc(ant1)=p1
+
+SATISFIABLE
+Models       : 1+
+Calls        : 5
+Time         : 0.146s (Solving: 0.00s 1st Model: 0.00s Unsat: 0.00s)
+CPU Time     : 0.146s

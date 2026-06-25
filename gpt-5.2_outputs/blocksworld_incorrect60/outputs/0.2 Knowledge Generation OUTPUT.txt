@@ -1,0 +1,66 @@
+
+% A block cannot be located on itself.
+% If loc(B)=B1 then B and B1 are different blocks.
+
+% A block cannot be located on two different locations at the same time.
+% If loc(B)=L1 then loc(B) is not equal to any other L2 different from L1.
+
+% If loc(B)=B1 (a block), then B is not on the table.
+% If onTable(B) then loc(B)=table.
+
+% If loc(B)=B1 (a block), then B1 is not clear.
+% If clear(B1) then no block has location B1.
+
+% If a block is clear, then nothing is on top of it (no other block has it as its location).
+% If a block is not clear, then there exists some block located on it.
+
+% The hand cannot be empty and holding a block at the same time.
+% If holding(B) then handEmpty is not the case.
+% If handEmpty then holding(B) is not the case for every block B.
+
+% The hand cannot be holding two different blocks at the same time.
+% If holding(B1) then holding(B2) is not the case for every different block B2.
+
+% Picking up a block causes the hand to hold that block.
+% Picking up a block causes the hand to not be empty.
+% Picking up a block causes the block to not be on the table.
+% Picking up a block causes the block to not be clear.
+
+% Picking up a block is not executable if the block is not clear.
+% Picking up a block is not executable if the block is on the table.
+% Picking up a block is not executable if the hand is empty.
+
+% Putting down a block causes the block to be on the table.
+% Putting down a block causes the hand to be empty.
+% Putting down a block causes the hand to not be holding that block.
+% Putting down a block causes the block to not be clear.
+
+% Putting down a block is not executable if the hand is not holding that block.
+
+% Stacking a block onto another block causes the moved block to be located on the destination block.
+% Stacking a block onto another block causes the destination block to not be clear.
+% Stacking a block onto another block causes the moved block to not be clear.
+% Stacking a block onto another block causes the hand to be empty.
+% Stacking a block onto another block causes the hand to not be holding the moved block.
+
+% Stacking a block onto another block is not executable if the hand is holding the moved block.
+% Stacking a block onto another block is not executable if the destination block is not clear.
+% Stacking a block onto another block is not executable if the moved block and the destination block are the same block.
+
+% Unstacking a top block from a bottom block causes the top block to not be located on the bottom block.
+% Unstacking a top block from a bottom block causes the top block to be clear.
+% Unstacking a top block from a bottom block causes the bottom block to not be clear.
+% Unstacking a top block from a bottom block causes the hand to not be empty.
+% Unstacking a top block from a bottom block causes the hand to not be holding the top block.
+
+% Unstacking a top block from a bottom block is not executable if the top block is on the bottom block.
+% Unstacking a top block from a bottom block is not executable if the top block is not clear.
+% Unstacking a top block from a bottom block is not executable if the hand is empty.
+% Unstacking a top block from a bottom block is not executable if the top block and bottom block are the same block.
+
+% It is not executable to perform pickup and putdown in the same step.
+% It is not executable to perform pickup and stack in the same step.
+% It is not executable to perform pickup and unstack in the same step.
+% It is not executable to perform putdown and stack in the same step.
+% It is not executable to perform putdown and unstack in the same step.
+% It is not executable to perform stack and unstack in the same step.

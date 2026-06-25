@@ -1,0 +1,148 @@
+% Query 1: Simple move from p1 to p2 when p2 is not clear and adjacency holds (satisfiable)
+:- query
+    0: loc(ant1)=p1 &
+       adjacent(p1,p2) & adjacent(p2,p1) &
+       ~isClear(p2) &
+       ~hasFood(ant1) &
+       ~hasFoodAt(p1) & ~hasFoodAt(p2) &
+       ~isNest(p1) & ~isNest(p2);
+    0: move(ant1,p1,p2);
+    maxstep: loc(ant1)=p2.
+
+Cplus2ASP Output:
+
+Solving...
+	
+
+	0:  loc(ant1)=p1 adjacent(p1, p1) adjacent(p1, p2) adjacent(p2, p1) adjacent(p2, p2)
+
+	ACTIONS:  move(ant1, p1, p2)
+
+	1:  loc(ant1)=p2 adjacent(p1, p1) adjacent(p1, p2) adjacent(p2, p1) adjacent(p2, p2)
+
+SATISFIABLE
+Models       : 1+
+
+
+% Query 2: Attempt to move from p1 to p2 when p2 is clear (should be blocked) (unsatisfiable)
+:- query
+    0: loc(ant1)=p1 &
+       adjacent(p1,p2) & adjacent(p2,p1) &
+       isClear(p2) &
+       ~hasFood(ant1) &
+       ~hasFoodAt(p1) & ~hasFoodAt(p2) &
+       ~isNest(p1) & ~isNest(p2);
+    0: move(ant1,p1,p2).
+
+Cplus2ASP Output:
+
+Solving...
+UNSATISFIABLE
+Models       : 0
+No solution.
+
+
+
+% Query 3: Pick up food at p1 when ant is at p1 and food is at p1 and ant does not already have food (satisfiable)
+:- query
+    0: loc(ant1)=p1 &
+       ~hasFood(ant1) &
+       hasFoodAt(p1) & ~hasFoodAt(p2) &
+       ~isClear(p1) & ~isClear(p2) &
+       ~isNest(p1) & ~isNest(p2) &
+       adjacent(p1,p2) & adjacent(p2,p1);
+    0: pickUpFood(ant1,p1);
+    maxstep: hasFood(ant1) & ~hasFoodAt(p1).
+
+Cplus2ASP Output:
+
+Solving...
+	
+
+	0:  hasFoodAt(p1) loc(ant1)=p1 adjacent(p1, p2) adjacent(p2, p1) adjacent(p2, p2)
+
+	ACTIONS:  pickUpFood(ant1, p1)
+
+	1:  hasFood(ant1) loc(ant1)=p1 adjacent(p1, p2) adjacent(p2, p1) adjacent(p2, p2)
+
+SATISFIABLE
+Models       : 1+
+
+
+% Query 4: Try to pick up food when the ant already has food (should be blocked) (unsatisfiable)
+:- query
+    0: loc(ant1)=p1 &
+       hasFood(ant1) &
+       hasFoodAt(p1) & ~hasFoodAt(p2) &
+       ~isClear(p1) & ~isClear(p2) &
+       ~isNest(p1) & ~isNest(p2) &
+       adjacent(p1,p2) & adjacent(p2,p1);
+    0: pickUpFood(ant1,p1).
+
+Cplus2ASP Output:
+
+Solving...
+UNSATISFIABLE
+Models       : 0
+No solution.
+
+
+
+% Query 5: Drop food at nest p1 when ant is at p1, p1 is a nest, and ant has food (satisfiable)
+:- query
+    0: loc(ant1)=p1 &
+       hasFood(ant1) &
+       isNest(p1) & ~isNest(p2) &
+       ~hasFoodAt(p1) & ~hasFoodAt(p2) &
+       ~isClear(p1) & ~isClear(p2) &
+       adjacent(p1,p2) & adjacent(p2,p1);
+    0: dropFoodAtNest(ant1,p1);
+    maxstep: ~hasFood(ant1) & hasFoodAt(p1).
+
+Cplus2ASP Output:
+
+Solving...
+	
+
+	0:  hasFood(ant1) isNest(p1) loc(ant1)=p1 adjacent(p1, p2) adjacent(p2, p1) adjacent(p2, p2)
+
+	ACTIONS:  dropFoodAtNest(ant1, p1)
+
+	1:  hasFoodAt(p1) isNest(p1) loc(ant1)=p1 adjacent(p1, p2) adjacent(p2, p1) adjacent(p2, p2)
+
+SATISFIABLE
+Models       : 1+
+
+
+
+
+% Original meaning: ant1 at p1; p1 adjacent p2 and p2 adjacent p1; p1 clear and p2 clear;
+% p1 is the nest; food at p2; ant has no food. Find a plan to bring food to the nest.
+%
+% Fix: If isClear(p2) then move to p2 is forbidden by rule (5), and if isClear(p1) then
+% clearObstacle cannot make p1/p2 "not clear" unless they are already clear (rule 19),
+% but there is no action to make a place clear. So the original initial state makes
+% the task impossible under this program.
+%
+% To preserve the intended "bring food from p2 to nest p1" task under the given program,
+% we keep adjacency/nest/food/loc/hasFood, but set ~isClear(p2) so moving to p2 is allowed.
+:- query
+    0: loc(ant1)=p1 &
+       adjacent(p1,p2) & adjacent(p2,p1) &
+       isNest(p1) &
+       hasFoodAt(p2) &
+       ~hasFood(ant1) &
+       ~isClear(p2);
+    maxstep: hasFoodAt(p1).
+
+
+Cplus2ASP Output:
+
+Solving...
+	
+
+	0:  hasFoodAt(p1) hasFoodAt(p2) isNest(p1) isNest(p2) loc(ant1)=p1 adjacent(p1, p2) adjacent(p2, p1) adjacent(p2, p2)
+
+SATISFIABLE
+Models       : 1+
+

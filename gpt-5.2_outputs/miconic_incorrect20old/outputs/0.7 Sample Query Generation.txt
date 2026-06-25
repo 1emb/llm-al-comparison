@@ -1,0 +1,41 @@
+% Query 1: Basic boarding works at the passenger's origin when the elevator is there and the floor is valid. (satisfiable)
+:- query
+    0: validFloor(f0) & validFloor(f1) & above(f0,f1) &
+       at(f0) &
+       origin(p0)=f0 & dest(p0)=f1 &
+       ~passengerFlag(p0) & boarded(p0) & ~served(p0);
+    0: board(f0,p0).
+
+% Query 2: Boarding is not allowed at the wrong floor (origin mismatch). (unsatisfiable)
+:- query
+    0: validFloor(f0) & validFloor(f1) & above(f0,f1) &
+       at(f1) &
+       origin(p0)=f0 & dest(p0)=f1 &
+       ~passengerFlag(p0) & boarded(p0) & ~served(p0);
+    0: board(f1,p0).
+
+% Query 3: Depart is not allowed if the elevator is at the departure floor (rule says nonexecutable if at(F)). (unsatisfiable)
+:- query
+    0: validFloor(f0) & validFloor(f1) & above(f0,f1) &
+       at(f1) &
+       origin(p0)=f0 & dest(p0)=f1 &
+       passengerFlag(p0) & boarded(p0) & ~served(p0);
+    0: depart(f1,p0).
+
+% Query 4: A simple plan to serve the passenger: board at f0, move down to f1, then depart at f1 (with elevator not at f1 at depart time). (satisfiable)
+:- query
+    0: validFloor(f0) & validFloor(f1) & above(f0,f1) &
+       at(f0) &
+       origin(p0)=f0 & dest(p0)=f1 &
+       ~passengerFlag(p0) & boarded(p0) & ~served(p0);
+    0: board(f0,p0);
+    1: down(f0,f1);
+    2: depart(f1,p0);
+    maxstep: served(p0).
+
+% Query 5: The elevator cannot be at two different floors in the same state. (unsatisfiable)
+:- query
+    0: validFloor(f0) & validFloor(f1) & above(f0,f1) &
+       at(f0) & at(f1) &
+       origin(p0)=f0 & dest(p0)=f1 &
+       ~passengerFlag(p0) & boarded(p0) & ~served(p0).

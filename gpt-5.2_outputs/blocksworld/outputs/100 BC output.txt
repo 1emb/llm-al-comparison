@@ -1,0 +1,19 @@
+Solving...
+Solution: 1 (Time: 0.043s)
+	
+
+	0:  handEmpty clear(b1) clear(b3) clear(b4) on(b1)=table on(b2)=table on(b3)=table on(b4)=b2 on(b5)=table on(b6)=table on(b7)=table
+
+	ACTIONS:  pickupBlock(b1)
+
+	1:  clear(b3) clear(b4) holding(b1) on(b1)=inHand on(b2)=table on(b3)=table on(b4)=b2 on(b5)=table on(b6)=table on(b7)=table
+
+	ACTIONS:  stackBlock(b1, b4)
+
+	2:  handEmpty clear(b1) clear(b3) on(b1)=b4 on(b2)=table on(b3)=table on(b4)=b2 on(b5)=table on(b6)=table on(b7)=table
+
+SATISFIABLE
+Models       : 1+
+Calls        : 3
+Time         : 0.043s (Solving: 0.00s 1st Model: 0.00s Unsat: 0.00s)
+CPU Time     : 0.043s

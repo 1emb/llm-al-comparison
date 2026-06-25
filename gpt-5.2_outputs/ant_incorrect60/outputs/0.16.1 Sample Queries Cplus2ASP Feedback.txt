@@ -1,0 +1,120 @@
+% Query 1: Simple move from p1 to p2 when adjacent and destination is clear (satisfiable)
+:- query
+    0: loc(ant1)=p1
+       & adj(p1,p2) & adj(p2,p1)
+       & ~adj(p1,p1) & ~adj(p2,p2)
+       & clear(p1) & clear(p2)
+       & isNest(p1)
+       & hasFood(p2)
+       & ~hasFood(p1)
+       & ~carryingFood(ant1);
+    0: move(ant1,p1,p2);
+    maxstep: loc(ant1)=p2.
+
+Cplus2ASP Output:
+
+ERROR: temp.bc:112:12]: "->": Syntax error.
+
+% Query 2: Attempt to move from the wrong starting place (ant is at p1 but action says start p2) (unsatisfiable)
+:- query
+    0: loc(ant1)=p1
+       & adj(p1,p2) & adj(p2,p1)
+       & ~adj(p1,p1) & ~adj(p2,p2)
+       & clear(p1) & clear(p2)
+       & isNest(p1)
+       & hasFood(p2)
+       & ~hasFood(p1)
+       & ~carryingFood(ant1);
+    0: move(ant1,p2,p1).
+
+Cplus2ASP Output:
+
+ERROR: temp.bc:112:12]: "->": Syntax error.
+
+% Query 3: Attempt to move into a destination that is not clear (unsatisfiable)
+:- query
+    0: loc(ant1)=p1
+       & adj(p1,p2) & adj(p2,p1)
+       & ~adj(p1,p1) & ~adj(p2,p2)
+       & clear(p1) & ~clear(p2)
+       & isNest(p1)
+       & hasFood(p2)
+       & ~hasFood(p1)
+       & ~carryingFood(ant1);
+    0: move(ant1,p1,p2).
+
+Cplus2ASP Output:
+
+ERROR: temp.bc:112:12]: "->": Syntax error.
+
+% Query 4: Pick up food at p2 after moving there; food at p2 should be gone and ant should be carrying food (satisfiable)
+:- query
+    0: loc(ant1)=p1
+       & adj(p1,p2) & adj(p2,p1)
+       & ~adj(p1,p1) & ~adj(p2,p2)
+       & clear(p1) & clear(p2)
+       & isNest(p1)
+       & hasFood(p2)
+       & ~hasFood(p1)
+       & ~carryingFood(ant1);
+    0: move(ant1,p1,p2);
+    1: pickUpFood(ant1,p2);
+    maxstep: carryingFood(ant1) & ~hasFood(p2) & loc(ant1)=p2.
+
+Cplus2ASP Output:
+
+ERROR: temp.bc:112:12]: "->": Syntax error.
+
+% Query 5: Try to execute two different actions in the same step (move and pick up) (unsatisfiable)
+:- query
+    0: loc(ant1)=p1
+       & adj(p1,p2) & adj(p2,p1)
+       & ~adj(p1,p1) & ~adj(p2,p2)
+       & clear(p1) & clear(p2)
+       & isNest(p1)
+       & hasFood(p2)
+       & ~hasFood(p1)
+       & ~carryingFood(ant1);
+    0: move(ant1,p1,p2) & pickUpFood(ant1,p1).
+
+Cplus2ASP Output:
+
+ERROR: temp.bc:112:12]: "->": Syntax error.
+
+% Query 6 (main-task-like): pick up at p2 then drop at nest p1 (satisfiable)
+:- query
+    0: loc(ant1)=p1
+       & adj(p1,p2) & adj(p2,p1)
+       & ~adj(p1,p1) & ~adj(p2,p2)
+       & clear(p1) & clear(p2)
+       & isNest(p1)
+       & hasFood(p2)
+       & ~hasFood(p1)
+       & ~carryingFood(ant1);
+    0: move(ant1,p1,p2);
+    1: pickUpFood(ant1,p2);
+    2: move(ant1,p2,p1);
+    3: dropFoodAtNest(ant1,p1);
+    maxstep: hasFood(p1) & ~carryingFood(ant1) & ~hasFood(p2) & loc(ant1)=p1.
+
+Cplus2ASP Output:
+
+ERROR: temp.bc:112:12]: "->": Syntax error.
+
+
+
+:- query
+    0: loc(ant1)=p1
+       & adj(p1,p2) & adj(p2,p1)
+       & ~adj(p1,p1) & ~adj(p2,p2)
+       & clear(p1) & clear(p2)
+       & isNest(p1)
+       & hasFood(p2)
+       & ~hasFood(p1)
+       & ~carryingFood(ant1);
+    maxstep: hasFood(p1).
+
+
+Cplus2ASP Output:
+
+ERROR: temp.bc:112:12]: "->": Syntax error.

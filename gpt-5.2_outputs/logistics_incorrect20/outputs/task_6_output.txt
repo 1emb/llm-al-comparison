@@ -1,0 +1,46 @@
+Objects:
+:- objects
+    c0, c1 :: city;
+    l00 :: airport;
+    l10 :: airport;
+    l01, l11 :: location;
+    a0 :: airplane;
+    t0, t1 :: truck;
+    p0, p1 :: package.
+
+Query:
+:- query
+    0: inCity(l00,c0) & inCity(l01,c0) & inCity(l10,c1) & inCity(l11,c1) &
+       loc(a0)=l00 &
+       loc(t0)=l00 & loc(t1)=l11 &
+       loc(p0)=l00 & loc(p1)=l00 &
+       ~in(p0,a0) & ~in(p0,t0) & ~in(p0,t1) &
+       ~in(p1,a0) & ~in(p1,t0) & ~in(p1,t1);
+    maxstep: loc(p0)=l01 & loc(p1)=l01.
+
+Status: True
+
+Output:
+Solving...
+Solution: 1 (Time: 0.052s)
+	
+
+	0:  loc(a0)=l00 loc(p0)=l00 loc(p1)=l00 loc(t0)=l00 loc(t1)=l11 inCity(l00, c0) inCity(l01, c0) inCity(l10, c1) inCity(l11, c1)
+
+	ACTIONS:  loadTruck(p0, t0, l00)
+
+	1:  loc(a0)=l00 loc(p0)=l00 loc(p1)=l00 loc(t0)=l00 loc(t1)=l11 in(p0, t0) inCity(l00, c0) inCity(l01, c0) inCity(l10, c1)
+
+	ACTIONS:  loadTruck(p1, t0, l00)
+
+	2:  loc(a0)=l00 loc(p0)=l00 loc(p1)=l00 loc(t0)=l00 loc(t1)=l11 in(p0, t0) in(p1, t0) inCity(l00, c0) inCity(l01, c0)
+
+	ACTIONS:  drive(t0, l00, l01, c0)
+
+	3:  loc(a0)=l00 loc(p0)=l01 loc(p1)=l01 loc(t0)=l01 loc(t1)=l11 in(p0, t0) in(p1, t0)
+
+SATISFIABLE
+Models       : 1+
+Calls        : 4
+Time         : 0.052s (Solving: 0.00s 1st Model: 0.00s Unsat: 0.00s)
+CPU Time     : 0.052s

@@ -1,0 +1,37 @@
+```
+Actions:
+openWin(window)   - open a window
+closeWin(window)  - close a window
+lockWin(window)   - lock a window
+unlockWin(window) - unlock a window
+
+Constants:
+isWindow(window) - whether the thing is a window (inertial boolean fluent)
+isOpen(window)   - whether the window is open (inertial boolean fluent)
+isClosed(window) - whether the window is closed (inertial boolean fluent)
+isLocked(window) - whether the window is locked (inertial boolean fluent)
+isUnlocked(window) - whether the window is unlocked (inertial boolean fluent)
+
+BC+ Signature:
+:- sorts
+    window.
+
+:- objects
+    w1, w2 :: window.
+
+:- variables
+    W, W1, W2, W3, W4 :: window;
+    Bool, Bool1, Bool2, Bool3, Bool4 :: boolean.
+
+:- constants
+    openWin(window) :: exogenousAction;
+    closeWin(window) :: exogenousAction;
+    lockWin(window) :: exogenousAction;
+    unlockWin(window) :: exogenousAction;
+
+    isWindow(window) :: inertialFluent(boolean);
+    isOpen(window) :: inertialFluent(boolean);
+    isClosed(window) :: inertialFluent(boolean);
+    isLocked(window) :: inertialFluent(boolean);
+    isUnlocked(window) :: inertialFluent(boolean).
+```

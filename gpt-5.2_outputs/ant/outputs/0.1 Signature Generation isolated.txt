@@ -1,0 +1,28 @@
+BC+ Signature:
+:- sorts
+    ant;
+    place.
+
+:- objects
+    ant1 :: ant;
+    p1, p2 :: place.
+
+:- variables
+    A, A1, A2, A3, A4 :: ant;
+    P, P1, P2, P3, P4 :: place;
+    Bool, Bool1, Bool2, Bool3, Bool4 :: boolean.
+
+:- constants
+    % Actions
+    move(ant, place, place) :: exogenousAction;
+    pickupFood(ant, place) :: exogenousAction;
+    dropFood(ant, place) :: exogenousAction;
+    clearObstacle(ant, place, place) :: exogenousAction;
+
+    % Fluents
+    loc(ant) :: inertialFluent(place);
+    adjacent(place, place) :: inertialFluent(boolean);
+    clear(place) :: inertialFluent(boolean);
+    isNest(place) :: inertialFluent(boolean);
+    hasFood(place) :: inertialFluent(boolean);
+    carryingFood(ant) :: inertialFluent(boolean).

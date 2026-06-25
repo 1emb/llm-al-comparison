@@ -1,0 +1,38 @@
+% Query 1: Board at a non-floor should be disallowed. (unsatisfiable)
+:- query
+    0: isFloor(f0) & isFloor(f1) & ~isPassenger(p0);
+    0: liftAt(f0);
+    0: origin(p0)=f1 & dest(p0)=f0;
+    0: board(p0,f0).
+
+% Query 2: Board at the current floor when it is a floor, the person is not a passenger, and origin is different should be allowed; result should have ~boarded(p0). (satisfiable)
+:- query
+    0: isFloor(f0) & isFloor(f1) & ~isPassenger(p0);
+    0: liftAt(f0);
+    0: origin(p0)=f1 & dest(p0)=f0;
+    0: board(p0,f0);
+    maxstep: ~boarded(p0).
+
+% Query 3: Depart when boarded(p0) is already true should be disallowed. (unsatisfiable)
+:- query
+    0: isFloor(f0) & isFloor(f1) & ~isPassenger(p0);
+    0: liftAt(f0);
+    0: origin(p0)=f1 & dest(p0)=f1;
+    0: boarded(p0);
+    0: depart(p0,f0).
+
+% Query 4: Depart at the current floor when it is a floor, the person is not a passenger, dest is different, and the person is not boarded should be allowed; result should have boarded(p0) and served(p0). (satisfiable)
+:- query
+    0: isFloor(f0) & isFloor(f1) & ~isPassenger(p0);
+    0: liftAt(f0);
+    0: origin(p0)=f1 & dest(p0)=f1;
+    0: ~boarded(p0) & ~served(p0);
+    0: depart(p0,f0);
+    maxstep: boarded(p0) & served(p0).
+
+% Query 5: moveUp from a first location that is a floor should be disallowed (rule 13). (unsatisfiable)
+:- query
+    0: isFloor(f0) & isFloor(f1);
+    0: above(f0,f1);
+    0: liftAt(f1);
+    0: moveUp(f0,f1).

@@ -1,0 +1,208 @@
+% Query 1: Pick up a clear block while the hand is empty (satisfiable)
+:- query
+    0: handEmpty
+       & loc(b5)=table
+       & loc(b4)=b5 & clear(b4)
+       & loc(b1)=table & clear(b1)
+       & loc(b7)=table & clear(b7)
+       & loc(b3)=table & clear(b3)
+       & loc(b6)=table
+       & loc(b2)=b6 & clear(b2);
+    0: pickup(b4);
+    maxstep: holding(b4) & loc(b4)=hand & ~handEmpty.
+
+Cplus2ASP Output:
+
+Solving...
+UNSATISFIABLE
+Models       : 0
+No solution.
+
+
+
+% Query 2: Try to pick up b5 even though it is not clear (unsatisfiable)
+:- query
+    0: handEmpty
+       & loc(b5)=table
+       & loc(b4)=b5 & clear(b4)
+       & loc(b1)=table & clear(b1)
+       & loc(b7)=table & clear(b7)
+       & loc(b3)=table & clear(b3)
+       & loc(b6)=table
+       & loc(b2)=b6 & clear(b2);
+    0: pickup(b5).
+
+Cplus2ASP Output:
+
+Solving...
+UNSATISFIABLE
+Models       : 0
+No solution.
+
+
+
+% Query 3: Try to put down a block that is not being held (unsatisfiable)
+:- query
+    0: handEmpty
+       & loc(b5)=table
+       & loc(b4)=b5 & clear(b4)
+       & loc(b1)=table & clear(b1)
+       & loc(b7)=table & clear(b7)
+       & loc(b3)=table & clear(b3)
+       & loc(b6)=table
+       & loc(b2)=b6 & clear(b2);
+    0: putdown(b4).
+
+Cplus2ASP Output:
+
+Solving...
+UNSATISFIABLE
+Models       : 0
+No solution.
+
+
+
+% Query 4: Pick up b4 and then stack it onto clear block b1 (satisfiable)
+:- query
+    0: handEmpty
+       & loc(b5)=table
+       & loc(b4)=b5 & clear(b4)
+       & loc(b1)=table & clear(b1)
+       & loc(b7)=table & clear(b7)
+       & loc(b3)=table & clear(b3)
+       & loc(b6)=table
+       & loc(b2)=b6 & clear(b2);
+    0: pickup(b4);
+    1: stack(b4,b1);
+    maxstep: loc(b4)=b1 & handEmpty & ~holding(b4).
+
+Cplus2ASP Output:
+
+Solving...
+UNSATISFIABLE
+Models       : 0
+No solution.
+
+
+% The query fails!
+
+Each step is satisfiable up until 0, which has state/actions: "    0: handEmpty and     0: pickup(b4);", which should be satisfiable but they are not.
+
+The last satisfiable state, correponding to this query is:
+:- query
+        0: handEmpty
+        maxstep :: 0.
+
+is:
+
+Solving...
+UNSATISFIABLE
+Models       : 0
+No solution.
+
+
+
+The actions and states are shown up until the last step in the query which is satisfiable. Consider why "    0: handEmpty and     0: pickup(b4);" cannot be executed in step 0. Look at the last satisfiable state in the plan, and the rules which involve or may affect "    0: handEmpty and     0: pickup(b4);", which would cause it to be nonexecutable (if it is an action) or cause something that leads to the query being unsatisfiable.
+    
+
+% Query 5: Try to stack b4 onto b5 even though b5 is not clear (unsatisfiable)
+:- query
+    0: handEmpty
+       & loc(b5)=table
+       & loc(b4)=b5 & clear(b4)
+       & loc(b1)=table & clear(b1)
+       & loc(b7)=table & clear(b7)
+       & loc(b3)=table & clear(b3)
+       & loc(b6)=table
+       & loc(b2)=b6 & clear(b2);
+    0: pickup(b4);
+    1: stack(b4,b5).
+
+Cplus2ASP Output:
+
+Solving...
+UNSATISFIABLE
+Models       : 0
+No solution.
+
+
+
+
+
+:- query
+    0: handEmpty
+       & loc(b5)=table
+       & loc(b4)=b5 & clear(b4)
+       & loc(b1)=table & clear(b1)
+       & loc(b7)=table & clear(b7)
+       & loc(b3)=table & clear(b3)
+       & loc(b6)=table
+       & loc(b2)=b6 & clear(b2);
+    maxstep: loc(b3)=table
+       & loc(b1)=b3
+       & loc(b5)=b1
+       & loc(b2)=b5 & clear(b2)
+       & loc(b6)=table
+       & loc(b7)=b6
+       & loc(b4)=b7 & clear(b4).
+
+
+
+Cplus2ASP Output:
+
+Solving...
+	
+
+	0:  handEmpty clear(b1) clear(b2) clear(b3) clear(b4) clear(b7) loc(b1)=table loc(b2)=b6 loc(b3)=table loc(b4)=b5 loc(b5)=table loc(b6)=table loc(b7)=table
+
+	ACTIONS:  unstack(b2, b6)
+
+	1:  clear(b1) clear(b3) clear(b4) clear(b6) clear(b7) holding(b2) loc(b1)=table loc(b2)=hand loc(b3)=table loc(b4)=b5 loc(b5)=table loc(b6)=table loc(b7)=table
+
+	ACTIONS:  putdown(b2)
+
+	2:  handEmpty clear(b1) clear(b2) clear(b3) clear(b4) clear(b6) clear(b7) loc(b1)=table loc(b2)=table loc(b3)=table loc(b4)=b5 loc(b5)=table loc(b6)=table loc(b7)=table
+
+	ACTIONS:  pickup(b7)
+
+	3:  clear(b1) clear(b2) clear(b3) clear(b4) clear(b6) clear(b7) holding(b7) loc(b1)=table loc(b2)=table loc(b3)=table loc(b4)=b5 loc(b5)=table loc(b6)=table loc(b7)=hand
+
+	ACTIONS:  stack(b7, b6)
+
+	4:  handEmpty clear(b1) clear(b2) clear(b3) clear(b4) clear(b7) loc(b1)=table loc(b2)=table loc(b3)=table loc(b4)=b5 loc(b5)=table loc(b6)=table loc(b7)=b6
+
+	ACTIONS:  unstack(b4, b5)
+
+	5:  clear(b1) clear(b2) clear(b3) clear(b5) clear(b7) holding(b4) loc(b1)=table loc(b2)=table loc(b3)=table loc(b4)=hand loc(b5)=table loc(b6)=table loc(b7)=b6
+
+	ACTIONS:  stack(b4, b7)
+
+	6:  handEmpty clear(b1) clear(b2) clear(b3) clear(b4) clear(b5) loc(b1)=table loc(b2)=table loc(b3)=table loc(b4)=b7 loc(b5)=table loc(b6)=table loc(b7)=b6
+
+	ACTIONS:  pickup(b1)
+
+	7:  clear(b1) clear(b2) clear(b3) clear(b4) clear(b5) holding(b1) loc(b1)=hand loc(b2)=table loc(b3)=table loc(b4)=b7 loc(b5)=table loc(b6)=table loc(b7)=b6
+
+	ACTIONS:  stack(b1, b3)
+
+	8:  handEmpty clear(b1) clear(b2) clear(b4) clear(b5) loc(b1)=b3 loc(b2)=table loc(b3)=table loc(b4)=b7 loc(b5)=table loc(b6)=table loc(b7)=b6
+
+	ACTIONS:  pickup(b5)
+
+	9:  clear(b1) clear(b2) clear(b4) clear(b5) holding(b5) loc(b1)=b3 loc(b2)=table loc(b3)=table loc(b4)=b7 loc(b5)=hand loc(b6)=table loc(b7)=b6
+
+	ACTIONS:  stack(b5, b1)
+
+	10:  handEmpty clear(b2) clear(b4) clear(b5) loc(b1)=b3 loc(b2)=table loc(b3)=table loc(b4)=b7 loc(b5)=b1 loc(b6)=table loc(b7)=b6
+
+	ACTIONS:  pickup(b2)
+
+	11:  clear(b2) clear(b4) clear(b5) holding(b2) loc(b1)=b3 loc(b2)=hand loc(b3)=table loc(b4)=b7 loc(b5)=b1 loc(b6)=table loc(b7)=b6
+
+	ACTIONS:  stack(b2, b5)
+
+	12:  handEmpty clear(b2) clear(b4) loc(b1)=b3 loc(b2)=b5 loc(b3)=table loc(b4)=b7 loc(b5)=b1 loc(b6)=table loc(b7)=b6
+
+SATISFIABLE
+Models       : 1+
+

@@ -1,0 +1,51 @@
+% A passenger cannot be both boarded and served at the same time.
+
+% Boarding action executability conditions:
+% Boarding a passenger at a floor is not executable if that floor is not marked as a floor.
+% Boarding a passenger at a floor is not executable if that passenger is not marked as a passenger.
+% Boarding a passenger at a floor is not executable if the elevator is not at that floor.
+% Boarding a passenger at a floor is not executable if that floor is not the passenger's origin.
+% Boarding a passenger at a floor is not executable if the passenger is already marked as boarded.
+
+% Boarding action effects:
+% Boarding a passenger at a floor causes the passenger to be marked as boarded.
+% Boarding a passenger at a floor causes the passenger to no longer be marked as served.
+
+% Departing action executability conditions:
+% Departing a passenger at a floor is not executable if that floor is not marked as a floor.
+% Departing a passenger at a floor is not executable if that passenger is not marked as a passenger.
+% Departing a passenger at a floor is not executable if the elevator is not at that floor.
+% Departing a passenger at a floor is not executable if that floor is not the passenger's destination.
+% Departing a passenger at a floor is not executable if the passenger is not marked as boarded.
+
+% Departing action effects:
+% Departing a passenger at a floor causes the passenger to no longer be marked as boarded.
+% Departing a passenger at a floor causes the passenger to be marked as served.
+
+% Upward movement executability conditions:
+% Moving up from a first floor to a second floor is not executable if the first floor is not marked as a floor.
+% Moving up from a first floor to a second floor is not executable if the second floor is not marked as a floor.
+% Moving up from a first floor to a second floor is not executable if the elevator is not at the first floor.
+% Moving up from a first floor to a second floor is not executable if the first floor is not above the second floor.
+
+% Upward movement effects:
+% Moving up from a first floor to a second floor causes the elevator to be at the second floor.
+% Moving up from a first floor to a second floor causes the elevator to no longer be at the first floor.
+
+% Downward movement executability conditions:
+% Moving down from a first floor to a second floor is not executable if the first floor is not marked as a floor.
+% Moving down from a first floor to a second floor is not executable if the second floor is not marked as a floor.
+% Moving down from a first floor to a second floor is not executable if the elevator is not at the first floor.
+% Moving down from a first floor to a second floor is not executable if the second floor is not above the first floor.
+
+% Downward movement effects:
+% Moving down from a first floor to a second floor causes the elevator to be at the second floor.
+% Moving down from a first floor to a second floor causes the elevator to no longer be at the first floor.
+
+% Concurrency restrictions (single-elevator, single-step intuition):
+% It is not executable to perform moveUp and moveDown at the same time.
+% It is not executable to perform moveUp and board at the same time.
+% It is not executable to perform moveUp and depart at the same time.
+% It is not executable to perform moveDown and board at the same time.
+% It is not executable to perform moveDown and depart at the same time.
+% It is not executable for the same passenger to board and depart at the same time.

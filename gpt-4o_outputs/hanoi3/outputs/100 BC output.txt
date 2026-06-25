@@ -1,0 +1,1 @@
+/home/grad24/mnguyen/.cplus2asp.config: cannot open file

@@ -1,0 +1,145 @@
+% Query 1: Board at a non-floor should be disallowed. (unsatisfiable)
+:- query
+    0: isFloor(f0) & isFloor(f1) & ~isPassenger(p0);
+    0: liftAt(f0);
+    0: origin(p0)=f1 & dest(p0)=f0;
+    0: board(p0,f0).
+
+Cplus2ASP Output:
+
+Solving...
+UNSATISFIABLE
+Models       : 0
+No solution.
+
+
+
+% Query 2: Board at the current floor when it is a floor, the person is not a passenger, and origin is the same should be allowed; result should have boarded(p0). (satisfiable)
+:- query
+    0: isFloor(f0) & isFloor(f1) & ~isPassenger(p0);
+    0: liftAt(f0);
+    0: origin(p0)=f0 & dest(p0)=f1;
+    0: ~boarded(p0);
+    0: board(p0,f0);
+    maxstep: boarded(p0).
+
+Cplus2ASP Output:
+
+Solving...
+	
+
+	0:  dest(p0)=f1 isFloor(f0) isFloor(f1) liftAt(f0) origin(p0)=f0 served(p0) above(f0, f1) above(f1, f0) above(f1, f1)
+
+	ACTIONS:  board(p0, f0)
+
+	1:  boarded(p0) dest(p0)=f1 isFloor(f0) isFloor(f1) liftAt(f0) origin(p0)=f0 served(p0) above(f0, f1) above(f1, f0) above(f1, f1)
+
+SATISFIABLE
+Models       : 1+
+
+
+% Query 3: Depart when boarded(p0) is false should be disallowed. (unsatisfiable)
+:- query
+    0: isFloor(f0) & isFloor(f1) & ~isPassenger(p0);
+    0: liftAt(f0);
+    0: origin(p0)=f1 & dest(p0)=f0;
+    0: ~boarded(p0);
+    0: depart(p0,f0).
+
+Cplus2ASP Output:
+
+Solving...
+UNSATISFIABLE
+Models       : 0
+No solution.
+
+
+
+% Query 4: Depart at the current floor when it is a floor, the person is not a passenger, dest is the same, and the person is boarded should be allowed; result should have ~boarded(p0) and served(p0). (satisfiable)
+:- query
+    0: isFloor(f0) & isFloor(f1) & ~isPassenger(p0);
+    0: liftAt(f0);
+    0: origin(p0)=f1 & dest(p0)=f0;
+    0: boarded(p0) & ~served(p0);
+    0: depart(p0,f0);
+    maxstep: ~boarded(p0) & served(p0).
+
+Cplus2ASP Output:
+
+Solving...
+	
+
+	0:  boarded(p0) dest(p0)=f0 isFloor(f0) isFloor(f1) liftAt(f0) origin(p0)=f1 above(f0, f1) above(f1, f0) above(f1, f1)
+
+	ACTIONS:  depart(p0, f0)
+
+	1:  dest(p0)=f0 isFloor(f0) isFloor(f1) liftAt(f0) origin(p0)=f1 served(p0) above(f0, f1) above(f1, f0) above(f1, f1)
+
+SATISFIABLE
+Models       : 1+
+
+
+% Query 5: moveUp from f1 to f0 should be allowed if above(f0,f1) and liftAt(f1). (satisfiable)
+:- query
+    0: isFloor(f0) & isFloor(f1);
+    0: above(f0,f1);
+    0: liftAt(f1);
+    0: moveUp(f1,f0);
+    maxstep: liftAt(f0).
+
+Cplus2ASP Output:
+
+Solving...
+	
+
+	0:  boarded(p0) dest(p0)=f0 isFloor(f0) isFloor(f1) isPassenger(p0) liftAt(f1) origin(p0)=f0 served(p0) above(f0, f1) above(f1, f0) above(f1, f1)
+
+	ACTIONS:  moveUp(f1, f0)
+
+	1:  boarded(p0) dest(p0)=f0 isFloor(f0) isFloor(f1) isPassenger(p0) liftAt(f0) origin(p0)=f0 served(p0) above(f0, f1) above(f1, f0) above(f1, f1)
+
+SATISFIABLE
+Models       : 1+
+
+
+
+
+% Fix: declare the missing objects (f2,f3,p1) in the program OR restrict query.
+% Here we keep the original meaning, so we add objects by changing the program objects section.
+% (See updated objects below in this query block for clarity; implement in program objects section.)
+
+% NOTE: To preserve the original natural language query, update the program objects to:
+% :- objects
+%     f0, f1, f2, f3 :: floor;
+%     p0, p1 :: passenger.
+
+:- query
+    0: isFloor(f0) & isFloor(f1) & isFloor(f2) & isFloor(f3);
+    0: ~isPassenger(p0) & ~isPassenger(p1);
+    0: above(f0,f1) & above(f0,f2) & above(f0,f3) & above(f1,f2) & above(f1,f3) & above(f2,f3);
+    0: origin(p0)=f3 & dest(p0)=f0;
+    0: origin(p1)=f0 & dest(p1)=f2;
+    0: liftAt(f0);
+    0: ~boarded(p0) & ~boarded(p1) & ~served(p0) & ~served(p1);
+    maxstep: served(p0) & served(p1).
+
+
+
+Cplus2ASP Output:
+
+ERROR: temp.bc:89:45]: Encountered undeclared identifier "f2/0".
+ERROR: temp.bc:89:59]: Encountered undeclared identifier "f3/0".
+ERROR: temp.bc:90:41]: Encountered undeclared identifier "p1/0".
+ERROR: temp.bc:91:33]: Encountered undeclared identifier "f2/0".
+ERROR: temp.bc:91:48]: Encountered undeclared identifier "f3/0".
+ERROR: temp.bc:91:63]: Encountered undeclared identifier "f2/0".
+ERROR: temp.bc:91:78]: Encountered undeclared identifier "f3/0".
+ERROR: temp.bc:91:90]: Encountered undeclared identifier "f2/0".
+ERROR: temp.bc:91:93]: Encountered undeclared identifier "f3/0".
+ERROR: temp.bc:92:19]: Encountered undeclared identifier "f3/0".
+ERROR: temp.bc:93:16]: Encountered undeclared identifier "p1/0".
+ERROR: temp.bc:93:30]: Encountered undeclared identifier "p1/0".
+ERROR: temp.bc:93:33]: Encountered undeclared identifier "f2/0".
+ERROR: temp.bc:95:33]: Encountered undeclared identifier "p1/0".
+ERROR: temp.bc:95:61]: Encountered undeclared identifier "p1/0".
+ERROR: temp.bc:96:35]: Encountered undeclared identifier "p1/0".

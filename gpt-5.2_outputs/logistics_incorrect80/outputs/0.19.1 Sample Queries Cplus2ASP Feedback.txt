@@ -1,0 +1,151 @@
+% Query 1: Load p0 into truck t1 at l1_0 (satisfiable)
+:- query
+    0: inCity(l0_0)=c0 & inCity(l1_0)=c1
+       & loc(a0)=l1_0 & loc(a1)=l1_0
+       & loc(t0)=l0_0 & loc(t1)=l1_0
+       & loc(p0)=l1_0
+       & ~inVehicle(p0,t0) & ~inVehicle(p0,t1) & ~inVehicle(p0,a0) & ~inVehicle(p0,a1);
+    0: loadTruck(p0,t1,l1_0);
+    maxstep: inVehicle(p0,t1).
+
+Cplus2ASP Output:
+
+Solving...
+	
+
+	0:  inCity(l0_0)=c0 inCity(l1_0)=c1 loc(a0)=l1_0 loc(a1)=l1_0 loc(p0)=l1_0 loc(t0)=l0_0 loc(t1)=l1_0
+
+	ACTIONS:  loadTruck(p0, t1, l1_0)
+
+	1:  inCity(l0_0)=c0 inCity(l1_0)=c1 loc(a0)=l1_0 loc(a1)=l1_0 loc(p0)=l1_0 loc(t0)=l0_0 loc(t1)=l1_0 inVehicle(p0, t1)
+
+SATISFIABLE
+Models       : 1
+
+
+% Query 2: Try to load p0 into truck t0 at l0_0 even though p0 is at l1_0 (unsatisfiable)
+:- query
+    0: inCity(l0_0)=c0 & inCity(l1_0)=c1
+       & loc(a0)=l1_0 & loc(a1)=l1_0
+       & loc(t0)=l0_0 & loc(t1)=l1_0
+       & loc(p0)=l1_0
+       & ~inVehicle(p0,t0) & ~inVehicle(p0,t1) & ~inVehicle(p0,a0) & ~inVehicle(p0,a1);
+    0: loadTruck(p0,t0,l0_0).
+
+Cplus2ASP Output:
+
+Solving...
+UNSATISFIABLE
+Models       : 0
+No solution.
+
+
+
+% Query 3: Drive truck t1 from l1_0 to l0_0 using city c1 (blocked because inCity(l0_0)=c0) (unsatisfiable)
+:- query
+    0: inCity(l0_0)=c0 & inCity(l1_0)=c1
+       & loc(a0)=l1_0 & loc(a1)=l1_0
+       & loc(t0)=l0_0 & loc(t1)=l1_0
+       & loc(p0)=l1_0
+       & ~inVehicle(p0,t0) & ~inVehicle(p0,t1) & ~inVehicle(p0,a0) & ~inVehicle(p0,a1);
+    0: drive(t1,l1_0,l0_0,c1).
+
+Cplus2ASP Output:
+
+Solving...
+UNSATISFIABLE
+Models       : 0
+No solution.
+
+
+
+% Query 4: Fly airplane a0 from l1_0 to l0_0 and end with a0 at l0_0 (satisfiable)
+:- query
+    0: inCity(l0_0)=c0 & inCity(l1_0)=c1
+       & loc(a0)=l1_0 & loc(a1)=l1_0
+       & loc(t0)=l0_0 & loc(t1)=l1_0
+       & loc(p0)=l1_0
+       & ~inVehicle(p0,t0) & ~inVehicle(p0,t1) & ~inVehicle(p0,a0) & ~inVehicle(p0,a1);
+    0: fly(a0,l1_0,l0_0);
+    maxstep: loc(a0)=l0_0.
+
+Cplus2ASP Output:
+
+Solving...
+	
+
+	0:  inCity(l0_0)=c0 inCity(l1_0)=c1 loc(a0)=l1_0 loc(a1)=l1_0 loc(p0)=l1_0 loc(t0)=l0_0 loc(t1)=l1_0
+
+	ACTIONS:  fly(a0, l1_0, l0_0)
+
+	1:  inCity(l0_0)=c0 inCity(l1_0)=c1 loc(a0)=l0_0 loc(a1)=l1_0 loc(p0)=l1_0 loc(t0)=l0_0 loc(t1)=l1_0
+
+SATISFIABLE
+Models       : 1
+
+
+% Query 5: Load p0 into airplane a0 and simultaneously unload it from the same airplane at the same location (unsatisfiable)
+:- query
+    0: inCity(l0_0)=c0 & inCity(l1_0)=c1
+       & loc(a0)=l1_0 & loc(a1)=l1_0
+       & loc(t0)=l0_0 & loc(t1)=l1_0
+       & loc(p0)=l1_0
+       & ~inVehicle(p0,t0) & ~inVehicle(p0,t1) & ~inVehicle(p0,a0) & ~inVehicle(p0,a1);
+    0: loadAirplane(p0,a0,l1_0) & unloadAirplane(p0,a0,l1_0).
+
+Cplus2ASP Output:
+
+Solving...
+UNSATISFIABLE
+Models       : 0
+No solution.
+
+
+
+% [CHANGED] Query 6: With the fix, transporting p0 to l0_0 requires unloading after flying (satisfiable)
+:- query
+    0: inCity(l0_0)=c0 & inCity(l1_0)=c1
+       & loc(a0)=l1_0 & loc(a1)=l1_0
+       & loc(t0)=l0_0 & loc(t1)=l1_0
+       & loc(p0)=l1_0
+       & ~inVehicle(p0,t0) & ~inVehicle(p0,t1) & ~inVehicle(p0,a0) & ~inVehicle(p0,a1);
+    maxstep: loc(p0)=l0_0 & ~inVehicle(p0,a0) & ~inVehicle(p0,a1) & ~inVehicle(p0,t0) & ~inVehicle(p0,t1).
+
+Cplus2ASP Output:
+
+Solving...
+UNSATISFIABLE
+Models       : 0
+No solution.
+
+
+
+
+
+:- query
+    0: inCity(l0_0)=c0 & inCity(l1_0)=c1
+       & loc(a0)=l1_0 & loc(a1)=l1_0
+       & loc(t0)=l0_0 & loc(t1)=l1_0
+       & loc(p0)=l1_0
+       & ~inVehicle(p0,t0) & ~inVehicle(p0,t1) & ~inVehicle(p0,a0) & ~inVehicle(p0,a1);
+    maxstep: loc(p0)=l0_0.
+
+
+Cplus2ASP Output:
+
+Solving...
+	
+
+	0:  inCity(l0_0)=c0 inCity(l1_0)=c1 loc(a0)=l1_0 loc(a1)=l1_0 loc(p0)=l1_0 loc(t0)=l0_0 loc(t1)=l1_0
+
+	ACTIONS:  loadAirplane(p0, a1, l1_0)
+
+	1:  inCity(l0_0)=c0 inCity(l1_0)=c1 loc(a0)=l1_0 loc(a1)=l1_0 loc(p0)=l1_0 loc(t0)=l0_0 loc(t1)=l1_0 inVehicle(p0, a1)
+
+	ACTIONS:  fly(a1, l1_0, l0_0)
+
+	2:  inCity(l0_0)=c0 inCity(l1_0)=c1 loc(a0)=l1_0 loc(a1)=l0_0 loc(p0)=l0_0 loc(t0)=l0_0 loc(t1)=l1_0 inVehicle(p0, a1)
+
+SATISFIABLE
+Models       : 1+
+

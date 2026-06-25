@@ -1,0 +1,1 @@
+There are two passengers p0 and p1 and four floors f0, f1, f2, and f3. f0 is above f1, f0 is above f2, f0 is above f3, f1 is above f2, f1 is above f3, and f2 is above f3. The origin of p0 is f3 and the destination of p0 is f2. The origin of p1 is f1 and the destination of p1 is f3. The elevator is at f0. Find a plan to serve passengers p0 and p1.

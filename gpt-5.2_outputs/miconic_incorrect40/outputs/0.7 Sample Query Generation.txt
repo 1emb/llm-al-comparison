@@ -1,0 +1,41 @@
+% Query 1: Board p0 at f0 when the lift is at f0 and origin(p0)=f0, with isFloor(f0)=false and isPassenger(p0)=false (satisfiable)
+:- query
+    0: liftAt(f0) & ~liftAt(f1);
+    0: origin(p0)=f0 & dest(p0)=f1;
+    0: ~isFloor(f0) & isFloor(f1);
+    0: ~isPassenger(p0) & boarded(p0) & served(p0);
+    0: board(p0,f0);
+    maxstep: ~boarded(p0).
+
+% Query 2: Try to board p0 at f0 when isFloor(f0)=true (should be blocked by nonexecutable board if isFloor(F)) (unsatisfiable)
+:- query
+    0: liftAt(f0) & ~liftAt(f1);
+    0: origin(p0)=f0 & dest(p0)=f1;
+    0: isFloor(f0) & isFloor(f1);
+    0: ~isPassenger(p0) & boarded(p0) & served(p0);
+    0: board(p0,f0).
+
+% Query 3: Depart p0 at f1 when the lift is at f1, dest(p0)=f1, isFloor(f1)=false, isPassenger(p0)=true, and boarded(p0)=false (satisfiable)
+:- query
+    0: liftAt(f1) & ~liftAt(f0);
+    0: origin(p0)=f0 & dest(p0)=f1;
+    0: ~isFloor(f1) & isFloor(f0);
+    0: isPassenger(p0) & ~boarded(p0) & served(p0);
+    0: depart(p0,f1);
+    maxstep: ~boarded(p0) & ~served(p0).
+
+% Query 4: Try to depart p0 at f1 while boarded(p0)=true (should be blocked by nonexecutable depart if boarded(P)) (unsatisfiable)
+:- query
+    0: liftAt(f1) & ~liftAt(f0);
+    0: origin(p0)=f0 & dest(p0)=f1;
+    0: ~isFloor(f1) & isFloor(f0);
+    0: isPassenger(p0) & boarded(p0) & served(p0);
+    0: depart(p0,f1).
+
+% Query 5: Move up from f0 to f1 when liftAt(f0)=true, isFloor(f0)=false, isFloor(f1)=true, and above(f0,f1)=true (satisfiable)
+:- query
+    0: liftAt(f0) & ~liftAt(f1);
+    0: ~isFloor(f0) & isFloor(f1);
+    0: above(f0,f1);
+    0: moveUp(f0,f1);
+    maxstep: liftAt(f1).

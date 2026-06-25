@@ -1,0 +1,19 @@
+The hand is empty. Block b2 is on the table. Block b3 is on top of b2. Block b1 is on top of b3. b1 is clear. Find a plan so that b1 is on the table and clear, b2 is on the table and clear, and b3 is on the table and clear.
+---
+The hand is empty. Block b3 is on the table. Block b2 is on top of b3. Block b1 is on top of b2. b1 is clear. Find a plan so that b1 is on the table and clear, b2 is on the table and clear, and b3 is on the table and clear.
+---
+The hand is empty. Block b1 is on the table and clear. Block b2 is on the table and clear. Block b3 is on the table and clear. Block b4 is on the table and clear. Find a plan so that b4 is on the table, b1 is on top of b4 and clear, b3 is on the table and clear, and b2 is on the table and clear.
+---
+The hand is empty. Block b3 is on the table and clear. Block b1 is on the table and clear. Block b2 is on the table. Block b4 is on top of b2. b4 is clear. Find a plan so that b3 is on the table and clear, b2 is on the table, b4 is on top of b2, b1 is on top of b4, and b1 is clear.
+---
+The hand is empty. Block b5 is on the table. Block b1 is on top of b5 and clear. Block b3 is on the table and clear. Block b2 is on the table. Block b4 is on top of b2. b4 is clear. Find a plan so that b3 is on the table and clear, b1 is on the table, b4 is on top of b1 and clear, b2 is on the table and clear, and b5 is on the table and clear.
+---
+The hand is empty. Block b4 is on the table and clear. Block b3 is on the table and clear. Block b2 is on the table. Block b1 is on top of b2. Block b5 is on top of b1. b5 is clear. Find a plan so that b1 is on the table and clear, b2 is on the table and clear, b3 is on the table and clear, b4 is on the table and clear, and b5 is on the table and clear.
+---
+The hand is empty. Block b4 is on the table and clear. Block b3 is on the table and clear. Block b1 is on the table and clear. Block b5 is on the table. Block b6 is on top of b5 and clear. Block b2 is on the table and clear. Find a plan so that b1 is on the table and clear, b2 is on the table and clear, b3 is on the table and clear, b4 is on the table and clear, b5 is on the table and clear, and b6 is on the table and clear.
+---
+The hand is empty. Block b4 is on the table. Block b5 is on top of b4 and clear. Block b2 is on the table and clear. Block b3 is on the table and clear. Block b1 is on the table and clear. Block b6 is on the table and clear. Find a plan so that b1 is on the table and clear, b2 is on the table and clear, b3 is on the table and clear, b4 is on the table and clear, b5 is on the table and clear, and b6 is on the table and clear.
+---
+The hand is empty. Block b5 is on the table. Block b4 is on top of b5 and clear. Block b1 is on the table and clear. Block b7 is on the table and clear. Block b3 is on the table and clear. Block b6 is on the table. Block b2 is on top of b6 and clear. Find a plan so that b3 is on the table, b1 is on top of b3, b5 is on top of b1, b2 is on top of b5 and clear, b6 is on the table, b7 is on top of b6, and b4 is on top of b7 and clear.
+---
+The hand is empty. Block b3 is on the table and clear. Block b1 is on the table. Block b7 is on top of b1 and clear. Block b2 is on the table and clear. Block b6 is on the table and clear. Block b4 is on the table and clear. Block b5 is on the table and clear. Find a plan so that b1 is on the table and clear, b3 is on the table and clear, b4 is on the table, b7 is on top of b4 and clear, b5 is on the table and clear, b6 is on the table and clear, and b2 is on the table and clear.

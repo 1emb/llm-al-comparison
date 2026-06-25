@@ -1,0 +1,121 @@
+% Query 1: openWin(w1) should be executable when w1 is a window, closed, and not unlocked (satisfiable)
+% Also include ~isLocked(w1) to avoid accidental isLocked/isUnlocked contradiction via inertia.
+:- query
+    0: isWindow(w1) & isClosed(w1) & ~isUnlocked(w1) & ~isOpen(w1) & ~isLocked(w1);
+    0: openWin(w1).
+
+Cplus2ASP Output:
+
+Solving...
+	
+
+	0:  isClosed(w1) isClosed(w3) isClosed(w4) isClosed(w5) isClosed(w6) isOpen(w2) isOpen(w3) isOpen(w4) isOpen(w5) isOpen(w6) isOpen(w7) isWindow(w1) isWindow(w2) isWindow(w3) isWindow(w5) isWindow(w6) isWindow(w7)
+
+	ACTIONS:  openWin(w1)
+
+	1:  isClosed(w3) isClosed(w4) isClosed(w5) isClosed(w6) isOpen(w2) isOpen(w3) isOpen(w4) isOpen(w5) isOpen(w6) isOpen(w7) isWindow(w1) isWindow(w2) isWindow(w3) isWindow(w5) isWindow(w6) isWindow(w7)
+
+SATISFIABLE
+Models       : 1+
+
+
+% Query 2: openWin(w1) should be nonexecutable if w1 is unlocked (unsatisfiable)
+:- query
+    0: isWindow(w1) & isClosed(w1) & isUnlocked(w1) & ~isOpen(w1) & ~isLocked(w1);
+    0: openWin(w1).
+
+Cplus2ASP Output:
+
+Solving...
+UNSATISFIABLE
+Models       : 0
+No solution.
+
+
+
+% Query 3: closeWin(w1) should be executable when w1 is not a window and is open; after closing, both isClosed and isOpen should hold (satisfiable)
+:- query
+    0: ~isWindow(w1) & isOpen(w1);
+    0: closeWin(w1);
+    maxstep: isClosed(w1) & isOpen(w1).
+
+Cplus2ASP Output:
+
+Solving...
+	
+
+	0:  isClosed(w2) isClosed(w3) isClosed(w4) isClosed(w5) isClosed(w6) isClosed(w7) isOpen(w1) isOpen(w2) isOpen(w4) isOpen(w5) isOpen(w6) isOpen(w7) isWindow(w2) isWindow(w3) isWindow(w4) isWindow(w5) isWindow(w6) isWindow(w7)
+
+	ACTIONS:  closeWin(w1)
+
+	1:  isClosed(w1) isClosed(w2) isClosed(w3) isClosed(w4) isClosed(w5) isClosed(w6) isClosed(w7) isOpen(w1) isOpen(w2) isOpen(w4) isOpen(w5) isOpen(w6) isOpen(w7) isWindow(w2) isWindow(w3) isWindow(w4) isWindow(w5) isWindow(w6) isWindow(w7)
+
+SATISFIABLE
+Models       : 1+
+
+
+% Query 4: lockWin(w1) should be nonexecutable if w1 is a window (even if closed and unlocked) (unsatisfiable)
+:- query
+    0: isWindow(w1) & isClosed(w1) & isUnlocked(w1) & ~isLocked(w1);
+    0: lockWin(w1).
+
+Cplus2ASP Output:
+
+Solving...
+UNSATISFIABLE
+Models       : 0
+No solution.
+
+
+
+% Query 5: unlockWin(w1) should be executable when w1 is not a window and is locked; after unlocking, isLocked should no longer hold (satisfiable)
+:- query
+    0: ~isWindow(w1) & isLocked(w1) & ~isUnlocked(w1);
+    0: unlockWin(w1);
+    maxstep: ~isLocked(w1).
+
+Cplus2ASP Output:
+
+Solving...
+	
+
+	0:  isClosed(w6) isClosed(w7) isLocked(w1) isOpen(w1) isOpen(w2) isOpen(w3) isOpen(w4) isOpen(w5) isOpen(w6) isOpen(w7) isWindow(w2) isWindow(w3) isWindow(w4) isWindow(w5) isWindow(w6) isWindow(w7)
+
+	ACTIONS:  unlockWin(w1)
+
+	1:  isClosed(w6) isClosed(w7) isOpen(w1) isOpen(w2) isOpen(w3) isOpen(w4) isOpen(w5) isOpen(w6) isOpen(w7) isWindow(w2) isWindow(w3) isWindow(w4) isWindow(w5) isWindow(w6) isWindow(w7)
+
+SATISFIABLE
+Models       : 1+
+
+
+
+
+% The original main goal asks to make some windows "locked" and some "open".
+% Under the stated dynamics, lockWin/unlockWin can only make ~isLocked and ~isUnlocked,
+% and openWin can only make ~isOpen and ~isClosed, so "isLocked" and "isOpen" cannot be achieved unless already true.
+% To preserve the intended meaning as much as possible while making it solvable, we restate goals using the achievable
+% post-action conditions: "locked" -> ~isLocked & ~isUnlocked, and "open" -> ~isOpen & ~isClosed.
+% "closed" remains isClosed (achievable via closeWin, but note closeWin requires ~isWindow, so we must allow ~isWindow for w6).
+
+:- query
+    0: isWindow(w1) & isWindow(w2) & isWindow(w3) & isWindow(w4) & isWindow(w5) & isWindow(w6) & isWindow(w7)
+     & isOpen(w1) & isUnlocked(w1) & ~isClosed(w1) & ~isLocked(w1)
+     & isClosed(w2) & isUnlocked(w2) & ~isOpen(w2) & ~isLocked(w2)
+     & isClosed(w3) & isLocked(w3) & ~isOpen(w3) & ~isUnlocked(w3)
+     & isOpen(w4) & isUnlocked(w4) & ~isClosed(w4) & ~isLocked(w4)
+     & isClosed(w5) & isUnlocked(w5) & ~isOpen(w5) & ~isLocked(w5)
+     & isOpen(w6) & isUnlocked(w6) & ~isClosed(w6) & ~isLocked(w6)
+     & isClosed(w7) & isLocked(w7) & ~isOpen(w7) & ~isUnlocked(w7);
+    maxstep:
+       (~isLocked(w1) & ~isUnlocked(w1))          % "w1 locked" achievable form
+     & (~isOpen(w3) & ~isClosed(w3))              % "w3 open" achievable form
+     & (~isLocked(w4) & ~isUnlocked(w4))          % "w4 locked" achievable form
+     & (~isOpen(w5) & ~isClosed(w5))              % "w5 open" achievable form
+     & isClosed(w6)                               % "w6 closed" (requires closeWin, but closeWin requires ~isWindow)
+     & (~isOpen(w7) & ~isClosed(w7)).             % "w7 open" achievable form
+
+
+Cplus2ASP Output:
+
+ERROR: temp.bc:97:12]: ":": Syntax error.

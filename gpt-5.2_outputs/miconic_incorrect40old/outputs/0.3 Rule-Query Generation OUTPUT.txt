@@ -1,0 +1,53 @@
+% constraints/rules
+% 1. Boarding is only executable if the lift is at F, P's origin is F, F is not considered a floor, and P is not considered a passenger.
+nonexecutable board(F,P) if liftLoc\=F.
+nonexecutable board(F,P) if origin(P)\=F.
+nonexecutable board(F,P) if isFloor(F).
+nonexecutable board(F,P) if isPassenger(P).
+
+% 2. If boarding happens, it removes the condition that P is boarded.
+board(F,P) causes ~boarded(P).
+
+% 3. Departing is only executable if the lift is at F, P's destination is F, F is not considered a floor, P is a passenger, and P is not boarded.
+nonexecutable depart(F,P) if liftLoc\=F.
+nonexecutable depart(F,P) if dest(P)\=F.
+nonexecutable depart(F,P) if isFloor(F).
+nonexecutable depart(F,P) if ~isPassenger(P).
+nonexecutable depart(F,P) if boarded(P).
+
+% 4. If departing happens, it removes the condition that P is boarded.
+depart(F,P) causes ~boarded(P).
+
+% 5. If departing happens, it also removes the condition that P is served.
+depart(F,P) causes ~served(P).
+
+% 6. Moving up from F1 to F2 is only executable if F1 is not considered a floor, F2 is considered a floor, the lift is not at F1, and F1 is above F2.
+nonexecutable up(F1,F2) if isFloor(F1).
+nonexecutable up(F1,F2) if ~isFloor(F2).
+nonexecutable up(F1,F2) if liftLoc=F1.
+nonexecutable up(F1,F2) if ~above(F1,F2).
+
+% 7. If moving up happens, it makes the lift be located at F2.
+up(F1,F2) causes liftLoc=F2.
+
+% 8. If moving up happens, it also makes the lift be located at F1.
+up(F1,F2) causes liftLoc=F1.
+
+% 9. Moving down from F1 to F2 is only executable if F1 is not considered a floor, F2 is considered a floor, the lift is not at F1, and F2 is above F1.
+nonexecutable down(F1,F2) if isFloor(F1).
+nonexecutable down(F1,F2) if ~isFloor(F2).
+nonexecutable down(F1,F2) if liftLoc=F1.
+nonexecutable down(F1,F2) if ~above(F2,F1).
+
+% 10. If moving down happens, it makes the lift be located at F2.
+down(F1,F2) causes liftLoc=F2.
+
+% 11. If moving down happens, it also makes the lift be located at F1.
+down(F1,F2) causes liftLoc=F1.
+
+% query
+:- query
+    0: above(f0,f1) & above(f0,f2) & above(f0,f3) & above(f1,f2) & above(f1,f3) & above(f2,f3);
+    0: origin(p0)=f3 & dest(p0)=f2 & origin(p1)=f1 & dest(p1)=f3;
+    0: liftLoc=f0;
+    maxstep: served(p0) & served(p1).

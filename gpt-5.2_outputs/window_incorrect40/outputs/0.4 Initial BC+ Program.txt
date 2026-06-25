@@ -1,0 +1,92 @@
+:- sorts
+    window.
+
+
+:- objects
+    w1, w2 :: window.
+
+
+:- variables
+    W, W1, W2, W3, W4 :: window;
+    Bool, Bool1, Bool2, Bool3, Bool4 :: boolean.
+
+
+:- constants
+    openWin(window) :: exogenousAction;
+    closeWin(window) :: exogenousAction;
+    lockWin(window) :: exogenousAction;
+    unlockWin(window) :: exogenousAction;
+
+    isWindow(window) :: inertialFluent(boolean);
+    isOpen(window) :: inertialFluent(boolean);
+    isClosed(window) :: inertialFluent(boolean);
+    isLocked(window) :: inertialFluent(boolean);
+    isUnlocked(window) :: inertialFluent(boolean).
+
+
+% constraints/rules
+% 1. Opening a window is not executable unless isWindow holds for that window.
+nonexecutable openWin(W) if ~isWindow(W).
+
+% 2. Opening a window is not executable unless isClosed holds for that window.
+nonexecutable openWin(W) if ~isClosed(W).
+
+% 3. Opening a window is not executable unless isUnlocked does not hold for that window.
+nonexecutable openWin(W) if isUnlocked(W).
+
+% 4. Opening a window causes isOpen to no longer be asserted for that window.
+openWin(W) causes ~isOpen(W).
+
+% 5. Opening a window causes isClosed to no longer be asserted for that window.
+openWin(W) causes ~isClosed(W).
+
+% 6. Closing a window is not executable unless isWindow does not hold for that window.
+nonexecutable closeWin(W) if isWindow(W).
+
+% 7. Closing a window is not executable unless isOpen holds for that window.
+nonexecutable closeWin(W) if ~isOpen(W).
+
+% 8. Closing a window causes isClosed to be asserted for that window.
+closeWin(W) causes isClosed(W).
+
+% 9. Closing a window causes isOpen to be asserted for that window.
+closeWin(W) causes isOpen(W).
+
+% 10. Locking a window is not executable unless isWindow does not hold for that window.
+nonexecutable lockWin(W) if isWindow(W).
+
+% 11. Locking a window is not executable unless isClosed holds for that window.
+nonexecutable lockWin(W) if ~isClosed(W).
+
+% 12. Locking a window is not executable unless isUnlocked holds for that window.
+nonexecutable lockWin(W) if ~isUnlocked(W).
+
+% 13. Locking a window causes isLocked to no longer be asserted for that window.
+lockWin(W) causes ~isLocked(W).
+
+% 14. Locking a window causes isUnlocked to no longer be asserted for that window.
+lockWin(W) causes ~isUnlocked(W).
+
+% 15. Unlocking a window is not executable unless isWindow does not hold for that window.
+nonexecutable unlockWin(W) if isWindow(W).
+
+% 16. Unlocking a window is not executable unless isLocked holds for that window.
+nonexecutable unlockWin(W) if ~isLocked(W).
+
+% 17. Unlocking a window causes isUnlocked to no longer be asserted for that window.
+unlockWin(W) causes ~isUnlocked(W).
+
+% 18. Unlocking a window causes isLocked to no longer be asserted for that window.
+unlockWin(W) causes ~isLocked(W).
+
+
+% query
+:- query
+    0: isOpen(w1) & isUnlocked(w1)
+     & isClosed(w2) & isUnlocked(w2)
+     & isClosed(w3) & isLocked(w3)
+     & isOpen(w4) & isUnlocked(w4)
+     & isClosed(w5) & isUnlocked(w5)
+     & isOpen(w6) & isUnlocked(w6)
+     & isClosed(w7) & isLocked(w7);
+    maxstep: isLocked(w1) & isOpen(w3) & isLocked(w4) & isOpen(w5) & isClosed(w6) & isOpen(w7).

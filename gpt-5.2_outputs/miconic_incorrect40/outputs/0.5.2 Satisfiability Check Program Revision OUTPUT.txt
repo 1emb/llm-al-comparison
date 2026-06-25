@@ -1,0 +1,124 @@
+% BC+ signature
+:- sorts
+    floor;
+    passenger;
+    boolean.
+
+:- objects
+    f0, f1, f2, f3 :: floor;
+    p0, p1 :: passenger;
+    true, false :: boolean.
+
+:- variables
+    F, F1, F2 :: floor;
+    P :: passenger.
+
+:- constants
+    board(passenger) :: exogenousAction;
+    depart(passenger) :: exogenousAction;
+    moveUp(floor) :: exogenousAction;
+    moveDown(floor) :: exogenousAction;
+
+    % Attributes (tie floor parameters to actions; avoids putting action constants in "impossible")
+    atFloor(passenger) :: attribute(floor) of board(passenger);
+    atFloor(passenger) :: attribute(floor) of depart(passenger);
+    toFloor(floor) :: attribute(floor) of moveUp(floor);
+    toFloor(floor) :: attribute(floor) of moveDown(floor);
+
+    liftAt :: inertialFluent(floor);
+    origin(passenger) :: inertialFluent(floor);
+    dest(passenger) :: inertialFluent(floor);
+
+    above(floor,floor) :: inertialFluent(boolean);
+
+    isFloor(floor) :: inertialFluent(boolean);
+    isPassenger(passenger) :: inertialFluent(boolean);
+    boarded(passenger) :: inertialFluent(boolean);
+    served(passenger) :: inertialFluent(boolean).
+
+% Generated constraints
+
+% --- Basic sanity constraints ---
+% above is intended as a fixed relation; enforce it does not change across transitions.
+always above(F1,F2) = Bool -> above(F1,F2) after above(F1,F2) = Bool.
+
+% The elevator cannot be at two different floors at the same time.
+impossible liftAt = F1 & liftAt = F2 & F1\=F2.
+
+% --- Boarding ---
+% A passenger can board only when the lift is at the boarding floor and the passenger's origin is that floor.
+nonexecutable board(P) if atFloor(P)\=liftAt.
+nonexecutable board(P) if origin(P)\=atFloor(P).
+
+% Boarding is not executable at floor F if isFloor(F) holds.
+nonexecutable board(P) if isFloor(F) & atFloor(P)=F.
+
+% Boarding is not executable for passenger P if isPassenger(P) holds.
+nonexecutable board(P) if isPassenger(P).
+
+% Boarding causes boarded(P) to hold (fixes the original contradiction with depart's precondition).
+board(P) causes boarded(P).
+
+% Boarding makes the person a passenger (typical intended meaning).
+board(P) causes isPassenger(P).
+
+% --- Departing ---
+% A passenger can depart only when the lift is at the departing floor and the passenger's destination is that floor.
+nonexecutable depart(P) if atFloor(P)\=liftAt.
+nonexecutable depart(P) if dest(P)\=atFloor(P).
+
+% Departing is not executable at floor F if isFloor(F) holds.
+nonexecutable depart(P) if isFloor(F) & atFloor(P)=F.
+
+% Departing is not executable for passenger P if isPassenger(P) does not hold.
+nonexecutable depart(P) if ~isPassenger(P).
+
+% Departing is not executable for passenger P if boarded(P) does not hold.
+nonexecutable depart(P) if ~boarded(P).
+
+% Departing causes boarded(P) to not hold.
+depart(P) causes ~boarded(P).
+
+% Departing causes served(P) to hold (fixes the original "depart causes ~served" which makes the goal unreachable).
+depart(P) causes served(P).
+
+% --- Moving up/down ---
+% MoveUp(F1) means "move from current floor F1 to toFloor(F1)".
+% It is executable only if the lift is at F1, the destination is a floor, and F1 is above destination.
+nonexecutable moveUp(F1) if liftAt\=F1.
+nonexecutable moveUp(F1) if isFloor(F1).
+nonexecutable moveUp(F1) if toFloor(F1)=F2 & ~isFloor(F2).
+nonexecutable moveUp(F1) if toFloor(F1)=F2 & ~above(F1,F2).
+
+% Moving up causes the lift to be at the destination (remove the erroneous effect that also kept it at F1).
+moveUp(F1) causes liftAt=F2 if toFloor(F1)=F2.
+
+% MoveDown(F1) means "move from current floor F1 to toFloor(F1)".
+% It is executable only if the lift is at F1, the destination is a floor, and destination is above F1.
+nonexecutable moveDown(F1) if liftAt\=F1.
+nonexecutable moveDown(F1) if isFloor(F1).
+nonexecutable moveDown(F1) if toFloor(F1)=F2 & ~isFloor(F2).
+nonexecutable moveDown(F1) if toFloor(F1)=F2 & ~above(F2,F1).
+
+% Moving down causes the lift to be at the destination.
+moveDown(F1) causes liftAt=F2 if toFloor(F1)=F2.
+
+% Main query
+% Original natural language query:
+% There are two passengers p0 and p1 and four floors f0, f1, f2, and f3.
+% f0 is above f1, f0 is above f2, f0 is above f3, f1 is above f2, f1 is above f3, and f2 is above f3.
+% The origin of p0 is f3 and the destination of p0 is f2.
+% The origin of p1 is f1 and the destination of p1 is f3.
+% The elevator is at f0. Find a plan to serve passengers p0 and p1.
+:- query
+    0: above(f0,f1) & above(f0,f2) & above(f0,f3) & above(f1,f2) & above(f1,f3) & above(f2,f3);
+    0: origin(p0)=f3 & dest(p0)=f2 & origin(p1)=f1 & dest(p1)=f3;
+    0: liftAt=f0;
+
+    % Make floors be floors (the original program required ~isFloor(...) for actions, which contradicts the intended meaning).
+    0: isFloor(f0) & isFloor(f1) & isFloor(f2) & isFloor(f3);
+
+    % Initially, nobody is a passenger, boarded, or served.
+    0: ~isPassenger(p0) & ~isPassenger(p1) & ~boarded(p0) & ~boarded(p1) & ~served(p0) & ~served(p1);
+
+    maxstep: served(p0) & served(p1).

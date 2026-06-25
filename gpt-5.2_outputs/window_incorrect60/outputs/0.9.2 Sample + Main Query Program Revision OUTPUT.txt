@@ -1,0 +1,114 @@
+% PROGRAM CHANGED? [CHANGED]
+% BC+ signature
+:- sorts
+    window.
+
+:- objects
+    w1, w2, w3, w4, w5, w6, w7, w8, w9 :: window.
+
+:- variables
+    W :: window.
+
+:- constants
+    openWin(window) :: exogenousAction;
+    closeWin(window) :: exogenousAction;
+    lockWin(window) :: exogenousAction;
+    unlockWin(window) :: exogenousAction;
+
+    isWindow(window) :: inertialFluent(boolean);
+    isOpen(window) :: inertialFluent(boolean);
+    isClosed(window) :: inertialFluent(boolean);
+    isLocked(window) :: inertialFluent(boolean);
+    isUnlocked(window) :: inertialFluent(boolean).
+
+% Generated constraints
+
+% Domain fix: all objects of sort window are windows
+isWindow(W).
+
+% State constraints: open/closed and locked/unlocked are mutually exclusive
+impossible isOpen(W) & isClosed(W).
+impossible isLocked(W) & isUnlocked(W).
+
+% Open action:
+% can only be applied to something that is a window, that is closed, and that is not unlocked
+nonexecutable openWin(W) if ~isWindow(W).
+nonexecutable openWin(W) if ~isClosed(W).
+nonexecutable openWin(W) if isUnlocked(W).
+
+% when it happens, it removes both the fact that the thing is open and the fact that it is closed
+openWin(W) causes ~isOpen(W).
+openWin(W) causes ~isClosed(W).
+
+% Close action:
+% can only be applied to something that is a window and that is not open
+nonexecutable closeWin(W) if ~isWindow(W).
+nonexecutable closeWin(W) if isOpen(W).
+
+% when it happens, it removes both the fact that the thing is closed and the fact that it is open
+closeWin(W) causes ~isClosed(W).
+closeWin(W) causes ~isOpen(W).
+
+% Lock action:
+% can only be applied to something that is a window, that is closed, and that is not unlocked
+nonexecutable lockWin(W) if ~isWindow(W).
+nonexecutable lockWin(W) if ~isClosed(W).
+nonexecutable lockWin(W) if isUnlocked(W).
+
+% when it happens, it removes both the fact that the thing is locked and the fact that it is unlocked
+lockWin(W) causes ~isLocked(W).
+lockWin(W) causes ~isUnlocked(W).
+
+% Unlock action:
+% can only be applied to something that is a window and that is locked
+nonexecutable unlockWin(W) if ~isWindow(W).
+nonexecutable unlockWin(W) if ~isLocked(W).
+
+% when it happens, it makes the thing both unlocked and locked
+unlockWin(W) causes isUnlocked(W).
+unlockWin(W) causes isLocked(W).
+
+
+% MAIN QUERY CHANGED? [CHANGED]
+:- query
+    0: isWindow(w1) & isOpen(w1) & isUnlocked(w1) & ~isClosed(w1) & ~isLocked(w1);
+    0: isWindow(w2) & isClosed(w2) & isUnlocked(w2) & ~isOpen(w2) & ~isLocked(w2);
+    0: isWindow(w3) & isClosed(w3) & isLocked(w3) & ~isOpen(w3) & ~isUnlocked(w3);
+    0: isWindow(w4) & isOpen(w4) & isUnlocked(w4) & ~isClosed(w4) & ~isLocked(w4);
+    0: isWindow(w5) & isClosed(w5) & isUnlocked(w5) & ~isOpen(w5) & ~isLocked(w5);
+    0: isWindow(w6) & isOpen(w6) & isUnlocked(w6) & ~isClosed(w6) & ~isLocked(w6);
+    0: isWindow(w7) & isClosed(w7) & isLocked(w7) & ~isOpen(w7) & ~isUnlocked(w7);
+    0: isWindow(w8) & isClosed(w8) & isUnlocked(w8) & ~isOpen(w8) & ~isLocked(w8);
+    0: isWindow(w9) & isOpen(w9) & isUnlocked(w9) & ~isClosed(w9) & ~isLocked(w9);
+    maxstep: isLocked(w1) & isOpen(w3) & isLocked(w4) & isOpen(w5) & isClosed(w6) & isOpen(w7) & isLocked(w9).
+
+
+% SAMPLE QUERIES CHANGED? [CHANGED]
+% Query 1: Try to open w1 even though it is a window (should be allowed by the "is a window" part,
+% but still blocked because it requires "not unlocked"; here we set ~isUnlocked so it should be executable)
+:- query
+    0: isWindow(w1) & isClosed(w1) & ~isUnlocked(w1) & ~isOpen(w1) & ~isLocked(w1);
+    0: openWin(w1);
+    maxstep: ~isOpen(w1) & ~isClosed(w1).
+
+% Query 2: Open w1 when it is NOT a window (contradicts isWindow(W)) (unsatisfiable)
+:- query
+    0: ~isWindow(w1) & isClosed(w1) & ~isUnlocked(w1) & ~isOpen(w1) & ~isLocked(w1);
+    0: openWin(w1).
+
+% Query 3: Try to open w1 when it is not closed (should be blocked) (unsatisfiable)
+:- query
+    0: isWindow(w1) & ~isClosed(w1) & ~isUnlocked(w1) & ~isOpen(w1) & ~isLocked(w1);
+    0: openWin(w1).
+
+% Query 4: Close w1 when it IS a window and is NOT open; after closing, it should become not closed and not open (satisfiable)
+:- query
+    0: isWindow(w1) & ~isOpen(w1) & isClosed(w1) & ~isLocked(w1) & ~isUnlocked(w1);
+    0: closeWin(w1);
+    maxstep: ~isClosed(w1) & ~isOpen(w1).
+
+% Query 5: Unlock w1 when it is NOT a window and is locked ... (contradicts isWindow(W)) (unsatisfiable)
+:- query
+    0: ~isWindow(w1) & isLocked(w1) & ~isUnlocked(w1) & ~isOpen(w1) & isClosed(w1);
+    0: unlockWin(w1);
+    maxstep: isUnlocked(w1) & isLocked(w1).

@@ -1,0 +1,1 @@
+The hand is empty. Block b5 is on the table. Block b1 is on top of b5 and clear. Block b3 is on the table and clear. Block b2 is on the table. Block b4 is on top of b2. b4 is clear. Find a plan so that b3 is on the table and clear, b1 is on the table, b4 is on top of b1 and clear, b2 is on the table and clear, and b5 is on the table and clear.

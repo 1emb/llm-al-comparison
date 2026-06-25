@@ -1,0 +1,61 @@
+% Query 1: Move the top disk d3 from d2 onto peg b (should be allowed) (satisfiable)
+:- query
+    label :: q1;
+    0: loc(d1)=a & loc(d2)=d1 & loc(d3)=d2 & weight(d1)=3 & weight(d2)=2 & weight(d3)=1;
+    0: move(d3,b).
+
+Cplus2ASP Output:
+
+% Error: The specified query was not found.
+
+% Query 2: Try to move disk d2 while d3 is on top of it (should be blocked) (unsatisfiable)
+:- query
+    label :: q2;
+    0: loc(d1)=a & loc(d2)=d1 & loc(d3)=d2 & weight(d1)=3 & weight(d2)=2 & weight(d3)=1;
+    0: move(d2,b).
+
+Cplus2ASP Output:
+
+% Error: The specified query was not found.
+
+% Query 3: Try to move heavier disk d1 onto lighter disk d3 (should violate weight constraint) (unsatisfiable)
+:- query
+    label :: q3;
+    0: loc(d1)=a & loc(d2)=b & loc(d3)=c & weight(d1)=3 & weight(d2)=2 & weight(d3)=1;
+    0: move(d1,d3).
+
+Cplus2ASP Output:
+
+% Error: The specified query was not found.
+
+% Query 4: Try to move d1 onto d2 when d2 already has a disk on it (d3 on d2), so destination has a disk on top (unsatisfiable)
+:- query
+    label :: q4;
+    0: loc(d1)=a & loc(d2)=b & loc(d3)=d2 & weight(d1)=3 & weight(d2)=2 & weight(d3)=1;
+    0: move(d1,d2).
+
+Cplus2ASP Output:
+
+% Error: The specified query was not found.
+
+% Query 5: Try to move a disk to the location it is already at (should be disallowed) (unsatisfiable)
+:- query
+    label :: q5;
+    0: loc(d1)=a & loc(d2)=d1 & loc(d3)=d2 & weight(d1)=3 & weight(d2)=2 & weight(d3)=1;
+    0: move(d1,a).
+
+Cplus2ASP Output:
+
+% Error: The specified query was not found.
+
+
+
+% Original natural language query: Disk d1 is on peg a. Disk d2 is on disk d1. Disk d3 is on disk d2. In order of heaviest to lightest, the disks are d1, d2, and d3. Find a plan to stack all disks on peg c.
+:- query
+    0: loc(d1)=a & loc(d2)=d1 & loc(d3)=d2 & weight(d1)=3 & weight(d2)=2 & weight(d3)=1;
+    maxstep: loc(d1)=c & loc(d2)=d1 & loc(d3)=d2.
+
+
+Cplus2ASP Output:
+
+% Error: The specified query was not found.

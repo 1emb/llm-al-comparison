@@ -1,0 +1,116 @@
+% PROGRAM CHANGED? [CHANGED]
+% BC+ signature
+:- sorts
+    entity.
+
+:- objects
+    a, b, c, d :: entity.
+
+:- variables
+    E, E1, E2 :: entity.
+
+:- constants
+    attack(entity) :: exogenousAction;
+    succumb(entity) :: exogenousAction;
+    overcome(entity, entity) :: exogenousAction;
+    feast(entity, entity) :: exogenousAction;
+
+    harmony :: inertialFluent(boolean);
+    inPain(entity) :: inertialFluent(boolean);
+    isProvince(entity) :: inertialFluent(boolean);
+    isPlanet(entity) :: inertialFluent(boolean);
+    craves(entity, entity) :: inertialFluent(boolean).
+
+% Generated constraints
+
+% Attack can occur only when harmony holds and the target is both a province and a planet.
+nonexecutable attack(E) if ~harmony.
+nonexecutable attack(E) if ~isProvince(E).
+nonexecutable attack(E) if ~isPlanet(E).
+
+% Effects of attack.
+attack(E) causes inPain(E).
+attack(E) causes ~isProvince(E).
+attack(E) causes ~isPlanet(E).
+attack(E) causes ~harmony.
+
+% Succumb can occur whenever the entity is in pain.
+nonexecutable succumb(E) if ~inPain(E).
+
+% Effects of succumb.
+succumb(E) causes ~inPain(E).
+succumb(E) causes isProvince(E).
+succumb(E) causes isPlanet(E).
+succumb(E) causes harmony.
+
+% Overcome can occur when the acting entity is in pain and the other entity is a province.
+nonexecutable overcome(E1,E2) if ~inPain(E1).
+nonexecutable overcome(E1,E2) if ~isProvince(E2).
+
+% Effects of overcome.
+overcome(E1,E2) causes harmony.
+overcome(E1,E2) causes isProvince(E1).
+overcome(E1,E2) causes craves(E1,E2).
+overcome(E1,E2) causes ~isProvince(E2).
+overcome(E1,E2) causes ~inPain(E1).
+
+% Feast can occur when E1 craves E2, E1 is a province, and harmony holds.
+nonexecutable feast(E1,E2) if ~craves(E1,E2).
+nonexecutable feast(E1,E2) if ~isProvince(E1).
+nonexecutable feast(E1,E2) if ~harmony.
+
+% Effects of feast.
+feast(E1,E2) causes inPain(E1).
+feast(E1,E2) causes isProvince(E2).
+feast(E1,E2) causes ~craves(E1,E2).
+feast(E1,E2) causes ~isProvince(E1).
+feast(E1,E2) causes ~harmony.
+
+% State constraints to keep the intended "closed world" behavior for fluents.
+% Without these, the main query can be satisfied by arbitrarily setting many inertial fluents true initially.
+impossible harmony & ~harmony.
+impossible inPain(E) & ~inPain(E).
+impossible isProvince(E) & ~isProvince(E).
+impossible isPlanet(E) & ~isPlanet(E).
+impossible craves(E1,E2) & ~craves(E1,E2).
+
+% Defaults: keep unspecified inertial fluents false unless stated otherwise.
+default ~harmony.
+default ~inPain(E).
+default ~isProvince(E).
+default ~isPlanet(E).
+default ~craves(E1,E2).
+
+% MAIN QUERY CHANGED? [UNCHANGED]
+:- query
+    0: harmony & craves(a,c) & craves(b,a) & craves(c,d) & isPlanet(d) & isProvince(b);
+    maxstep: craves(b,c) & craves(d,b).
+
+% SAMPLE QUERIES CHANGED? [UNCHANGED]
+% Query 1: Attack is executable when harmony holds and the target is both a province and a planet; after attack, target is in pain and harmony is false. (satisfiable)
+:- query
+    0: harmony & isProvince(a) & isPlanet(a) & ~inPain(a);
+    0: attack(a);
+    maxstep: inPain(a) & ~isProvince(a) & ~isPlanet(a) & ~harmony.
+
+% Query 2: Attack is not executable if harmony does not hold (even if the target is a province and a planet). (unsatisfiable)
+:- query
+    0: ~harmony & isProvince(a) & isPlanet(a) & ~inPain(a);
+    0: attack(a).
+
+% Query 3: Succumb is executable only when the entity is in pain; after succumb, pain is removed and harmony becomes true and the entity becomes both province and planet. (satisfiable)
+:- query
+    0: ~harmony & inPain(b) & ~isProvince(b) & ~isPlanet(b);
+    0: succumb(b);
+    maxstep: ~inPain(b) & isProvince(b) & isPlanet(b) & harmony.
+
+% Query 4: Overcome is not executable if the "other" entity is not a province (even if the acting entity is in pain). (unsatisfiable)
+:- query
+    0: inPain(a) & ~isProvince(b);
+    0: overcome(a,b).
+
+% Query 5: Feast is executable only if the acting entity craves the other, the acting entity is a province, and harmony holds; after feast, acting entity is in pain, loses province, loses the craving, harmony becomes false, and the other becomes a province. (satisfiable)
+:- query
+    0: harmony & isProvince(a) & craves(a,c) & ~inPain(a) & ~isProvince(c);
+    0: feast(a,c);
+    maxstep: inPain(a) & ~isProvince(a) & ~craves(a,c) & isProvince(c) & ~harmony.

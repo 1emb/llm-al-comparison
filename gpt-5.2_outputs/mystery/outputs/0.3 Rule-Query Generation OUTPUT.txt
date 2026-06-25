@@ -1,0 +1,86 @@
+% constraints/rules
+% 1. An attack on an entity is not executable unless harmony holds.
+nonexecutable attack(E) if ~harmony.
+
+% 2. An attack on an entity is not executable unless the chosen entity is a province.
+nonexecutable attack(E) if ~isProvince(E).
+
+% 3. An attack on an entity is not executable unless the chosen entity is a planet.
+nonexecutable attack(E) if ~isPlanet(E).
+
+% 4. Attacking an entity causes that entity to be in pain.
+attack(E) causes inPain(E).
+
+% 5. Attacking an entity causes that entity to cease to be a province.
+attack(E) causes ~isProvince(E).
+
+% 6. Attacking an entity causes that entity to cease to be a planet.
+attack(E) causes ~isPlanet(E).
+
+% 7. Attacking an entity causes harmony to not hold.
+attack(E) causes ~harmony.
+
+% 8. A succumb for an entity is not executable unless that entity is in pain.
+nonexecutable succumb(E) if ~inPain(E).
+
+% 9. Succumbing for an entity causes that entity to no longer be in pain.
+succumb(E) causes ~inPain(E).
+
+% 10. Succumbing for an entity causes that entity to become a province.
+succumb(E) causes isProvince(E).
+
+% 11. Succumbing for an entity causes that entity to become a planet.
+succumb(E) causes isPlanet(E).
+
+% 12. Succumbing for an entity causes harmony to hold.
+succumb(E) causes harmony.
+
+% 13. An overcome by one entity over another entity is not executable unless the acting entity is in pain.
+nonexecutable overcome(E1,E2) if ~inPain(E1).
+
+% 14. An overcome by one entity over another entity is not executable unless the other entity is a province.
+nonexecutable overcome(E1,E2) if ~isProvince(E2).
+
+% 15. Overcoming causes harmony to hold.
+overcome(E1,E2) causes harmony.
+
+% 16. Overcoming causes the acting entity to become a province.
+overcome(E1,E2) causes isProvince(E1).
+
+% 17. Overcoming causes the acting entity to crave the other entity.
+overcome(E1,E2) causes craves(E1,E2).
+
+% 18. Overcoming causes the other entity to cease to be a province.
+overcome(E1,E2) causes ~isProvince(E2).
+
+% 19. Overcoming causes the acting entity to no longer be in pain.
+overcome(E1,E2) causes ~inPain(E1).
+
+% 20. A feast by one entity on another entity is not executable unless the acting entity craves the other entity.
+nonexecutable feast(E1,E2) if ~craves(E1,E2).
+
+% 21. A feast by one entity on another entity is not executable unless the acting entity is a province.
+nonexecutable feast(E1,E2) if ~isProvince(E1).
+
+% 22. A feast by one entity on another entity is not executable unless harmony holds.
+nonexecutable feast(E1,E2) if ~harmony.
+
+% 23. Feasting causes the acting entity to be in pain.
+feast(E1,E2) causes inPain(E1).
+
+% 24. Feasting causes the other entity to become a province.
+feast(E1,E2) causes isProvince(E2).
+
+% 25. Feasting causes the acting entity to no longer crave the other entity.
+feast(E1,E2) causes ~craves(E1,E2).
+
+% 26. Feasting causes the acting entity to cease to be a province.
+feast(E1,E2) causes ~isProvince(E1).
+
+% 27. Feasting causes harmony to not hold.
+feast(E1,E2) causes ~harmony.
+
+% query
+:- query
+    0: harmony & craves(a,c) & craves(b,a) & craves(c,d) & isPlanet(d) & isProvince(b);
+    maxstep: craves(b,c) & craves(d,b).

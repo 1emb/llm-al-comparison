@@ -1,0 +1,55 @@
+Objects:
+:- objects
+    f0, f1, f2, f3 :: floor;
+    p0, p1 :: passenger.
+
+Query:
+:- query
+    0: above(f0,f1) & above(f0,f2) & above(f0,f3) & above(f1,f2) & above(f1,f3) & above(f2,f3);
+    0: origin(p0)=f3 & dest(p0)=f0 & origin(p1)=f0 & dest(p1)=f2;
+    0: liftLoc=f0;
+    0: ~isPassenger(p0) & ~isPassenger(p1) & ~boarded(p0) & ~boarded(p1) & ~served(p0) & ~served(p1);
+    maxstep: served(p0) & served(p1).
+
+Status: True
+
+Output:
+Solving...
+Solution: 1 (Time: 0.019s)
+	
+
+	0:  liftLoc=f0 dest(p0)=f0 dest(p1)=f2 origin(p0)=f3 origin(p1)=f0 above(f0, f1) above(f0, f2) above(f0, f3) above(f1, f2) above(f1, f3) above(f2, f3)
+
+	ACTIONS:  board(p1)
+
+	1:  liftLoc=f0 boarded(p1) dest(p0)=f0 dest(p1)=f2 isPassenger(p1) origin(p0)=f3 origin(p1)=f0 above(f0, f1) above(f0, f2) above(f0, f3) above(f1, f2) above(f1, f3) above(f2, f3)
+
+	ACTIONS:  up(f2)
+
+	2:  liftLoc=f2 boarded(p1) dest(p0)=f0 dest(p1)=f2 isPassenger(p1) origin(p0)=f3 origin(p1)=f0 above(f0, f1) above(f0, f2) above(f0, f3) above(f1, f2) above(f1, f3) above(f2, f3)
+
+	ACTIONS:  depart(p1)
+
+	3:  liftLoc=f2 dest(p0)=f0 dest(p1)=f2 isPassenger(p1) origin(p0)=f3 origin(p1)=f0 served(p1) above(f0, f1) above(f0, f2) above(f0, f3) above(f1, f2) above(f1, f3) above(f2, f3)
+
+	ACTIONS:  up(f3)
+
+	4:  liftLoc=f3 dest(p0)=f0 dest(p1)=f2 isPassenger(p1) origin(p0)=f3 origin(p1)=f0 served(p1) above(f0, f1) above(f0, f2) above(f0, f3) above(f1, f2) above(f1, f3) above(f2, f3)
+
+	ACTIONS:  board(p0)
+
+	5:  liftLoc=f3 boarded(p0) dest(p0)=f0 dest(p1)=f2 isPassenger(p0) isPassenger(p1) origin(p0)=f3 origin(p1)=f0 served(p1) above(f0, f1) above(f0, f2) above(f0, f3) above(f1, f2) above(f1, f3) above(f2, f3)
+
+	ACTIONS:  down(f0)
+
+	6:  liftLoc=f0 boarded(p0) dest(p0)=f0 dest(p1)=f2 isPassenger(p0) isPassenger(p1) origin(p0)=f3 origin(p1)=f0 served(p1) above(f0, f1) above(f0, f2) above(f0, f3) above(f1, f2) above(f1, f3) above(f2, f3)
+
+	ACTIONS:  depart(p0)
+
+	7:  liftLoc=f0 dest(p0)=f0 dest(p1)=f2 isPassenger(p0) isPassenger(p1) origin(p0)=f3 origin(p1)=f0 served(p0) served(p1) above(f0, f1) above(f0, f2) above(f0, f3) above(f1, f2) above(f1, f3) above(f2, f3)
+
+SATISFIABLE
+Models       : 1+
+Calls        : 8
+Time         : 0.019s (Solving: 0.00s 1st Model: 0.00s Unsat: 0.00s)
+CPU Time     : 0.019s

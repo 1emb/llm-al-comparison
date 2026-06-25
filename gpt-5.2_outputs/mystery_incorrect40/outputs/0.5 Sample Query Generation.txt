@@ -1,0 +1,26 @@
+% Query 1: Attack is executable when the target is a province, not a planet, and harmony holds; after attack, target becomes a planet, is in pain, and harmony becomes false. (satisfiable)
+:- query
+    0: harmony & isProvince(b) & ~isPlanet(b);
+    0: attack(b);
+    maxstep: isPlanet(b) & inPain(b) & ~harmony.
+
+% Query 2: Attack is not executable if harmony does not hold. (unsatisfiable)
+:- query
+    0: ~harmony & isProvince(b) & ~isPlanet(b);
+    0: attack(b).
+
+% Query 3: Succumb is not executable if the entity is already in pain. (unsatisfiable)
+:- query
+    0: inPain(a);
+    0: succumb(a).
+
+% Query 4: Overcome is executable only if the first entity is in pain and the second entity is not a province; after overcome, harmony holds and the second entity is not a province. (satisfiable)
+:- query
+    0: inPain(a) & ~isProvince(c) & ~harmony;
+    0: overcome(a,c);
+    maxstep: harmony & ~isProvince(c) & inPain(a).
+
+% Query 5: Feast is not executable if the first entity craves the second entity (even if harmony holds and the first is a province). (unsatisfiable)
+:- query
+    0: harmony & isProvince(b) & craves(b,c);
+    0: feast(b,c).

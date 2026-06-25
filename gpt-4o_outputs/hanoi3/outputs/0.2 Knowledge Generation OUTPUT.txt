@@ -1,0 +1,10 @@
+% A disk cannot be moved if there is another disk on top of it.
+% A disk cannot be moved onto another disk if it is heavier than the disk it is being moved onto.
+% Moving a disk causes its location to change to the new location.
+% It is impossible for two disks to be at the same location simultaneously.
+% The move action is not executable if the location to be moved to is already occupied by another disk or peg.
+% The move action is not executable if the disk to be moved is not on top of the stack.
+% The weight of a disk remains constant unless explicitly changed.
+% The location of a peg remains constant unless explicitly changed.
+% The location of a disk remains constant unless explicitly changed.
+% Whether a disk is on top of another disk or peg remains constant unless explicitly changed.

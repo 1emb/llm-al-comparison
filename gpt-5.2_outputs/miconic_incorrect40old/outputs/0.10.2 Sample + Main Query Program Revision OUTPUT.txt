@@ -1,0 +1,120 @@
+% PROGRAM CHANGED? [CHANGED]
+% BC+ signature
+:- sorts
+    floor;
+    passenger.
+
+:- objects
+    % Floors
+    f0, f1, f2, f3 :: floor;
+    % Passengers
+    p0, p1 :: passenger.
+
+:- variables
+    F, F1, F2 :: floor;
+    P :: passenger.
+
+:- constants
+    % Actions
+    board(passenger) :: exogenousAction;
+    depart(passenger) :: exogenousAction;
+    up(floor) :: exogenousAction;
+    down(floor) :: exogenousAction;
+
+    % Fluents
+    liftLoc :: inertialFluent(floor);
+    origin(passenger) :: inertialFluent(floor);
+    dest(passenger) :: inertialFluent(floor);
+
+    % "above" is a relation on floors
+    above(floor,floor) :: inertialFluent(boolean);
+
+    isPassenger(passenger) :: inertialFluent(boolean);
+    boarded(passenger) :: inertialFluent(boolean);
+    served(passenger) :: inertialFluent(boolean).
+
+% Generated constraints
+
+% Boarding: only when lift is at passenger's origin, and passenger is not yet a passenger.
+nonexecutable board(P) if liftLoc\=origin(P).
+nonexecutable board(P) if isPassenger(P).
+nonexecutable board(P) if served(P).
+
+% Boarding makes the person a passenger and boarded.
+board(P) causes isPassenger(P).
+board(P) causes boarded(P).
+
+% Departing: only when lift is at passenger's destination, passenger is a passenger, and is currently boarded.
+nonexecutable depart(P) if liftLoc\=dest(P).
+nonexecutable depart(P) if ~isPassenger(P).
+nonexecutable depart(P) if ~boarded(P).
+
+% Departing unboards and marks served.
+depart(P) causes ~boarded(P).
+depart(P) causes served(P).
+
+% Moving up/down: parameter is the destination floor.
+% Preconditions use above/2 to constrain direction.
+nonexecutable up(F2) if liftLoc=F2.
+nonexecutable up(F2) if ~above(liftLoc,F2).
+
+nonexecutable down(F2) if liftLoc=F2.
+nonexecutable down(F2) if ~above(F2,liftLoc).
+
+% Effects: movement changes lift location to destination.
+up(F2) causes liftLoc=F2.
+down(F2) causes liftLoc=F2.
+
+% Sanity constraints:
+impossible above(F,F).  % no floor is above itself
+
+% If F1 is above F2 then F2 is not above F1.
+impossible above(F1,F2) & above(F2,F1) & F1\=F2.
+
+% Added: a served passenger cannot be boarded (already enforced by nonexecutable board(P) if served(P)).
+% Added: a served passenger should not remain boarded.
+impossible served(P) & boarded(P).
+
+
+% MAIN QUERY CHANGED? [UNCHANGED]
+:- query
+    0: above(f0,f1) & above(f0,f2) & above(f0,f3) & above(f1,f2) & above(f1,f3) & above(f2,f3);
+    0: origin(p0)=f3 & dest(p0)=f2 & origin(p1)=f1 & dest(p1)=f3;
+    0: liftLoc=f0;
+    0: ~isPassenger(p0) & ~isPassenger(p1) & ~boarded(p0) & ~boarded(p1) & ~served(p0) & ~served(p1);
+    maxstep: served(p0) & served(p1).
+
+
+% SAMPLE QUERIES CHANGED? [CHANGED]
+% Query 1: Boarding should be executable when liftLoc=F and origin(P)=F and isPassenger(P)=false. (satisfiable)
+:- query
+    label :: q1_board_ok;
+    0: liftLoc=f1 & origin(p1)=f1 & dest(p1)=f2 & ~isPassenger(p1) & ~boarded(p1) & ~served(p1);
+    0: board(p1);
+    maxstep: isPassenger(p1) & boarded(p1).
+
+% Query 2: Boarding should be blocked if the lift is not at the boarding floor. (unsatisfiable)
+:- query
+    label :: q2_board_wrong_liftloc;
+    0: liftLoc=f2 & origin(p1)=f1 & dest(p1)=f2 & ~isPassenger(p1) & ~boarded(p1) & ~served(p1);
+    0: board(p1).
+
+% Query 3: Departing should be executable when liftLoc=dest(P), isPassenger(P)=true, boarded(P)=true; it should make boarded(P)=false and served(P)=true. (satisfiable)
+:- query
+    label :: q3_depart_ok_effects;
+    0: liftLoc=f2 & origin(p1)=f1 & dest(p1)=f2 & isPassenger(p1) & boarded(p1) & ~served(p1);
+    0: depart(p1);
+    maxstep: ~boarded(p1) & served(p1).
+
+% Query 4: Departing should be blocked if boarded(P)=false. (unsatisfiable)
+:- query
+    label :: q4_depart_blocked_not_boarded;
+    0: liftLoc=f2 & origin(p1)=f1 & dest(p1)=f2 & isPassenger(p1) & ~boarded(p1) & ~served(p1);
+    0: depart(p1).
+
+% Query 5: Moving up should be blocked when above(liftLoc,F2) is false. (unsatisfiable)
+% Make the query exhaustive enough to prevent the solver from setting above(f3,f1) to true.
+:- query
+    label :: q5_up_requires_above;
+    0: liftLoc=f3 & ~above(f3,f1) & above(f3,f0) & above(f0,f1) & above(f0,f2) & above(f0,f3) & above(f1,f2) & above(f1,f3) & above(f2,f3);
+    0: up(f1).

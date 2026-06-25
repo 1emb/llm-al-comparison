@@ -1,0 +1,30 @@
+
+% An ant is at exactly one place at a time (it cannot be at two different places simultaneously).
+
+% Moving an ant from a starting place to a destination place causes the ant's current place to become the destination place.
+
+% The move action is not executable if the ant is not at the stated starting place.
+% The move action is not executable if the stated starting place is not adjacent to the stated destination place.
+% The move action is not executable if the stated destination place is not clear.
+
+% Picking up food at a place causes the ant to become marked as carrying food.
+% Picking up food at a place causes that place to no longer have food.
+
+% The pick-up-food action is not executable if the ant is not at the stated place.
+% The pick-up-food action is not executable if the stated place does not have food.
+% The pick-up-food action is not executable if the ant is already marked as carrying food.
+
+% Dropping food at a nest place causes the ant to no longer be marked as carrying food.
+% Dropping food at a nest place causes that nest place to have food.
+
+% The drop-food-at-nest action is not executable if the ant is not at the stated place.
+% The drop-food-at-nest action is not executable if the stated place is not a nest.
+% The drop-food-at-nest action is not executable if the ant is not marked as carrying food.
+
+% Clearing an obstacle at a blocked place from a starting place causes the blocked place to become clear.
+
+% The clear-obstacle action is not executable if the ant is not at the stated starting place.
+% The clear-obstacle action is not executable if the stated starting place is not adjacent to the stated blocked place.
+% The clear-obstacle action is not executable if the stated blocked place is already clear.
+
+% It is not executable for the ant to perform two different actions at the same time step.

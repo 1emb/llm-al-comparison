@@ -1,0 +1,138 @@
+% Query 1: Try to pick up a clear block that is on the table; this should be disallowed by the nonexecutable pickup rule. (unsatisfiable)
+:- query
+    0: handEmpty &
+       onTable(b3) & clear(b3) &
+       onTable(b1) &
+       on(b7,b1) & clear(b7) &
+       onTable(b2) & clear(b2) &
+       onTable(b6) & clear(b6) &
+       onTable(b4) & clear(b4) &
+       onTable(b5) & clear(b5);
+    0: pickup(b3).
+
+Cplus2ASP Output:
+
+Solving...
+UNSATISFIABLE
+Models       : 0
+No solution.
+
+
+
+% Query 2: Put down a block that is not being held; this should be disallowed by the nonexecutable putdown rule. (unsatisfiable)
+:- query
+    0: handEmpty &
+       onTable(b3) & clear(b3) &
+       onTable(b1) &
+       on(b7,b1) & clear(b7) &
+       onTable(b2) & clear(b2) &
+       onTable(b6) & clear(b6) &
+       onTable(b4) & clear(b4) &
+       onTable(b5) & clear(b5);
+    0: putdown(b2).
+
+Cplus2ASP Output:
+
+Solving...
+UNSATISFIABLE
+Models       : 0
+No solution.
+
+
+
+% Query 3: Stack b7 onto b4 while b7 is not held; this should be disallowed by the nonexecutable stack rule. (unsatisfiable)
+:- query
+    0: handEmpty &
+       onTable(b3) & clear(b3) &
+       onTable(b1) &
+       on(b7,b1) & clear(b7) &
+       onTable(b2) & clear(b2) &
+       onTable(b6) & clear(b6) &
+       onTable(b4) & clear(b4) &
+       onTable(b5) & clear(b5);
+    0: stack(b7,b4).
+
+Cplus2ASP Output:
+
+Solving...
+UNSATISFIABLE
+Models       : 0
+No solution.
+
+
+
+% Query 4: Unstack b7 from b1 even though b7 is on b1; this should be disallowed by the nonexecutable unstack rule. (unsatisfiable)
+:- query
+    0: handEmpty &
+       onTable(b3) & clear(b3) &
+       onTable(b1) &
+       on(b7,b1) & clear(b7) &
+       onTable(b2) & clear(b2) &
+       onTable(b6) & clear(b6) &
+       onTable(b4) & clear(b4) &
+       onTable(b5) & clear(b5);
+    0: unstack(b7,b1).
+
+Cplus2ASP Output:
+
+Solving...
+UNSATISFIABLE
+Models       : 0
+No solution.
+
+
+
+% Query 5: Execute the provided goal of moving b7 from on b1 to on b4 (as in the main query); should have a plan. (satisfiable)
+:- query
+    0: handEmpty &
+       onTable(b3) & clear(b3) &
+       onTable(b1) &
+       on(b7,b1) & clear(b7) &
+       onTable(b2) & clear(b2) &
+       onTable(b6) & clear(b6) &
+       onTable(b4) & clear(b4) &
+       onTable(b5) & clear(b5);
+    maxstep: onTable(b1) & clear(b1) &
+             onTable(b3) & clear(b3) &
+             onTable(b4) &
+             on(b7,b4) & clear(b7) &
+             onTable(b5) & clear(b5) &
+             onTable(b6) & clear(b6) &
+             onTable(b2) & clear(b2).
+
+Cplus2ASP Output:
+
+Solving...
+UNSATISFIABLE
+Models       : 0
+No solution.
+
+
+
+
+
+:- query
+    0: handEmpty &
+       onTable(b3) & clear(b3) &
+       onTable(b1) &
+       on(b7,b1) & clear(b7) &
+       onTable(b2) & clear(b2) &
+       onTable(b6) & clear(b6) &
+       onTable(b4) & clear(b4) &
+       onTable(b5) & clear(b5);
+    maxstep: onTable(b1) & clear(b1) &
+             onTable(b3) & clear(b3) &
+             onTable(b4) &
+             on(b7,b4) & clear(b7) &
+             onTable(b5) & clear(b5) &
+             onTable(b6) & clear(b6) &
+             onTable(b2) & clear(b2).
+
+Cplus2ASP Output:
+
+Solving...
+UNSATISFIABLE
+Models       : 0
+No solution.
+
+

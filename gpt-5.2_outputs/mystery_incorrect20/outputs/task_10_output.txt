@@ -1,0 +1,31 @@
+Objects:
+:- objects
+    a, b, c, d :: entity.
+
+Query:
+:- query
+    0: harmony
+       & craves(a,d) & craves(d,c)
+       & isPlanet(b) & isPlanet(c)
+       & isProvince(a) & isProvince(b)
+       & ~isPlanet(a) & ~isPlanet(d)
+       & ~isProvince(c) & ~isProvince(d)
+       & ~inPain(a) & ~inPain(b) & ~inPain(c) & ~inPain(d)
+       & ~craves(a,a) & ~craves(a,b) & ~craves(a,c)
+       & ~craves(b,a) & ~craves(b,b) & ~craves(b,c) & ~craves(b,d)
+       & ~craves(c,a) & ~craves(c,b) & ~craves(c,c) & ~craves(c,d)
+       & ~craves(d,a) & ~craves(d,b) & ~craves(d,d);
+    maxstep: craves(b,c) & craves(c,d).
+
+Status: True
+
+Output:
+Solving...
+Solution: 1 (Time: 0.000s)
+	
+
+SATISFIABLE
+Models       : 1+
+Calls        : 1
+Time         : 0.000s (Solving: 0.00s 1st Model: 0.00s Unsat: 0.00s)
+CPU Time     : 0.000s

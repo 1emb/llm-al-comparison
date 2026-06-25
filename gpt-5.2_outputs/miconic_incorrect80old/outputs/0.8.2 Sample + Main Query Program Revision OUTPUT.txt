@@ -1,0 +1,153 @@
+% PROGRAM CHANGED? [CHANGED]
+% BC+ signature
+:- sorts
+    floor;
+    passenger.
+
+:- objects
+    f0, f1, f2, f3 :: floor;
+    p0, p1 :: passenger.
+
+:- variables
+    F, F1, F2, F3, F4 :: floor;
+    P, P1 :: passenger.
+
+:- constants
+    board(floor, passenger) :: exogenousAction;
+    depart(floor, passenger) :: exogenousAction;
+    up(floor, floor) :: exogenousAction;
+    down(floor, floor) :: exogenousAction;
+
+    isFloor(floor) :: inertialFluent(boolean);
+    above(floor, floor) :: inertialFluent(boolean);
+    elevAt(floor) :: inertialFluent(boolean);
+
+    origin(passenger) :: inertialFluent(floor);
+    dest(passenger) :: inertialFluent(floor);
+
+    boarded(passenger) :: inertialFluent(boolean);
+    served(passenger) :: inertialFluent(boolean).
+
+% Generated constraints
+
+% A passenger's origin/destination floors must be floors.
+isFloor(F) if origin(P)=F.
+isFloor(F) if dest(P)=F.
+
+% [CHANGED] Removed these two static laws because they incorrectly force the elevator
+% to be at every boarded passenger's origin and every served passenger's destination,
+% which makes serving multiple passengers inconsistent with "elevAt is unique".
+% elevAt(F) if boarded(P) & origin(P)=F.
+% elevAt(F) if served(P) & dest(P)=F.
+
+% Elevator cannot be at two different floors at the same time.
+impossible elevAt(F1) & elevAt(F2) & F1\=F2.
+
+% Boarding preconditions.
+nonexecutable board(F,P) if ~isFloor(F).
+nonexecutable board(F,P) if ~elevAt(F).
+nonexecutable board(F,P) if origin(P)\=F.
+nonexecutable board(F,P) if boarded(P).
+
+% Boarding effects.
+board(F,P) causes boarded(P).
+board(F,P) causes ~served(P).
+
+% Departing preconditions.
+nonexecutable depart(F,P) if ~isFloor(F).
+nonexecutable depart(F,P) if ~elevAt(F).
+nonexecutable depart(F,P) if dest(P)\=F.
+nonexecutable depart(F,P) if ~boarded(P).
+
+% Departing effects.
+depart(F,P) causes ~boarded(P).
+depart(F,P) causes served(P).
+
+% Moving up preconditions.
+nonexecutable up(F1,F2) if ~isFloor(F1).
+nonexecutable up(F1,F2) if ~isFloor(F2).
+nonexecutable up(F1,F2) if ~elevAt(F1).
+nonexecutable up(F1,F2) if ~above(F1,F2).
+
+% Moving up effects.
+up(F1,F2) causes ~elevAt(F1).
+up(F1,F2) causes elevAt(F2).
+
+% Moving down preconditions.
+nonexecutable down(F1,F2) if ~isFloor(F1).
+nonexecutable down(F1,F2) if ~isFloor(F2).
+nonexecutable down(F1,F2) if ~elevAt(F1).
+nonexecutable down(F1,F2) if ~above(F2,F1).
+
+% Moving down effects.
+down(F1,F2) causes ~elevAt(F1).
+down(F1,F2) causes elevAt(F2).
+
+% Concurrency restrictions.
+nonexecutable up(F1,F2) & down(F3,F4).
+
+% At most one up action per step.
+nonexecutable up(F1,F2) & up(F3,F4) if F1\=F3.
+nonexecutable up(F1,F2) & up(F3,F4) if F2\=F4.
+
+% At most one down action per step.
+nonexecutable down(F1,F2) & down(F3,F4) if F1\=F3.
+nonexecutable down(F1,F2) & down(F3,F4) if F2\=F4.
+
+% Cannot board and depart the same passenger at the same time.
+nonexecutable board(F1,P) & depart(F2,P).
+
+% MAIN QUERY CHANGED? [UNCHANGED]
+:- query
+    0: isFloor(f0) & isFloor(f1) & isFloor(f2) & isFloor(f3);
+    0: above(f0,f1) & above(f0,f2) & above(f0,f3) & above(f1,f2) & above(f1,f3) & above(f2,f3);
+    0: origin(p0)=f3 & dest(p0)=f2 & origin(p1)=f2 & dest(p1)=f0;
+    0: elevAt(f0);
+    0: ~boarded(p0) & ~served(p0) & ~boarded(p1) & ~served(p1);
+    maxstep: served(p0) & served(p1).
+
+% SAMPLE QUERIES CHANGED? [CHANGED]
+% Query 1: Board p1 at its origin floor f2 while the elevator is at f2 (satisfiable)
+:- query
+    0: isFloor(f0) & isFloor(f1) & isFloor(f2) & isFloor(f3);
+    0: above(f0,f1) & above(f0,f2) & above(f0,f3) & above(f1,f2) & above(f1,f3) & above(f2,f3);
+    0: origin(p0)=f3 & dest(p0)=f2 & origin(p1)=f2 & dest(p1)=f0;
+    0: elevAt(f2);
+    0: ~boarded(p0) & ~served(p0) & ~boarded(p1) & ~served(p1);
+    0: board(f2,p1).
+
+% Query 2: Try to board p1 at the wrong floor (f3) even though the elevator is there (unsatisfiable)
+:- query
+    0: isFloor(f0) & isFloor(f1) & isFloor(f2) & isFloor(f3);
+    0: above(f0,f1) & above(f0,f2) & above(f0,f3) & above(f1,f2) & above(f1,f3) & above(f2,f3);
+    0: origin(p0)=f3 & dest(p0)=f2 & origin(p1)=f2 & dest(p1)=f0;
+    0: elevAt(f3);
+    0: ~boarded(p0) & ~served(p0) & ~boarded(p1) & ~served(p1);
+    0: board(f3,p1).
+
+% Query 3: Move down from f0 to f2 (since f0 is above f2) (satisfiable)
+:- query
+    0: isFloor(f0) & isFloor(f1) & isFloor(f2) & isFloor(f3);
+    0: above(f0,f1) & above(f0,f2) & above(f0,f3) & above(f1,f2) & above(f1,f3) & above(f2,f3);
+    0: origin(p0)=f3 & dest(p0)=f2 & origin(p1)=f2 & dest(p1)=f0;
+    0: elevAt(f0);
+    0: ~boarded(p0) & ~served(p0) & ~boarded(p1) & ~served(p1);
+    0: down(f0,f2).
+
+% [CHANGED] Query 4: Try to move up from f0 to f2 (should be UNSAT because f0 is not below f2)
+:- query
+    0: isFloor(f0) & isFloor(f1) & isFloor(f2) & isFloor(f3);
+    0: above(f0,f1) & above(f0,f2) & above(f0,f3) & above(f1,f2) & above(f1,f3) & above(f2,f3);
+    0: origin(p0)=f3 & dest(p0)=f2 & origin(p1)=f2 & dest(p1)=f0;
+    0: elevAt(f0);
+    0: ~boarded(p0) & ~served(p0) & ~boarded(p1) & ~served(p1);
+    0: up(f0,f2).
+
+% Query 5: Try to execute an up and a down action concurrently (explicitly forbidden) (unsatisfiable)
+:- query
+    0: isFloor(f0) & isFloor(f1) & isFloor(f2) & isFloor(f3);
+    0: above(f0,f1) & above(f0,f2) & above(f0,f3) & above(f1,f2) & above(f1,f3) & above(f2,f3);
+    0: origin(p0)=f3 & dest(p0)=f2 & origin(p1)=f2 & dest(p1)=f0;
+    0: elevAt(f0);
+    0: ~boarded(p0) & ~served(p0) & ~boarded(p1) & ~served(p1);
+    0: down(f0,f2) & up(f0,f1).

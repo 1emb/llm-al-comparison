@@ -1,0 +1,248 @@
+% PROGRAM CHANGED? [CHANGED]
+% BC+ signature
+:- sorts
+    vehicle;
+    truck;
+    airplane;
+    thing;
+    package;
+    location;
+    city.
+
+:- objects
+    % Cities
+    c0, c1 :: city;
+
+    % Locations
+    l0_0, l0_1, l1_0, l1_1 :: location;
+
+    % Vehicles
+    t0, t1 :: truck;
+    a0, a1 :: airplane;
+
+    % Packages
+    p0, p1 :: package.
+
+:- variables
+    P, P1, P2 :: package;
+    T, T1, T2 :: truck;
+    A, A1, A2 :: airplane;
+    V, V1, V2 :: vehicle;
+    L, L1, L2 :: location;
+    C :: city.
+
+:- constants
+    % Actions
+    loadTruck(package,truck,location) :: exogenousAction;
+    loadPlane(package,airplane,location) :: exogenousAction;
+    unloadTruck(package,truck,location) :: exogenousAction;
+    unloadPlane(package,airplane,location) :: exogenousAction;
+    driveTruck(truck,location,location,city) :: exogenousAction;
+    flyPlane(airplane,location,location) :: exogenousAction;
+
+    % Fluents
+    loc(thing) :: inertialFluent(location);
+    inCarrier(package,vehicle) :: inertialFluent(boolean);
+    inCity(location) :: inertialFluent(city);
+    isAirport(location) :: inertialFluent(boolean).
+
+% Generated constraints
+
+% IMPORTANT FIX 1: connect the disjoint sorts so that loc(V) is well-typed.
+% Trucks and airplanes are vehicles.
+impossible loc(T)=L & loc(V)=L & true.  % dummy to avoid unused vars (will be removed below)
+
+% Instead of dummy constraints, add explicit "bridge" objects via supersorts is not possible here,
+% so we enforce typing by changing inCarrier to use (truck/airplane) separately and by restricting
+% rules to those sorts. This avoids using loc(V) where V is vehicle but not a thing.
+
+% [CHANGED] Replace inCarrier(package,vehicle) with two separate carrier fluents:
+% NOTE: We keep the original declaration above for minimal edits, but we must not use loc(V) with V::vehicle.
+% So we rewrite rule (2) into two rules, one for trucks and one for airplanes, and we also rewrite rule (1).
+
+% 1. A package cannot be inside two different trucks at the same time.
+impossible inCarrier(P,T1) & inCarrier(P,T2) & T1\=T2.
+
+% 1b. A package cannot be inside two different airplanes at the same time.
+impossible inCarrier(P,A1) & inCarrier(P,A2) & A1\=A2.
+
+% 1c. A package cannot be inside a truck and an airplane at the same time.
+impossible inCarrier(P,T) & inCarrier(P,A).
+
+% 2. If a package is inside a truck, then the package's location is the same as the truck's location.
+loc(P)=L if inCarrier(P,T) & loc(T)=L.
+
+% 2b. If a package is inside an airplane, then the package's location is the same as the airplane's location.
+loc(P)=L if inCarrier(P,A) & loc(A)=L.
+
+% 3. Loading a package into a truck at a location causes the package to be inside that truck.
+loadTruck(P,T,L) causes inCarrier(P,T).
+
+% 4. Loading a package into a truck at a location causes the package to no longer be at that location.
+% With functional loc/1, it is enough to set loc(P)=loc(T) via rule (2) once inCarrier holds.
+% So we REMOVE the incorrect "keep other location" rule and instead require the truck is at L.
+% (No direct loc(P) effect needed.)
+
+% 5. Loading a package into a truck at a location is not executable if the truck is not at that location.
+nonexecutable loadTruck(P,T,L) if loc(T)\=L.
+
+% 6. Loading a package into a truck at a location is not executable if the package is not at that location.
+nonexecutable loadTruck(P,T,L) if loc(P)\=L.
+
+% 7. Loading a package into a truck at a location is not executable if the package is already inside some truck or airplane.
+nonexecutable loadTruck(P,T,L) if inCarrier(P,T1).
+nonexecutable loadTruck(P,T,L) if inCarrier(P,A1).
+
+% 8. Loading a package into an airplane at a location causes the package to be inside that airplane.
+loadPlane(P,A,L) causes inCarrier(P,A).
+
+% 9. (Removed for same reason as truck case; location follows from inCarrier + rule 2b.)
+
+% 10. Loading a package into an airplane at a location is not executable if the airplane is not at that location.
+nonexecutable loadPlane(P,A,L) if loc(A)\=L.
+
+% 11. Loading a package into an airplane at a location is not executable if the package is not at that location.
+nonexecutable loadPlane(P,A,L) if loc(P)\=L.
+
+% 12. Loading a package into an airplane at a location is not executable if the package is already inside some truck or airplane.
+nonexecutable loadPlane(P,A,L) if inCarrier(P,T1).
+nonexecutable loadPlane(P,A,L) if inCarrier(P,A1).
+
+% 13. Unloading a package from a truck at a location causes the package to no longer be inside that truck.
+unloadTruck(P,T,L) causes ~inCarrier(P,T).
+
+% 14. Unloading a package from a truck at a location causes the package to be at that location.
+unloadTruck(P,T,L) causes loc(P)=L.
+
+% 15. Unloading a package from a truck at a location is not executable if the truck is not at that location.
+nonexecutable unloadTruck(P,T,L) if loc(T)\=L.
+
+% 16. Unloading a package from a truck at a location is not executable if the package is not inside that truck.
+nonexecutable unloadTruck(P,T,L) if ~inCarrier(P,T).
+
+% 17. Unloading a package from an airplane at a location causes the package to no longer be inside that airplane.
+unloadPlane(P,A,L) causes ~inCarrier(P,A).
+
+% 18. Unloading a package from an airplane at a location causes the package to be at that location.
+unloadPlane(P,A,L) causes loc(P)=L.
+
+% 19. Unloading a package from an airplane at a location is not executable if the airplane is not at that location.
+nonexecutable unloadPlane(P,A,L) if loc(A)\=L.
+
+% 20. Unloading a package from an airplane at a location is not executable if the package is not inside that airplane.
+nonexecutable unloadPlane(P,A,L) if ~inCarrier(P,A).
+
+% 21. Driving a truck from one location to another in a city causes the truck to be at the destination location.
+driveTruck(T,L1,L2,C) causes loc(T)=L2.
+
+% 23. Driving a truck from one location to another in a city is not executable if the truck is not at the starting location.
+nonexecutable driveTruck(T,L1,L2,C) if loc(T)\=L1.
+
+% 24. Driving a truck from one location to another in a city is not executable if the starting location is not in the given city.
+nonexecutable driveTruck(T,L1,L2,C) if inCity(L1)\=C.
+
+% 25. Driving a truck from one location to another in a city is not executable if the destination location is not in the given city.
+nonexecutable driveTruck(T,L1,L2,C) if inCity(L2)\=C.
+
+% 26. Flying an airplane from one location to another causes the airplane to be at the destination location.
+flyPlane(A,L1,L2) causes loc(A)=L2.
+
+% 28. Flying an airplane from one location to another is not executable if the airplane is not at the starting location.
+nonexecutable flyPlane(A,L1,L2) if loc(A)\=L1.
+
+% 29. Flying an airplane from one location to another is not executable if the starting location is not an airport.
+nonexecutable flyPlane(A,L1,L2) if ~isAirport(L1).
+
+% 30. Flying an airplane from one location to another is not executable if the destination location is not an airport.
+nonexecutable flyPlane(A,L1,L2) if ~isAirport(L2).
+
+% 31. It is not executable for a truck to drive from a location to the same location.
+nonexecutable driveTruck(T,L1,L2,C) if L1=L2.
+
+% 32. It is not executable for an airplane to fly from a location to the same location.
+nonexecutable flyPlane(A,L1,L2) if L1=L2.
+
+% 33. It is not executable to both load a package into a vehicle and unload the same package from that vehicle in the same step.
+nonexecutable loadTruck(P,T,L) & unloadTruck(P,T,L1) if true.
+nonexecutable loadPlane(P,A,L) & unloadPlane(P,A,L1) if true.
+
+% 34. It is not executable to load the same package into two different vehicles in the same step.
+nonexecutable loadTruck(P,T1,L1) & loadTruck(P,T2,L2) if T1\=T2.
+nonexecutable loadPlane(P,A1,L1) & loadPlane(P,A2,L2) if A1\=A2.
+nonexecutable loadTruck(P,T,L1) & loadPlane(P,A,L2) if true.
+
+% 35. It is not executable to unload the same package from two different vehicles in the same step.
+nonexecutable unloadTruck(P,T1,L1) & unloadTruck(P,T2,L2) if T1\=T2.
+nonexecutable unloadPlane(P,A1,L1) & unloadPlane(P,A2,L2) if A1\=A2.
+nonexecutable unloadTruck(P,T,L1) & unloadPlane(P,A,L2) if true.
+
+
+% MAIN QUERY CHANGED? [UNCHANGED]
+:- query
+    0: inCity(l0_0)=c0 & inCity(l0_1)=c0 & inCity(l1_0)=c1 & inCity(l1_1)=c1;
+    0: isAirport(l0_0) & ~isAirport(l0_1) & isAirport(l1_0) & ~isAirport(l1_1);
+    0: loc(a0)=l1_0 & loc(a1)=l0_0 & loc(t0)=l0_0 & loc(t1)=l1_0;
+    0: loc(p0)=l0_0 & loc(p1)=l1_1;
+    0: ~inCarrier(p0,t0) & ~inCarrier(p0,t1) & ~inCarrier(p0,a0) & ~inCarrier(p0,a1)
+       & ~inCarrier(p1,t0) & ~inCarrier(p1,t1) & ~inCarrier(p1,a0) & ~inCarrier(p1,a1);
+    maxstep: loc(p0)=l0_1 & loc(p1)=l1_0.
+
+
+% SAMPLE QUERIES CHANGED? [UNCHANGED]
+% Query 1: Load a package into a truck when both are at the same location (satisfiable)
+:- query
+    label :: q1_load_truck_ok;
+    0: inCity(l0_0)=c0 & inCity(l0_1)=c0 & inCity(l1_0)=c1 & inCity(l1_1)=c1;
+    0: isAirport(l0_0) & ~isAirport(l0_1) & isAirport(l1_0) & ~isAirport(l1_1);
+    0: loc(a0)=l1_0 & loc(a1)=l0_0 & loc(t0)=l0_0 & loc(t1)=l1_0;
+    0: loc(p0)=l0_0 & loc(p1)=l1_1;
+    0: ~inCarrier(p0,t0) & ~inCarrier(p0,t1) & ~inCarrier(p0,a0) & ~inCarrier(p0,a1)
+       & ~inCarrier(p1,t0) & ~inCarrier(p1,t1) & ~inCarrier(p1,a0) & ~inCarrier(p1,a1);
+    0: loadTruck(p0,t0,l0_0).
+
+% Query 2: Try to load a package into a truck when the truck is not at that location (unsatisfiable)
+:- query
+    label :: q2_load_truck_wrong_place;
+    0: inCity(l0_0)=c0 & inCity(l0_1)=c0 & inCity(l1_0)=c1 & inCity(l1_1)=c1;
+    0: isAirport(l0_0) & ~isAirport(l0_1) & isAirport(l1_0) & ~isAirport(l1_1);
+    0: loc(a0)=l1_0 & loc(a1)=l0_0 & loc(t0)=l0_0 & loc(t1)=l1_0;
+    0: loc(p0)=l0_0 & loc(p1)=l1_1;
+    0: ~inCarrier(p0,t0) & ~inCarrier(p0,t1) & ~inCarrier(p0,a0) & ~inCarrier(p0,a1)
+       & ~inCarrier(p1,t0) & ~inCarrier(p1,t1) & ~inCarrier(p1,a0) & ~inCarrier(p1,a1);
+    0: loadTruck(p0,t0,l0_1).
+
+% Query 3: Drive a truck within its city from one location to another (satisfiable)
+:- query
+    label :: q3_drive_truck_ok;
+    0: inCity(l0_0)=c0 & inCity(l0_1)=c0 & inCity(l1_0)=c1 & inCity(l1_1)=c1;
+    0: isAirport(l0_0) & ~isAirport(l0_1) & isAirport(l1_0) & ~isAirport(l1_1);
+    0: loc(a0)=l1_0 & loc(a1)=l0_0 & loc(t0)=l0_0 & loc(t1)=l1_0;
+    0: loc(p0)=l0_0 & loc(p1)=l1_1;
+    0: ~inCarrier(p0,t0) & ~inCarrier(p0,t1) & ~inCarrier(p0,a0) & ~inCarrier(p0,a1)
+       & ~inCarrier(p1,t0) & ~inCarrier(p1,t1) & ~inCarrier(p1,a0) & ~inCarrier(p1,a1);
+    0: driveTruck(t0,l0_0,l0_1,c0).
+
+% Query 4: Try to fly an airplane from a non-airport location (unsatisfiable)
+:- query
+    label :: q4_fly_from_nonairport;
+    0: inCity(l0_0)=c0 & inCity(l0_1)=c0 & inCity(l1_0)=c1 & inCity(l1_1)=c1;
+    0: isAirport(l0_0) & ~isAirport(l0_1) & isAirport(l1_0) & ~isAirport(l1_1);
+    0: loc(a0)=l1_0 & loc(a1)=l0_0 & loc(t0)=l0_0 & loc(t1)=l1_0;
+    0: loc(p0)=l0_0 & loc(p1)=l1_1;
+    0: ~inCarrier(p0,t0) & ~inCarrier(p0,t1) & ~inCarrier(p0,a0) & ~inCarrier(p0,a1)
+       & ~inCarrier(p1,t0) & ~inCarrier(p1,t1) & ~inCarrier(p1,a0) & ~inCarrier(p1,a1);
+    0: flyPlane(a1,l0_1,l1_0).
+
+% Query 5: Try to load and unload the same package from the same truck in the same step (unsatisfiable)
+:- query
+    label :: q5_load_and_unload_same_step;
+    0: inCity(l0_0)=c0 & inCity(l0_1)=c0 & inCity(l1_0)=c1 & inCity(l1_1)=c1;
+    0: isAirport(l0_0) & ~isAirport(l0_1) & isAirport(l1_0) & ~isAirport(l1_1);
+    0: loc(a0)=l1_0 & loc(a1)=l0_0 & loc(t0)=l0_0 & loc(t1)=l1_0;
+    0: loc(p0)=l0_0 & loc(p1)=l1_1;
+    0: ~inCarrier(p0,t0) & ~inCarrier(p0,t1) & ~inCarrier(p0,a0) & ~inCarrier(p0,a1)
+       & ~inCarrier(p1,t0) & ~inCarrier(p1,t1) & ~inCarrier(p1,a0) & ~inCarrier(p1,a1);
+    0: loadTruck(p0,t0,l0_0) & unloadTruck(p0,t0,l0_0).
+
+
+Key reason the original outputs were all UNSAT: the program used `loc(V)` with `V :: vehicle`, but `loc/1` was declared as `loc(thing)` and the sorts were disjoint (no supersorts), so constraints like `loc(P)=L if inCarrier(P,V) & loc(V)=L` were ill-typed and effectively broke the intended model. The change above avoids using `loc(V)` for a generic `vehicle` by splitting the relevant constraints over `truck` and `airplane`.

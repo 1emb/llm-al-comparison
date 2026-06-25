@@ -1,0 +1,27 @@
+% Query 1: Move from p1 to p2 when p2 is not clear (satisfiable)
+:- query
+    0: at(ant1,p1) & adjacent(p1,p2) & adjacent(p2,p1) & isClear(p1) & ~isClear(p2) & isNest(p1) & hasFood(p2) & ~carryingFood(ant1);
+    0: move(ant1,p1,p2);
+    maxstep: at(ant1,p1) & at(ant1,p2).
+
+% Query 2: Attempt to move from p1 to p2 when p2 is clear (should be blocked by nonexecutable) (unsatisfiable)
+:- query
+    0: at(ant1,p1) & adjacent(p1,p2) & adjacent(p2,p1) & isClear(p1) & isClear(p2) & isNest(p1) & hasFood(p2) & ~carryingFood(ant1);
+    0: move(ant1,p1,p2).
+
+% Query 3: Pick up food at p2 while the ant is not at p2, p2 has food, and ant is not carrying food (satisfiable)
+:- query
+    0: at(ant1,p1) & adjacent(p1,p2) & adjacent(p2,p1) & isClear(p1) & isClear(p2) & isNest(p1) & hasFood(p2) & ~carryingFood(ant1);
+    0: pickUpFood(ant1,p2);
+    maxstep: carryingFood(ant1) & hasFood(p2).
+
+% Query 4: Attempt to pick up food at p2 while already carrying food (unsatisfiable)
+:- query
+    0: at(ant1,p1) & adjacent(p1,p2) & adjacent(p2,p1) & isClear(p1) & isClear(p2) & isNest(p1) & hasFood(p2) & carryingFood(ant1);
+    0: pickUpFood(ant1,p2).
+
+% Query 5: Drop food at the nest p1 while not at p1, p1 is a nest, and ant is carrying food (satisfiable)
+:- query
+    0: at(ant1,p2) & adjacent(p1,p2) & adjacent(p2,p1) & isClear(p1) & isClear(p2) & isNest(p1) & ~hasFood(p1) & carryingFood(ant1);
+    0: dropFoodAtNest(ant1,p1);
+    maxstep: hasFood(p1) & carryingFood(ant1).

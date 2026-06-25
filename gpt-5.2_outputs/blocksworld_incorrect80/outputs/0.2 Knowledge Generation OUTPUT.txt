@@ -1,0 +1,59 @@
+
+% A block cannot be on top of itself.
+% Two different blocks cannot be on top of each other in both directions at the same time.
+
+% If on(B1,B2) holds, then B1 is not on the table.
+% If on(B1,B2) holds, then B2 is not being held.
+% If on(B1,B2) holds, then B1 is not being held.
+
+% If a block is being held, then the hand is not empty.
+% If the hand is empty, then no block is being held.
+% Two different blocks cannot both be held at the same time.
+
+% If a block is clear, then there is no block on top of it.
+% If some block is on top of a block, then that block is not clear.
+
+% If onTable(B) holds, then loc(B) is table.
+% If loc(B) is table, then onTable(B) holds.
+% If on(B1,B2) holds, then loc(B1) is B2.
+
+% A block cannot be both on the table and on top of another block at the same time.
+% A block cannot be both clear and held at the same time.
+
+% pickup(B) is not executable if clear(B) does not hold.
+% pickup(B) is not executable if onTable(B) holds.
+% pickup(B) is not executable if handEmpty holds.
+% pickup(B) causes onTable(B) to hold.
+% pickup(B) causes clear(B) to not hold.
+% pickup(B) causes handEmpty to hold.
+% pickup(B) causes held(B) to not hold.
+
+% putdown(B) is not executable if held(B) does not hold.
+% putdown(B) causes held(B) to hold.
+% putdown(B) causes clear(B) to not hold.
+% putdown(B) causes handEmpty to not hold.
+% putdown(B) causes onTable(B) to hold.
+
+% stack(B1,B2) is not executable if held(B1) does not hold.
+% stack(B1,B2) is not executable if clear(B2) holds.
+% stack(B1,B2) causes held(B1) to hold.
+% stack(B1,B2) causes clear(B2) to hold.
+% stack(B1,B2) causes clear(B1) to not hold.
+% stack(B1,B2) causes handEmpty to hold.
+% stack(B1,B2) causes on(B1,B2) to not hold.
+
+% unstack(B1,B2) is not executable if on(B1,B2) holds.
+% unstack(B1,B2) is not executable if clear(B1) holds.
+% unstack(B1,B2) is not executable if handEmpty does not hold.
+% unstack(B1,B2) causes held(B1) to not hold.
+% unstack(B1,B2) causes clear(B2) to not hold.
+% unstack(B1,B2) causes clear(B1) to hold.
+% unstack(B1,B2) causes handEmpty to not hold.
+% unstack(B1,B2) causes on(B1,B2) to hold.
+
+% It is not executable to perform pickup(B) and putdown(B) at the same time.
+% It is not executable to perform pickup(B) and stack(B,B2) at the same time.
+% It is not executable to perform pickup(B) and unstack(B,B2) at the same time.
+% It is not executable to perform putdown(B) and stack(B,B2) at the same time.
+% It is not executable to perform putdown(B) and unstack(B,B2) at the same time.
+% It is not executable to perform stack(B1,B2) and unstack(B1,B2) at the same time.

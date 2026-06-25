@@ -1,0 +1,134 @@
+% PROGRAM CHANGED? [CHANGED]
+% BC+ signature
+:- sorts
+    vehicle >> truck;
+    vehicle >> airplane;
+    thing >> package;
+    thing >> vehicle;
+    place >> location;
+    place >> airport;
+    city.
+
+:- objects
+    c0, c1 :: city;
+    l00, l10 :: airport;
+    t0, t1 :: truck;
+    a0 :: airplane;
+    p0 :: package.
+
+:- variables
+    P, P1, P2 :: package;
+    T, T1 :: truck;
+    A, A1 :: airplane;
+    V, V1, V2 :: vehicle;
+    Pl, Pl1, Pl2 :: place;
+    L, L1, L2, L3 :: location;
+    Ap, Ap1, Ap2, Ap3 :: airport;
+    C, C1 :: city.
+
+:- constants
+    loadTruck(package, truck, location) :: exogenousAction;
+    loadPlane(package, airplane, airport) :: exogenousAction;
+    unloadTruck(package, truck, location) :: exogenousAction;
+    unloadPlane(package, airplane, airport) :: exogenousAction;
+    drive(truck, location, location, city) :: exogenousAction;
+    fly(airplane, airport, airport) :: exogenousAction;
+
+    loc(thing) :: inertialFluent(place);
+    in(package, vehicle) :: inertialFluent(boolean);
+    inCity(place, city) :: inertialFluent(boolean).
+
+% Generated constraints
+
+% A package cannot be inside two different vehicles at the same time.
+impossible in(P,V1) & in(P,V2) & V1\=V2.
+
+% If a package is inside a vehicle, it is at the same place as that vehicle.
+loc(P)=Pl if in(P,V) & loc(V)=Pl.
+
+% Load into truck: makes package inside truck and (redundantly) at that location.
+loadTruck(P,T,L) causes in(P,T).
+loadTruck(P,T,L) causes loc(P)=L.
+nonexecutable loadTruck(P,T,L) if loc(T)\=L.
+nonexecutable loadTruck(P,T,L) if loc(P)\=L.
+nonexecutable loadTruck(P,T,L) if in(P,V).
+
+% Load into airplane: makes package inside airplane and at that airport.
+loadPlane(P,A,Ap) causes in(P,A).
+loadPlane(P,A,Ap) causes loc(P)=Ap.
+nonexecutable loadPlane(P,A,Ap) if loc(A)\=Ap.
+nonexecutable loadPlane(P,A,Ap) if loc(P)\=Ap.
+nonexecutable loadPlane(P,A,Ap) if in(P,V).
+
+% Unload from truck: removes inside relation and sets package location.
+unloadTruck(P,T,L) causes ~in(P,T).
+unloadTruck(P,T,L) causes loc(P)=L.
+nonexecutable unloadTruck(P,T,L) if loc(T)\=L.
+nonexecutable unloadTruck(P,T,L) if ~in(P,T).
+
+% Unload from airplane: removes inside relation and sets package location.
+unloadPlane(P,A,Ap) causes ~in(P,A).
+unloadPlane(P,A,Ap) causes loc(P)=Ap.
+nonexecutable unloadPlane(P,A,Ap) if loc(A)\=Ap.
+nonexecutable unloadPlane(P,A,Ap) if ~in(P,A).
+
+% Drive truck within a city: changes truck location.
+drive(T,L1,L2,C) causes loc(T)=L2.
+nonexecutable drive(T,L1,L2,C) if ~inCity(L1,C).
+nonexecutable drive(T,L1,L2,C) if ~inCity(L2,C).
+nonexecutable drive(T,L1,L2,C) if loc(T)\=L1.
+
+% Fly airplane between airports: changes airplane location.
+fly(A,Ap1,Ap2) causes loc(A)=Ap2.
+nonexecutable fly(A,Ap1,Ap2) if loc(A)\=Ap1.
+
+% Concurrency constraints (must include "if true" to avoid the parser treating them as "noconcurrency")
+nonexecutable loadTruck(P,T,L) & unloadTruck(P,T,L) if true.
+nonexecutable loadPlane(P,A,Ap) & unloadPlane(P,A,Ap) if true.
+
+nonexecutable drive(T,L1,L2,C) & drive(T,L1,L3,C) if L2\=L3.
+nonexecutable fly(A,Ap1,Ap2) & fly(A,Ap1,Ap3) if Ap2\=Ap3.
+
+% [FIX] Ensure inCity is not arbitrarily changed by the solver.
+% Without this, sample queries that set inCity(...) at step 0 can still become UNSAT
+% because the solver may choose different inCity values at later steps, violating drive preconditions.
+inCity(Pl,C) after inCity(Pl,C).
+
+% MAIN QUERY CHANGED? [UNCHANGED]
+:- query
+    0: inCity(l00,c0) & inCity(l10,c1) &
+       loc(a0)=l00 & loc(t0)=l00 & loc(t1)=l10 & loc(p0)=l10;
+    maxstep: loc(p0)=l00.
+
+% SAMPLE QUERIES CHANGED? [CHANGED]
+% Query 1: Load a package into a truck when both are at the same location and the package is not already in any vehicle. (satisfiable)
+:- query
+    label :: q1_load_truck_ok;
+    0: loc(t0)=l00 & loc(p0)=l00 & ~in(p0,t0) & ~in(p0,t1) & ~in(p0,a0);
+    0: loadTruck(p0,t0,l00);
+    maxstep: in(p0,t0) & loc(p0)=l00.
+
+% Query 2: Try to load a package into a truck when the truck is not at the loading location. (unsatisfiable)
+:- query
+    label :: q2_load_truck_wrong_place;
+    0: loc(t0)=l00 & loc(p0)=l10 & ~in(p0,t0) & ~in(p0,t1) & ~in(p0,a0);
+    0: loadTruck(p0,t0,l10).
+
+% Query 3: Try to load a package into a truck when the package is already inside an airplane. (unsatisfiable)
+:- query
+    label :: q3_load_truck_already_in_vehicle;
+    0: loc(a0)=l00 & loc(t0)=l00 & in(p0,a0) & loc(p0)=l00;
+    0: loadTruck(p0,t0,l00).
+
+% Query 4: Drive a truck within a city when both locations are in that city and the truck starts at the origin. (satisfiable)
+:- query
+    label :: q4_drive_ok;
+    0: inCity(l00,c0) & inCity(l10,c0) & loc(t0)=l00;
+    0: drive(t0,l00,l10,c0);
+    maxstep: loc(t0)=l10.
+
+% Query 5: Load and unload the same package with the same truck at the same time. (unsatisfiable)
+:- query
+    label :: q5_load_and_unload_same_time;
+    0: loc(t0)=l00 & loc(p0)=l00 & ~in(p0,t0) & ~in(p0,t1) & ~in(p0,a0);
+    0: loadTruck(p0,t0,l00) & unloadTruck(p0,t0,l00).

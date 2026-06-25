@@ -1,0 +1,73 @@
+:- sorts
+    thing;
+    side.
+
+
+:- objects
+    mouse, snake, cheese, boat :: thing;
+    leftBank, rightBank :: side.
+
+
+:- variables
+    T, T1, T2, T3, T4 :: thing;
+    S, S1, S2, S3, S4 :: side;
+    Bool, Bool1, Bool2, Bool3, Bool4 :: boolean.
+
+
+:- constants
+    moveBoat(side) :: exogenousAction;
+    boardBoat(thing) :: exogenousAction;
+    unboardBoat(thing) :: exogenousAction;
+    loc(thing) :: inertialFluent(side);
+    onBoat(thing) :: inertialFluent(boolean).
+
+% Generated constraints
+% 1. The location of the boat determines the location of any thing on the boat.
+loc(T) = S if onBoat(T) & loc(boat) = S.
+
+% 2. Moving the boat to a side causes the location of the boat to change to that side.
+moveBoat(S) causes loc(boat) = S.
+
+% 3. Moving the boat is not executable if there is more than one thing on the boat.
+nonexecutable moveBoat(S) if onBoat(T1) & onBoat(T2) & T1 \= T2.
+
+% 4. Boarding the boat causes the thing to be on the boat.
+boardBoat(T) causes onBoat(T).
+
+% 5. Boarding the boat is not executable if the thing is already on the boat.
+nonexecutable boardBoat(T) if onBoat(T).
+
+% 6. Boarding the boat is not executable if the location of the thing is not the same as the location of the boat.
+nonexecutable boardBoat(T) if loc(T) \= loc(boat).
+
+% 7. Unboarding the boat causes the thing to not be on the boat.
+unboardBoat(T) causes ~onBoat(T).
+
+% 8. Unboarding the boat is not executable if the thing is not on the boat.
+nonexecutable unboardBoat(T) if ~onBoat(T).
+
+% 9. Unboarding the boat causes the location of the thing to be the same as the location of the boat.
+unboardBoat(T) causes loc(T) = loc(boat).
+
+% 10. The mouse cannot be left alone with the cheese on the same side without the snake or the boat.
+impossible loc(mouse) = S & loc(cheese) = S & loc(snake) \= S & loc(boat) \= S.
+
+% 11. The snake cannot be left alone with the mouse on the same side without the cheese or the boat.
+impossible loc(snake) = S & loc(mouse) = S & loc(cheese) \= S & loc(boat) \= S.
+
+% 12. It is not executable to both move the boat to a side and board a thing on the boat.
+nonexecutable moveBoat(S) & boardBoat(T).
+
+% 13. It is not executable to both move the boat to a side and unboard a thing from the boat.
+nonexecutable moveBoat(S) & unboardBoat(T).
+
+% 14. It is not executable to both board a thing on the boat and unboard a thing from the boat.
+nonexecutable boardBoat(T1) & unboardBoat(T2).
+
+
+noconcurrency.
+
+% Original natural language query: The mouse, snake, and cheese are on side leftBank, along with the boat. Find a plan to get the mouse, snake, and piece of cheese across the river, on the side RightBank.
+:- query
+    0: loc(mouse) = leftBank & loc(snake) = leftBank & loc(cheese) = leftBank & loc(boat) = leftBank & ~onBoat(mouse) & ~onBoat(snake) & ~onBoat(cheese);
+    maxstep: loc(mouse) = rightBank & loc(snake) = rightBank & loc(cheese) = rightBank.

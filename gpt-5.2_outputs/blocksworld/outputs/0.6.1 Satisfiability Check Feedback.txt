@@ -1,0 +1,13 @@
+% Query 0: Check satisfiability of program signature and rules (ignores other queries). (satisfiable)
+:- query = sat.
+
+Cplus2ASP Output:
+
+ERROR: temp.bc:98:29]: Encountered undeclared identifier "inHand/0".
+ERROR: temp.bc:168:35]: Encountered undeclared identifier "inHand/0".
+ERROR: temp.bc:192:18]: Encountered undeclared identifier "inHand/0".
+ERROR: temp.bc:195:32]: Encountered undeclared identifier "inHand/0".
+ERROR: temp.bc:198:18]: Encountered undeclared identifier "inHand/0".
+
+Since this fails, check the error message(s).
+

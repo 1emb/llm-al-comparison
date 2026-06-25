@@ -1,0 +1,26 @@
+% Query 1: Open a closed, unlocked, and not-locked window w1 (satisfiable)
+:- query
+    0: isClosed(w1) & isUnlocked(w1) & ~isOpen(w1) & ~isLocked(w1);
+    0: openWin(w1);
+    maxstep: isOpen(w1) & ~isClosed(w1).
+
+% Query 2: Try to open w1 while it is locked (unsatisfiable)
+:- query
+    0: isClosed(w1) & isLocked(w1) & ~isOpen(w1) & ~isUnlocked(w1);
+    0: openWin(w1).
+
+% Query 3: Lock a closed and unlocked window w1 (satisfiable)
+:- query
+    0: isClosed(w1) & isUnlocked(w1) & ~isOpen(w1) & ~isLocked(w1);
+    0: lockWin(w1);
+    maxstep: isLocked(w1) & ~isUnlocked(w1).
+
+% Query 4: Try to lock w1 when it is not closed (it is open) (unsatisfiable)
+:- query
+    0: isOpen(w1) & isUnlocked(w1) & ~isClosed(w1) & ~isLocked(w1);
+    0: lockWin(w1).
+
+% Query 5: Execute open and close on the same window w1 concurrently (unsatisfiable)
+:- query
+    0: isClosed(w1) & isUnlocked(w1) & ~isOpen(w1) & ~isLocked(w1);
+    0: openWin(w1) & closeWin(w1).

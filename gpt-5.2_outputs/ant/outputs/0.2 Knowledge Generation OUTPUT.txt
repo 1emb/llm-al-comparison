@@ -1,0 +1,28 @@
+% An ant is at exactly one place at a time (loc(ant) is a single place value).
+% Moving an ant from a source place to a target place causes the ant's location to become the target place.
+% Moving an ant from a source place to a target place is not executable if the ant is not at the source place.
+% Moving an ant from a source place to a target place is not executable if the source place and target place are not adjacent.
+% Moving an ant from a source place to a target place is not executable if the target place is not clear.
+
+% Picking up food at a place causes the ant to be carrying food.
+% Picking up food at a place causes that place to no longer have food.
+% Picking up food at a place is not executable if the ant is not at that place.
+% Picking up food at a place is not executable if the ant is already carrying food.
+% Picking up food at a place is not executable if that place does not have food.
+
+% Dropping food at a place causes the ant to not be carrying food.
+% Dropping food at a place is not executable if the ant is not at that place.
+% Dropping food at a place is not executable if the ant is not carrying food.
+% Dropping food at a place is not executable if that place is not a nest.
+
+% Clearing an obstacle at a target place from a source place causes the target place to be clear.
+% Clearing an obstacle at a target place from a source place is not executable if the ant is not at the source place.
+% Clearing an obstacle at a target place from a source place is not executable if the source place and target place are not adjacent.
+% Clearing an obstacle at a target place from a source place is not executable if the target place is already clear.
+
+% It is not executable for the same ant to both move and pick up food in the same step.
+% It is not executable for the same ant to both move and drop food in the same step.
+% It is not executable for the same ant to both move and clear an obstacle in the same step.
+% It is not executable for the same ant to both pick up food and drop food in the same step.
+% It is not executable for the same ant to both pick up food and clear an obstacle in the same step.
+% It is not executable for the same ant to both drop food and clear an obstacle in the same step.

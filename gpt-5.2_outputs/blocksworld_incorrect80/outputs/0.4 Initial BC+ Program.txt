@@ -1,0 +1,192 @@
+:- sorts
+    loc >> block.
+
+
+:- objects
+    b1, b2, b3, b4, b5, b6, b7 :: block;
+    table :: loc.
+
+
+:- variables
+    B, B1, B2, B3, B4 :: block;
+    L, L1, L2, L3, L4 :: loc;
+    Bool, Bool1, Bool2, Bool3, Bool4 :: boolean.
+
+
+:- constants
+    pickup(block) :: exogenousAction;
+    putdown(block) :: exogenousAction;
+    stack(block, block) :: exogenousAction;
+    unstack(block, block) :: exogenousAction;
+
+    loc(block) :: inertialFluent(loc);
+    on(block, block) :: inertialFluent(boolean);
+    onTable(block) :: inertialFluent(boolean);
+    clear(block) :: inertialFluent(boolean);
+    held(block) :: inertialFluent(boolean);
+    handEmpty :: inertialFluent(boolean).
+
+
+% constraints/rules
+% 1. A block cannot be on top of itself.
+impossible on(B,B).
+
+% 2. Two different blocks cannot be on top of each other in both directions at the same time.
+impossible on(B1,B2) & on(B2,B1) & B1\=B2.
+
+% 3. If on(B1,B2) holds, then B1 is not on the table.
+impossible on(B1,B2) & onTable(B1).
+
+% 4. If on(B1,B2) holds, then B2 is not being held.
+impossible on(B1,B2) & held(B2).
+
+% 5. If on(B1,B2) holds, then B1 is not being held.
+impossible on(B1,B2) & held(B1).
+
+% 6. If a block is being held, then the hand is not empty.
+impossible held(B) & handEmpty.
+
+% 7. If the hand is empty, then no block is being held.
+impossible handEmpty & held(B).
+
+% 8. Two different blocks cannot both be held at the same time.
+impossible held(B1) & held(B2) & B1\=B2.
+
+% 9. If a block is clear, then there is no block on top of it.
+impossible clear(B2) & on(B1,B2).
+
+% 10. If some block is on top of a block, then that block is not clear.
+impossible on(B1,B2) & clear(B2).
+
+% 11. If onTable(B) holds, then loc(B) is table.
+loc(B)=table if onTable(B).
+
+% 12. If loc(B) is table, then onTable(B) holds.
+onTable(B) if loc(B)=table.
+
+% 13. If on(B1,B2) holds, then loc(B1) is B2.
+loc(B1)=B2 if on(B1,B2).
+
+% 14. A block cannot be both on the table and on top of another block at the same time.
+impossible onTable(B1) & on(B1,B2).
+
+% 15. A block cannot be both clear and held at the same time.
+impossible clear(B) & held(B).
+
+% 16. pickup(B) is not executable if clear(B) does not hold.
+nonexecutable pickup(B) if ~clear(B).
+
+% 17. pickup(B) is not executable if onTable(B) holds.
+nonexecutable pickup(B) if onTable(B).
+
+% 18. pickup(B) is not executable if handEmpty holds.
+nonexecutable pickup(B) if handEmpty.
+
+% 19. pickup(B) causes onTable(B) to hold.
+pickup(B) causes onTable(B).
+
+% 20. pickup(B) causes clear(B) to not hold.
+pickup(B) causes ~clear(B).
+
+% 21. pickup(B) causes handEmpty to hold.
+pickup(B) causes handEmpty.
+
+% 22. pickup(B) causes held(B) to not hold.
+pickup(B) causes ~held(B).
+
+% 23. putdown(B) is not executable if held(B) does not hold.
+nonexecutable putdown(B) if ~held(B).
+
+% 24. putdown(B) causes held(B) to hold.
+putdown(B) causes held(B).
+
+% 25. putdown(B) causes clear(B) to not hold.
+putdown(B) causes ~clear(B).
+
+% 26. putdown(B) causes handEmpty to not hold.
+putdown(B) causes ~handEmpty.
+
+% 27. putdown(B) causes onTable(B) to hold.
+putdown(B) causes onTable(B).
+
+% 28. stack(B1,B2) is not executable if held(B1) does not hold.
+nonexecutable stack(B1,B2) if ~held(B1).
+
+% 29. stack(B1,B2) is not executable if clear(B2) holds.
+nonexecutable stack(B1,B2) if clear(B2).
+
+% 30. stack(B1,B2) causes held(B1) to hold.
+stack(B1,B2) causes held(B1).
+
+% 31. stack(B1,B2) causes clear(B2) to hold.
+stack(B1,B2) causes clear(B2).
+
+% 32. stack(B1,B2) causes clear(B1) to not hold.
+stack(B1,B2) causes ~clear(B1).
+
+% 33. stack(B1,B2) causes handEmpty to hold.
+stack(B1,B2) causes handEmpty.
+
+% 34. stack(B1,B2) causes on(B1,B2) to not hold.
+stack(B1,B2) causes ~on(B1,B2).
+
+% 35. unstack(B1,B2) is not executable if on(B1,B2) holds.
+nonexecutable unstack(B1,B2) if on(B1,B2).
+
+% 36. unstack(B1,B2) is not executable if clear(B1) holds.
+nonexecutable unstack(B1,B2) if clear(B1).
+
+% 37. unstack(B1,B2) is not executable if handEmpty does not hold.
+nonexecutable unstack(B1,B2) if ~handEmpty.
+
+% 38. unstack(B1,B2) causes held(B1) to not hold.
+unstack(B1,B2) causes ~held(B1).
+
+% 39. unstack(B1,B2) causes clear(B2) to not hold.
+unstack(B1,B2) causes ~clear(B2).
+
+% 40. unstack(B1,B2) causes clear(B1) to hold.
+unstack(B1,B2) causes clear(B1).
+
+% 41. unstack(B1,B2) causes handEmpty to not hold.
+unstack(B1,B2) causes ~handEmpty.
+
+% 42. unstack(B1,B2) causes on(B1,B2) to hold.
+unstack(B1,B2) causes on(B1,B2).
+
+% 43. It is not executable to perform pickup(B) and putdown(B) at the same time.
+nonexecutable pickup(B) & putdown(B).
+
+% 44. It is not executable to perform pickup(B) and stack(B,B2) at the same time.
+nonexecutable pickup(B) & stack(B,B2).
+
+% 45. It is not executable to perform pickup(B) and unstack(B,B2) at the same time.
+nonexecutable pickup(B) & unstack(B,B2).
+
+% 46. It is not executable to perform putdown(B) and stack(B,B2) at the same time.
+nonexecutable putdown(B) & stack(B,B2).
+
+% 47. It is not executable to perform putdown(B) and unstack(B,B2) at the same time.
+nonexecutable putdown(B) & unstack(B,B2).
+
+% 48. It is not executable to perform stack(B1,B2) and unstack(B1,B2) at the same time.
+nonexecutable stack(B1,B2) & unstack(B1,B2).
+
+
+% query
+:- query
+    0: handEmpty &
+       onTable(b3) & clear(b3) &
+       onTable(b1) &
+       on(b7,b1) & clear(b7) &
+       onTable(b2) & clear(b2) &
+       onTable(b6) & clear(b6) &
+       onTable(b4) & clear(b4) &
+       onTable(b5) & clear(b5);
+    maxstep: onTable(b1) & clear(b1) &
+             onTable(b3) & clear(b3) &
+             onTable(b4) &
+             on(b7,b4) & clear(b7) &
+             onTable(b5) & clear(b5) &
+             onTable(b6) & clear(b6) &
+             onTable(b2) & clear(b2).

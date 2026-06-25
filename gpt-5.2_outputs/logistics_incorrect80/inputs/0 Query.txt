@@ -1,0 +1,1 @@
+There are two cities, c0 and c1. Each has one location: l0-0 is in c0 and is an airport, l1-0 is in c1 and is an airport. Airplane a0 is at l1-0, airplane a1 is at l1-0. Truck t0 is at l0-0, truck t1 is at l1-0. Package p0 is at l1-0. Find a plan to transport p0 to l0-0.

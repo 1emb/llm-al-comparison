@@ -1,0 +1,149 @@
+% Query 1: Simple move from p1 to p2 when adjacent and destination is not clear (satisfiable)
+:- query
+    0: loc(ant1)=p1
+       & adjacent(p1,p2) & adjacent(p2,p1)
+       & ~isClear(p2)
+       & ~hasFood(ant1)
+       & ~hasFoodAt(p1) & ~hasFoodAt(p2)
+       & ~isNest(p1) & ~isNest(p2);
+    0: move(ant1,p1,p2);
+    maxstep: loc(ant1)=p2.
+
+Cplus2ASP Output:
+
+Solving...
+	
+
+	0:  loc(ant1)=p1 adjacent(p1, p1) adjacent(p1, p2) adjacent(p2, p1) adjacent(p2, p2)
+
+	ACTIONS:  move(ant1, p1, p2)
+
+	1:  loc(ant1)=p2 adjacent(p1, p1) adjacent(p1, p2) adjacent(p2, p1) adjacent(p2, p2)
+
+SATISFIABLE
+Models       : 1+
+
+
+% Query 2: Attempt to move when the destination is clear (should be blocked by nonexecutable) (unsatisfiable)
+:- query
+    0: loc(ant1)=p1
+       & adjacent(p1,p2) & adjacent(p2,p1)
+       & isClear(p2)
+       & ~hasFood(ant1)
+       & ~hasFoodAt(p1) & ~hasFoodAt(p2)
+       & ~isNest(p1) & ~isNest(p2);
+    0: move(ant1,p1,p2).
+
+Cplus2ASP Output:
+
+Solving...
+UNSATISFIABLE
+Models       : 0
+No solution.
+
+
+
+% Query 3: [CHANGED] Pick up food at p1 now requires ant HAS food (per natural language),
+% and after pickUpFood ant loses food and place has food.
+:- query
+    0: loc(ant1)=p1
+       & adjacent(p1,p2) & adjacent(p2,p1)
+       & ~isClear(p1) & ~isClear(p2)
+       & hasFoodAt(p1) & ~hasFoodAt(p2)
+       & hasFood(ant1)
+       & ~isNest(p1) & ~isNest(p2);
+    0: pickUpFood(ant1,p1);
+    maxstep: ~hasFood(ant1) & hasFoodAt(p1).
+
+Cplus2ASP Output:
+
+Solving...
+	
+
+	0:  hasFood(ant1) hasFoodAt(p1) loc(ant1)=p1 adjacent(p1, p2) adjacent(p2, p1) adjacent(p2, p2)
+
+	ACTIONS:  pickUpFood(ant1, p1)
+
+	1:  hasFoodAt(p1) loc(ant1)=p1 adjacent(p1, p2) adjacent(p2, p1) adjacent(p2, p2)
+
+SATISFIABLE
+Models       : 1+
+
+
+% Query 4: [CHANGED] Drop food at a nest now requires ant does NOT have food,
+% and after dropFoodAtNest ant gains food and nest loses food.
+:- query
+    0: loc(ant1)=p1
+       & adjacent(p1,p2) & adjacent(p2,p1)
+       & ~isClear(p1) & ~isClear(p2)
+       & isNest(p1) & ~isNest(p2)
+       & ~hasFood(ant1)
+       & hasFoodAt(p1) & ~hasFoodAt(p2);
+    0: dropFoodAtNest(ant1,p1);
+    maxstep: hasFood(ant1) & ~hasFoodAt(p1).
+
+Cplus2ASP Output:
+
+Solving...
+	
+
+	0:  hasFoodAt(p1) isNest(p1) loc(ant1)=p1 adjacent(p1, p2) adjacent(p2, p1) adjacent(p2, p2)
+
+	ACTIONS:  dropFoodAtNest(ant1, p1)
+
+	1:  hasFood(ant1) isNest(p1) loc(ant1)=p1 adjacent(p1, p2) adjacent(p2, p1) adjacent(p2, p2)
+
+SATISFIABLE
+Models       : 1+
+
+
+% Query 5: Try to execute two different move actions for the same ant at the same time (blocked by concurrency constraint) (unsatisfiable)
+:- query
+    0: loc(ant1)=p1
+       & adjacent(p1,p2) & adjacent(p2,p1)
+       & ~isClear(p1) & ~isClear(p2)
+       & ~hasFood(ant1)
+       & ~hasFoodAt(p1) & ~hasFoodAt(p2)
+       & ~isNest(p1) & ~isNest(p2);
+    0: move(ant1,p1,p2) & move(ant1,p2,p1).
+
+Cplus2ASP Output:
+
+Solving...
+UNSATISFIABLE
+Models       : 0
+No solution.
+
+
+
+
+
+% [CHANGED] To match the natural language goal "bring the food to the nest" under the
+% (somewhat inverted) action semantics given, we need:
+% - food initially at p2
+% - nest at p1
+% - ant initially has food (required to execute pickUpFood, which keeps food at place but makes ant lose food)
+% - then ant can move to p2 (after clearing), pickUpFood to lose food, move back, and dropFoodAtNest to remove food at nest
+% However, the goal in the natural language is "food at nest". Under these inverted effects,
+% the only stable way to represent "food delivered" is ambiguous.
+% We keep the original intended meaning by setting the goal to "hasFoodAt(p1)" as before,
+% but we must also make the initial state and clear conditions consistent with move precondition (~isClear(dest)).
+:- query
+    0: loc(ant1)=p1
+       & adjacent(p1,p2) & adjacent(p2,p1)
+       & isNest(p1)
+       & hasFoodAt(p2) & ~hasFoodAt(p1)
+       & ~isClear(p1) & isClear(p2)
+       & ~hasFood(ant1);
+    maxstep: hasFoodAt(p1).
+
+
+
+Cplus2ASP Output:
+
+Solving...
+UNSATISFIABLE
+Models       : 0
+No solution.
+
+

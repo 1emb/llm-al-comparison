@@ -1,0 +1,18 @@
+There are two types of things: "block" and "loc".
+"loc" includes "block".
+
+b1, b2, b3, b4, b5, b6, and b7 are blocks.
+table is a loc.
+
+Fluents
+on(block, loc) - whether a block is on a loc (another block or the table) is an inertial fluent (boolean).
+ontable(block) - whether a block is directly on the table is an inertial fluent (boolean).
+clear(block) - whether a block has nothing on top of it is an inertial fluent (boolean).
+handempty - whether the hand is empty is an inertial fluent (boolean).
+holding(block) - whether the hand is holding a block is an inertial fluent (boolean).
+
+Actions
+pickup(block) - picking up a block from the table.
+putdown(block) - putting a block down onto the table.
+stack(block, block) - stacking one block onto another block.
+unstack(block, block) - unstacking one block from on top of another block.

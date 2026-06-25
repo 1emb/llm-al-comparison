@@ -1,0 +1,31 @@
+Objects:
+:- objects
+    b1, b2, b3, b4, b5, b6 :: block;
+    table :: loc.
+
+Query:
+:- query
+    0: handEmpty
+       & on(b4)=table & clear(b4) & ~holding(b4)
+       & on(b3)=table & clear(b3) & ~holding(b3)
+       & on(b1)=table & clear(b1) & ~holding(b1)
+       & on(b5)=table & ~clear(b5) & ~holding(b5)
+       & on(b6)=b5 & clear(b6) & ~holding(b6)
+       & on(b2)=table & clear(b2) & ~holding(b2);
+    maxstep: handEmpty
+             & on(b1)=table & clear(b1) & ~holding(b1)
+             & on(b2)=table & clear(b2) & ~holding(b2)
+             & on(b3)=table & clear(b3) & ~holding(b3)
+             & on(b4)=table & clear(b4) & ~holding(b4)
+             & on(b5)=table & clear(b5) & ~holding(b5)
+             & on(b6)=table & clear(b6) & ~holding(b6).
+
+Status: FAIL
+
+Output:
+/home/grad24/mnguyen/.cplus2asp.config: cannot open file
+
+
+Errors:
+Premature end of formula. 
+% Error: An error occurred while executing the pre-processor.

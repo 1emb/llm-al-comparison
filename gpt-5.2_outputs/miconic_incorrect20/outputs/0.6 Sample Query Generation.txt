@@ -1,0 +1,39 @@
+% Query 1: Board p0 at its origin floor f0 while the elevator is at f0 and f0 is a valid floor (satisfiable)
+:- query
+    0: isFloor(f0) & isFloor(f1) & above(f0,f1) &
+       origin(p0)=f0 & dest(p0)=f1 &
+       at(f0) & ~at(f1) &
+       ~passengerFlag(p0) & boarded(p0) & ~served(p0);
+    0: board(p0,f0).
+
+% Query 2: Try to board p0 at the wrong floor f1 (origin is f0), even though the elevator is at f1 (unsatisfiable)
+:- query
+    0: isFloor(f0) & isFloor(f1) & above(f0,f1) &
+       origin(p0)=f0 & dest(p0)=f1 &
+       at(f1) & ~at(f0) &
+       ~passengerFlag(p0) & boarded(p0) & ~served(p0);
+    0: board(p0,f1).
+
+% Query 3: Depart p0 at destination f1 while the elevator is NOT at f1, p0 is a passenger, and p0 is boarded (satisfiable)
+:- query
+    0: isFloor(f0) & isFloor(f1) & above(f0,f1) &
+       origin(p0)=f0 & dest(p0)=f1 &
+       at(f0) & ~at(f1) &
+       passengerFlag(p0) & boarded(p0) & ~served(p0);
+    0: depart(p0,f1).
+
+% Query 4: Try to depart p0 at f1 while the elevator IS at f1 (violates the nonexecutable condition) (unsatisfiable)
+:- query
+    0: isFloor(f0) & isFloor(f1) & above(f0,f1) &
+       origin(p0)=f0 & dest(p0)=f1 &
+       at(f1) & ~at(f0) &
+       passengerFlag(p0) & boarded(p0) & ~served(p0);
+    0: depart(p0,f1).
+
+% Query 5: Try to moveUp from f0 to f1 even though above(f0,f1) holds (moveUp requires above(F1,F2), so this should be blocked) (unsatisfiable)
+:- query
+    0: isFloor(f0) & isFloor(f1) & above(f0,f1) &
+       origin(p0)=f0 & dest(p0)=f1 &
+       at(f0) & ~at(f1) &
+       ~passengerFlag(p0) & boarded(p0) & ~served(p0);
+    0: moveUp(f0,f1).

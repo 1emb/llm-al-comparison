@@ -1,0 +1,71 @@
+% constraints/rules
+% 1. A passenger can board at floor F only when the lift is at F and the passenger's origin is F.
+nonexecutable board(P,F) if ~liftAt(F).
+nonexecutable board(P,F) if origin(P)\=F.
+
+% 2. Boarding is not executable at floor F if isFloor(F) holds.
+nonexecutable board(P,F) if isFloor(F).
+
+% 3. Boarding is not executable for passenger P if isPassenger(P) holds.
+nonexecutable board(P,F) if isPassenger(P).
+
+% 4. Boarding causes boarded(P) to not hold.
+board(P,F) causes ~boarded(P).
+
+% 5. A passenger can depart at floor F only when the lift is at F and the passenger's destination is F.
+nonexecutable depart(P,F) if ~liftAt(F).
+nonexecutable depart(P,F) if dest(P)\=F.
+
+% 6. Departing is not executable at floor F if isFloor(F) holds.
+nonexecutable depart(P,F) if isFloor(F).
+
+% 7. Departing is not executable for passenger P if isPassenger(P) does not hold.
+nonexecutable depart(P,F) if ~isPassenger(P).
+
+% 8. Departing is not executable for passenger P if boarded(P) holds.
+nonexecutable depart(P,F) if boarded(P).
+
+% 9. Departing causes boarded(P) to not hold.
+depart(P,F) causes ~boarded(P).
+
+% 10. Departing causes served(P) to not hold.
+depart(P,F) causes ~served(P).
+
+% 11. The lift can move up from floor F1 to floor F2 only when isFloor(F1) does not hold and isFloor(F2) holds.
+nonexecutable moveUp(F1,F2) if isFloor(F1).
+nonexecutable moveUp(F1,F2) if ~isFloor(F2).
+
+% 12. Moving up from F1 to F2 is not executable if liftAt(F1) does not hold.
+nonexecutable moveUp(F1,F2) if ~liftAt(F1).
+
+% 13. Moving up from F1 to F2 is not executable unless above(F1,F2) holds.
+nonexecutable moveUp(F1,F2) if ~above(F1,F2).
+
+% 14. Moving up from F1 to F2 causes liftAt(F2) to hold.
+moveUp(F1,F2) causes liftAt(F2).
+
+% 15. Moving up from F1 to F2 causes liftAt(F1) to hold.
+moveUp(F1,F2) causes liftAt(F1).
+
+% 16. The lift can move down from floor F1 to floor F2 only when isFloor(F1) does not hold and isFloor(F2) holds.
+nonexecutable moveDown(F1,F2) if isFloor(F1).
+nonexecutable moveDown(F1,F2) if ~isFloor(F2).
+
+% 17. Moving down from F1 to F2 is not executable if liftAt(F1) does not hold.
+nonexecutable moveDown(F1,F2) if ~liftAt(F1).
+
+% 18. Moving down from F1 to F2 is not executable unless above(F2,F1) holds.
+nonexecutable moveDown(F1,F2) if ~above(F2,F1).
+
+% 19. Moving down from F1 to F2 causes liftAt(F2) to hold.
+moveDown(F1,F2) causes liftAt(F2).
+
+% 20. Moving down from F1 to F2 causes liftAt(F1) to hold.
+moveDown(F1,F2) causes liftAt(F1).
+
+% query
+:- query
+    0: above(f0,f1) & above(f0,f2) & above(f0,f3) & above(f1,f2) & above(f1,f3) & above(f2,f3);
+    0: origin(p0)=f3 & dest(p0)=f2 & origin(p1)=f1 & dest(p1)=f3;
+    0: liftAt(f0);
+    maxstep: served(p0) & served(p1).

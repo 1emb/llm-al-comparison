@@ -1,0 +1,126 @@
+% Query 1: Try to open w1 when it is explicitly not a window, closed, and not unlocked
+% (should be executable; after the action it stays closed and becomes not open) (satisfiable)
+:- query
+    0: ~isWindow(w1) & isClosed(w1) & ~isUnlocked(w1) & isOpen(w1);
+    0: openWin(w1);
+    maxstep: isClosed(w1) & ~isOpen(w1).
+
+Cplus2ASP Output:
+
+Solving...
+UNSATISFIABLE
+Models       : 0
+No solution.
+
+
+
+% Query 2: Try to open w1 when it is unlocked (opening is nonexecutable if isUnlocked is true) (unsatisfiable)
+:- query
+    0: ~isWindow(w1) & isClosed(w1) & isUnlocked(w1) & ~isOpen(w1);
+    0: openWin(w1).
+
+Cplus2ASP Output:
+
+Solving...
+UNSATISFIABLE
+Models       : 0
+No solution.
+
+
+
+% Query 3: Try to close w1 when it is explicitly not a window and not open
+% (should be executable; after the action it becomes open and not closed) (satisfiable)
+:- query
+    0: ~isWindow(w1) & ~isOpen(w1) & isClosed(w1);
+    0: closeWin(w1);
+    maxstep: isOpen(w1) & ~isClosed(w1).
+
+Cplus2ASP Output:
+
+Solving...
+	
+
+	0:  isClosed(w1) isClosed(w7) isClosed(w8) isLocked(w1) isLocked(w2) isLocked(w3) isOpen(w10) isOpen(w11) isOpen(w2) isOpen(w3) isOpen(w4) isOpen(w5) isOpen(w6) isOpen(w9) isUnlocked(w10) isUnlocked(w11) isUnlocked(w4) isUnlocked(w5) isUnlocked(w6) isUnlocked(w7) isUnlocked(w8) isUnlocked(w9) isWindow(w2) isWindow(w4) isWindow(w5) isWindow(w6) isWindow(w8)
+
+	ACTIONS:  closeWin(w1)
+
+	1:  isClosed(w7) isClosed(w8) isLocked(w1) isLocked(w2) isLocked(w3) isOpen(w1) isOpen(w10) isOpen(w11) isOpen(w2) isOpen(w3) isOpen(w4) isOpen(w5) isOpen(w6) isOpen(w9) isUnlocked(w10) isUnlocked(w11) isUnlocked(w4) isUnlocked(w5) isUnlocked(w6) isUnlocked(w7) isUnlocked(w8) isUnlocked(w9) isWindow(w2) isWindow(w4) isWindow(w5) isWindow(w6) isWindow(w8)
+
+SATISFIABLE
+Models       : 1+
+
+
+% Query 4: Try to lock w1 when it is explicitly not a window, closed, and not unlocked
+% (should be executable; after the action it becomes unlocked and not locked) (satisfiable)
+:- query
+    0: ~isWindow(w1) & isClosed(w1) & ~isUnlocked(w1) & isLocked(w1);
+    0: lockWin(w1);
+    maxstep: isUnlocked(w1) & ~isLocked(w1).
+
+Cplus2ASP Output:
+
+Solving...
+	
+
+	0:  isClosed(w1) isClosed(w10) isClosed(w11) isClosed(w2) isClosed(w3) isClosed(w4) isClosed(w5) isClosed(w6) isClosed(w7) isClosed(w8) isClosed(w9) isLocked(w1) isLocked(w7) isLocked(w8) isUnlocked(w10) isUnlocked(w11) isUnlocked(w2) isUnlocked(w3) isUnlocked(w4) isUnlocked(w5) isUnlocked(w6) isUnlocked(w9) isWindow(w11) isWindow(w2) isWindow(w4) isWindow(w6) isWindow(w7) isWindow(w8) isWindow(w9)
+
+	ACTIONS:  lockWin(w1)
+
+	1:  isClosed(w1) isClosed(w10) isClosed(w11) isClosed(w2) isClosed(w3) isClosed(w4) isClosed(w5) isClosed(w6) isClosed(w7) isClosed(w8) isClosed(w9) isLocked(w7) isLocked(w8) isUnlocked(w1) isUnlocked(w10) isUnlocked(w11) isUnlocked(w2) isUnlocked(w3) isUnlocked(w4) isUnlocked(w5) isUnlocked(w6) isUnlocked(w9) isWindow(w11) isWindow(w2) isWindow(w4) isWindow(w6) isWindow(w7) isWindow(w8) isWindow(w9)
+
+SATISFIABLE
+Models       : 1+
+
+
+% Query 5: Try to unlock w1 when it is locked (unlocking is nonexecutable if isLocked is true) (unsatisfiable)
+:- query
+    0: ~isWindow(w1) & isLocked(w1) & ~isUnlocked(w1);
+    0: unlockWin(w1).
+
+Cplus2ASP Output:
+
+Solving...
+UNSATISFIABLE
+Models       : 0
+No solution.
+
+
+
+
+
+:- query
+    0: isOpen(w1) & ~isClosed(w1) & isUnlocked(w1) & ~isLocked(w1) &
+       isClosed(w2) & ~isOpen(w2) & isUnlocked(w2) & ~isLocked(w2) &
+       isClosed(w3) & ~isOpen(w3) & isLocked(w3) & ~isUnlocked(w3) &
+       isOpen(w4) & ~isClosed(w4) & isUnlocked(w4) & ~isLocked(w4) &
+       isClosed(w5) & ~isOpen(w5) & isUnlocked(w5) & ~isLocked(w5) &
+       isOpen(w6) & ~isClosed(w6) & isUnlocked(w6) & ~isLocked(w6) &
+       isClosed(w7) & ~isOpen(w7) & isLocked(w7) & ~isUnlocked(w7) &
+       isOpen(w8) & ~isClosed(w8) & isUnlocked(w8) & ~isLocked(w8) &
+       isClosed(w9) & ~isOpen(w9) & isUnlocked(w9) & ~isLocked(w9) &
+       isClosed(w10) & ~isOpen(w10) & isLocked(w10) & ~isUnlocked(w10) &
+       isOpen(w11) & ~isClosed(w11) & isUnlocked(w11) & ~isLocked(w11) &
+       ~isWindow(w1) & ~isWindow(w2) & ~isWindow(w3) & ~isWindow(w4) & ~isWindow(w5) &
+       ~isWindow(w6) & ~isWindow(w7) & ~isWindow(w8) & ~isWindow(w9) & ~isWindow(w10) &
+       ~isWindow(w11);
+    maxstep: isLocked(w1) &
+             isOpen(w3) &
+             isLocked(w4) &
+             isOpen(w5) &
+             isClosed(w6) &
+             isOpen(w7) &
+             isLocked(w8) &
+             isOpen(w9) &
+             isOpen(w10) &
+             isClosed(w11).
+
+
+
+Cplus2ASP Output:
+
+Solving...
+UNSATISFIABLE
+Models       : 0
+No solution.
+
+

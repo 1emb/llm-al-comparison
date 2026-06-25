@@ -1,0 +1,54 @@
+% Query 1: Load a package into a truck when both are at the same location (satisfiable)
+:- query
+    label :: q1_load_truck_ok;
+    0: inCity(l0_0)=c0 & inCity(l0_1)=c0 & inCity(l1_0)=c1 & inCity(l1_1)=c1;
+    0: isAirport(l0_0) & ~isAirport(l0_1) & isAirport(l1_0) & ~isAirport(l1_1);
+    0: loc(a0)=l1_0 & loc(a1)=l0_0 & loc(t0)=l0_0 & loc(t1)=l1_0;
+    0: loc(p0)=l0_0 & loc(p1)=l1_1;
+    0: ~inCarrier(p0,t0) & ~inCarrier(p0,t1) & ~inCarrier(p0,a0) & ~inCarrier(p0,a1)
+       & ~inCarrier(p1,t0) & ~inCarrier(p1,t1) & ~inCarrier(p1,a0) & ~inCarrier(p1,a1);
+    0: loadTruck(p0,t0,l0_0).
+
+% Query 2: Try to load a package into a truck when the truck is not at that location (unsatisfiable)
+:- query
+    label :: q2_load_truck_wrong_place;
+    0: inCity(l0_0)=c0 & inCity(l0_1)=c0 & inCity(l1_0)=c1 & inCity(l1_1)=c1;
+    0: isAirport(l0_0) & ~isAirport(l0_1) & isAirport(l1_0) & ~isAirport(l1_1);
+    0: loc(a0)=l1_0 & loc(a1)=l0_0 & loc(t0)=l0_0 & loc(t1)=l1_0;
+    0: loc(p0)=l0_0 & loc(p1)=l1_1;
+    0: ~inCarrier(p0,t0) & ~inCarrier(p0,t1) & ~inCarrier(p0,a0) & ~inCarrier(p0,a1)
+       & ~inCarrier(p1,t0) & ~inCarrier(p1,t1) & ~inCarrier(p1,a0) & ~inCarrier(p1,a1);
+    0: loadTruck(p0,t0,l0_1).
+
+% Query 3: Drive a truck within its city from one location to another (satisfiable)
+:- query
+    label :: q3_drive_truck_ok;
+    0: inCity(l0_0)=c0 & inCity(l0_1)=c0 & inCity(l1_0)=c1 & inCity(l1_1)=c1;
+    0: isAirport(l0_0) & ~isAirport(l0_1) & isAirport(l1_0) & ~isAirport(l1_1);
+    0: loc(a0)=l1_0 & loc(a1)=l0_0 & loc(t0)=l0_0 & loc(t1)=l1_0;
+    0: loc(p0)=l0_0 & loc(p1)=l1_1;
+    0: ~inCarrier(p0,t0) & ~inCarrier(p0,t1) & ~inCarrier(p0,a0) & ~inCarrier(p0,a1)
+       & ~inCarrier(p1,t0) & ~inCarrier(p1,t1) & ~inCarrier(p1,a0) & ~inCarrier(p1,a1);
+    0: driveTruck(t0,l0_0,l0_1,c0).
+
+% Query 4: Try to fly an airplane from a non-airport location (unsatisfiable)
+:- query
+    label :: q4_fly_from_nonairport;
+    0: inCity(l0_0)=c0 & inCity(l0_1)=c0 & inCity(l1_0)=c1 & inCity(l1_1)=c1;
+    0: isAirport(l0_0) & ~isAirport(l0_1) & isAirport(l1_0) & ~isAirport(l1_1);
+    0: loc(a0)=l1_0 & loc(a1)=l0_0 & loc(t0)=l0_0 & loc(t1)=l1_0;
+    0: loc(p0)=l0_0 & loc(p1)=l1_1;
+    0: ~inCarrier(p0,t0) & ~inCarrier(p0,t1) & ~inCarrier(p0,a0) & ~inCarrier(p0,a1)
+       & ~inCarrier(p1,t0) & ~inCarrier(p1,t1) & ~inCarrier(p1,a0) & ~inCarrier(p1,a1);
+    0: flyPlane(a1,l0_1,l1_0).
+
+% Query 5: Try to load and unload the same package from the same truck in the same step (unsatisfiable)
+:- query
+    label :: q5_load_and_unload_same_step;
+    0: inCity(l0_0)=c0 & inCity(l0_1)=c0 & inCity(l1_0)=c1 & inCity(l1_1)=c1;
+    0: isAirport(l0_0) & ~isAirport(l0_1) & isAirport(l1_0) & ~isAirport(l1_1);
+    0: loc(a0)=l1_0 & loc(a1)=l0_0 & loc(t0)=l0_0 & loc(t1)=l1_0;
+    0: loc(p0)=l0_0 & loc(p1)=l1_1;
+    0: ~inCarrier(p0,t0) & ~inCarrier(p0,t1) & ~inCarrier(p0,a0) & ~inCarrier(p0,a1)
+       & ~inCarrier(p1,t0) & ~inCarrier(p1,t1) & ~inCarrier(p1,a0) & ~inCarrier(p1,a1);
+    0: loadTruck(p0,t0,l0_0) & unloadTruck(p0,t0,l0_0).

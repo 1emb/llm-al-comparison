@@ -1,0 +1,97 @@
+Objects:
+:- objects
+    w1, w2, w3, w4, w5, w6, w7, w8, w9, w10, w11 :: window.
+
+Query:
+:- query
+    0: isOpen(w1) & isUnlocked(w1) & ~isClosed(w1) & ~isLocked(w1)
+     & isClosed(w2) & isUnlocked(w2) & ~isOpen(w2) & ~isLocked(w2)
+     & isClosed(w3) & isLocked(w3) & ~isOpen(w3) & ~isUnlocked(w3)
+     & isOpen(w4) & isUnlocked(w4) & ~isClosed(w4) & ~isLocked(w4)
+     & isClosed(w5) & isUnlocked(w5) & ~isOpen(w5) & ~isLocked(w5)
+     & isOpen(w6) & isUnlocked(w6) & ~isClosed(w6) & ~isLocked(w6)
+     & isClosed(w7) & isLocked(w7) & ~isOpen(w7) & ~isUnlocked(w7)
+     & isOpen(w8) & isUnlocked(w8) & ~isClosed(w8) & ~isLocked(w8)
+     & isClosed(w9) & isUnlocked(w9) & ~isOpen(w9) & ~isLocked(w9)
+     & isClosed(w10) & isLocked(w10) & ~isOpen(w10) & ~isUnlocked(w10)
+     & isOpen(w11) & isUnlocked(w11) & ~isClosed(w11) & ~isLocked(w11);
+    maxstep: isLocked(w1) & isOpen(w3) & isLocked(w4) & isOpen(w5) & isClosed(w6) & isOpen(w7) & isLocked(w8) & isOpen(w9) & isOpen(w10) & isClosed(w11).
+
+Status: True
+
+Output:
+Solving...
+Solution: 1 (Time: 21.174s)
+	
+
+	0:  isClosed(w10) isClosed(w2) isClosed(w3) isClosed(w5) isClosed(w7) isClosed(w9) isLocked(w10) isLocked(w3) isLocked(w7) isOpen(w1) isOpen(w11) isOpen(w4) isOpen(w6) isOpen(w8) isUnlocked(w1) isUnlocked(w11) isUnlocked(w2) isUnlocked(w4) isUnlocked(w5) isUnlocked(w6) isUnlocked(w8) isUnlocked(w9)
+
+	ACTIONS:  closeWin(w4)
+
+	1:  isClosed(w10) isClosed(w2) isClosed(w3) isClosed(w4) isClosed(w5) isClosed(w7) isClosed(w9) isLocked(w10) isLocked(w3) isLocked(w7) isOpen(w1) isOpen(w11) isOpen(w6) isOpen(w8) isUnlocked(w1) isUnlocked(w11) isUnlocked(w2) isUnlocked(w4) isUnlocked(w5) isUnlocked(w6) isUnlocked(w8) isUnlocked(w9)
+
+	ACTIONS:  lockWin(w4)
+
+	2:  isClosed(w10) isClosed(w2) isClosed(w3) isClosed(w4) isClosed(w5) isClosed(w7) isClosed(w9) isLocked(w10) isLocked(w3) isLocked(w4) isLocked(w7) isOpen(w1) isOpen(w11) isOpen(w6) isOpen(w8) isUnlocked(w1) isUnlocked(w11) isUnlocked(w2) isUnlocked(w5) isUnlocked(w6) isUnlocked(w8) isUnlocked(w9)
+
+	ACTIONS:  closeWin(w1)
+
+	3:  isClosed(w1) isClosed(w10) isClosed(w2) isClosed(w3) isClosed(w4) isClosed(w5) isClosed(w7) isClosed(w9) isLocked(w10) isLocked(w3) isLocked(w4) isLocked(w7) isOpen(w11) isOpen(w6) isOpen(w8) isUnlocked(w1) isUnlocked(w11) isUnlocked(w2) isUnlocked(w5) isUnlocked(w6) isUnlocked(w8) isUnlocked(w9)
+
+	ACTIONS:  unlockWin(w3)
+
+	4:  isClosed(w1) isClosed(w10) isClosed(w2) isClosed(w3) isClosed(w4) isClosed(w5) isClosed(w7) isClosed(w9) isLocked(w10) isLocked(w4) isLocked(w7) isOpen(w11) isOpen(w6) isOpen(w8) isUnlocked(w1) isUnlocked(w11) isUnlocked(w2) isUnlocked(w3) isUnlocked(w5) isUnlocked(w6) isUnlocked(w8) isUnlocked(w9)
+
+	ACTIONS:  lockWin(w1)
+
+	5:  isClosed(w1) isClosed(w10) isClosed(w2) isClosed(w3) isClosed(w4) isClosed(w5) isClosed(w7) isClosed(w9) isLocked(w1) isLocked(w10) isLocked(w4) isLocked(w7) isOpen(w11) isOpen(w6) isOpen(w8) isUnlocked(w11) isUnlocked(w2) isUnlocked(w3) isUnlocked(w5) isUnlocked(w6) isUnlocked(w8) isUnlocked(w9)
+
+	ACTIONS:  openWin(w5)
+
+	6:  isClosed(w1) isClosed(w10) isClosed(w2) isClosed(w3) isClosed(w4) isClosed(w7) isClosed(w9) isLocked(w1) isLocked(w10) isLocked(w4) isLocked(w7) isOpen(w11) isOpen(w5) isOpen(w6) isOpen(w8) isUnlocked(w11) isUnlocked(w2) isUnlocked(w3) isUnlocked(w5) isUnlocked(w6) isUnlocked(w8) isUnlocked(w9)
+
+	ACTIONS:  closeWin(w8)
+
+	7:  isClosed(w1) isClosed(w10) isClosed(w2) isClosed(w3) isClosed(w4) isClosed(w7) isClosed(w8) isClosed(w9) isLocked(w1) isLocked(w10) isLocked(w4) isLocked(w7) isOpen(w11) isOpen(w5) isOpen(w6) isUnlocked(w11) isUnlocked(w2) isUnlocked(w3) isUnlocked(w5) isUnlocked(w6) isUnlocked(w8) isUnlocked(w9)
+
+	ACTIONS:  lockWin(w8)
+
+	8:  isClosed(w1) isClosed(w10) isClosed(w2) isClosed(w3) isClosed(w4) isClosed(w7) isClosed(w8) isClosed(w9) isLocked(w1) isLocked(w10) isLocked(w4) isLocked(w7) isLocked(w8) isOpen(w11) isOpen(w5) isOpen(w6) isUnlocked(w11) isUnlocked(w2) isUnlocked(w3) isUnlocked(w5) isUnlocked(w6) isUnlocked(w9)
+
+	ACTIONS:  openWin(w3)
+
+	9:  isClosed(w1) isClosed(w10) isClosed(w2) isClosed(w4) isClosed(w7) isClosed(w8) isClosed(w9) isLocked(w1) isLocked(w10) isLocked(w4) isLocked(w7) isLocked(w8) isOpen(w11) isOpen(w3) isOpen(w5) isOpen(w6) isUnlocked(w11) isUnlocked(w2) isUnlocked(w3) isUnlocked(w5) isUnlocked(w6) isUnlocked(w9)
+
+	ACTIONS:  unlockWin(w10)
+
+	10:  isClosed(w1) isClosed(w10) isClosed(w2) isClosed(w4) isClosed(w7) isClosed(w8) isClosed(w9) isLocked(w1) isLocked(w4) isLocked(w7) isLocked(w8) isOpen(w11) isOpen(w3) isOpen(w5) isOpen(w6) isUnlocked(w10) isUnlocked(w11) isUnlocked(w2) isUnlocked(w3) isUnlocked(w5) isUnlocked(w6) isUnlocked(w9)
+
+	ACTIONS:  openWin(w10)
+
+	11:  isClosed(w1) isClosed(w2) isClosed(w4) isClosed(w7) isClosed(w8) isClosed(w9) isLocked(w1) isLocked(w4) isLocked(w7) isLocked(w8) isOpen(w10) isOpen(w11) isOpen(w3) isOpen(w5) isOpen(w6) isUnlocked(w10) isUnlocked(w11) isUnlocked(w2) isUnlocked(w3) isUnlocked(w5) isUnlocked(w6) isUnlocked(w9)
+
+	ACTIONS:  closeWin(w11)
+
+	12:  isClosed(w1) isClosed(w11) isClosed(w2) isClosed(w4) isClosed(w7) isClosed(w8) isClosed(w9) isLocked(w1) isLocked(w4) isLocked(w7) isLocked(w8) isOpen(w10) isOpen(w3) isOpen(w5) isOpen(w6) isUnlocked(w10) isUnlocked(w11) isUnlocked(w2) isUnlocked(w3) isUnlocked(w5) isUnlocked(w6) isUnlocked(w9)
+
+	ACTIONS:  openWin(w9)
+
+	13:  isClosed(w1) isClosed(w11) isClosed(w2) isClosed(w4) isClosed(w7) isClosed(w8) isLocked(w1) isLocked(w4) isLocked(w7) isLocked(w8) isOpen(w10) isOpen(w3) isOpen(w5) isOpen(w6) isOpen(w9) isUnlocked(w10) isUnlocked(w11) isUnlocked(w2) isUnlocked(w3) isUnlocked(w5) isUnlocked(w6) isUnlocked(w9)
+
+	ACTIONS:  unlockWin(w7)
+
+	14:  isClosed(w1) isClosed(w11) isClosed(w2) isClosed(w4) isClosed(w7) isClosed(w8) isLocked(w1) isLocked(w4) isLocked(w8) isOpen(w10) isOpen(w3) isOpen(w5) isOpen(w6) isOpen(w9) isUnlocked(w10) isUnlocked(w11) isUnlocked(w2) isUnlocked(w3) isUnlocked(w5) isUnlocked(w6) isUnlocked(w7) isUnlocked(w9)
+
+	ACTIONS:  closeWin(w6)
+
+	15:  isClosed(w1) isClosed(w11) isClosed(w2) isClosed(w4) isClosed(w6) isClosed(w7) isClosed(w8) isLocked(w1) isLocked(w4) isLocked(w8) isOpen(w10) isOpen(w3) isOpen(w5) isOpen(w9) isUnlocked(w10) isUnlocked(w11) isUnlocked(w2) isUnlocked(w3) isUnlocked(w5) isUnlocked(w6) isUnlocked(w7) isUnlocked(w9)
+
+	ACTIONS:  openWin(w7)
+
+	16:  isClosed(w1) isClosed(w11) isClosed(w2) isClosed(w4) isClosed(w6) isClosed(w8) isLocked(w1) isLocked(w4) isLocked(w8) isOpen(w10) isOpen(w3) isOpen(w5) isOpen(w7) isOpen(w9) isUnlocked(w10) isUnlocked(w11) isUnlocked(w2) isUnlocked(w3) isUnlocked(w5) isUnlocked(w6) isUnlocked(w7) isUnlocked(w9)
+
+SATISFIABLE
+Models       : 1+
+Calls        : 17
+Time         : 21.173s (Solving: 21.09s 1st Model: 0.01s Unsat: 21.09s)
+CPU Time     : 21.167s

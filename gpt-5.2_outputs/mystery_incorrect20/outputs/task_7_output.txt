@@ -1,0 +1,41 @@
+Objects:
+:- objects
+    a, b, c, d :: entity.
+
+Query:
+:- query
+    0: harmony
+       & craves(a,b) & craves(b,c) & craves(c,d)
+       & isPlanet(d)
+       & isProvince(a)
+       & ~isPlanet(a) & ~isPlanet(b) & ~isPlanet(c)
+       & ~isProvince(b) & ~isProvince(c) & ~isProvince(d)
+       & ~inPain(a) & ~inPain(b) & ~inPain(c) & ~inPain(d)
+       & ~craves(a,a) & ~craves(a,c) & ~craves(a,d)
+       & ~craves(b,a) & ~craves(b,b) & ~craves(b,d)
+       & ~craves(c,a) & ~craves(c,b) & ~craves(c,c)
+       & ~craves(d,a) & ~craves(d,b) & ~craves(d,c) & ~craves(d,d);
+    maxstep: craves(b,c) & craves(c,d) & craves(d,a).
+
+Status: True
+
+Output:
+Solving...
+Solution: 1 (Time: 0.012s)
+	
+
+	0:  harmony isPlanet(a) isPlanet(c) isPlanet(d) isProvince(a) isProvince(b) isProvince(c) craves(b, d)
+
+	ACTIONS:  overcome(d, a)
+
+	1:  harmony isPlanet(a) isPlanet(c) isPlanet(d) isProvince(b) isProvince(c) craves(d, a)
+
+	ACTIONS:  overcome(b, c)
+
+	2:  harmony isPlanet(a) isPlanet(c) isPlanet(d) craves(b, c) craves(d, a)
+
+SATISFIABLE
+Models       : 1+
+Calls        : 3
+Time         : 0.012s (Solving: 0.00s 1st Model: 0.00s Unsat: 0.00s)
+CPU Time     : 0.012s

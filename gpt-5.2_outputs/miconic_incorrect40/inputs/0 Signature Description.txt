@@ -1,0 +1,10 @@
+There are two types of objects: "floor" and "passenger".
+
+p0 is a passenger.
+f0 and f1 are floors.
+
+Actions
+A passenger boarding the elevator at a floor is an action.
+A passenger departing the elevator at a floor is an action.
+The elevator moving up from a floor to a floor is an action.
+The elevator moving down from a floor to a floor is an action.

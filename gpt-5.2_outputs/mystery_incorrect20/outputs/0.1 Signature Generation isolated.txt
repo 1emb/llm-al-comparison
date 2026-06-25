@@ -1,0 +1,22 @@
+BC+ Signature:
+:- sorts
+    entity.
+
+:- objects
+    a, b, c, d :: entity.
+
+:- variables
+    E, E1, E2, E3, E4 :: entity;
+    Bool, Bool1, Bool2, Bool3, Bool4 :: boolean.
+
+:- constants
+    attack(entity) :: exogenousAction;
+    succumb(entity) :: exogenousAction;
+    overcome(entity, entity) :: exogenousAction;
+    feast(entity, entity) :: exogenousAction;
+
+    isProvince(entity) :: inertialFluent(boolean);
+    isPlanet(entity) :: inertialFluent(boolean);
+    harmony :: inertialFluent(boolean);
+    inPain(entity) :: inertialFluent(boolean);
+    craves(entity, entity) :: inertialFluent(boolean).

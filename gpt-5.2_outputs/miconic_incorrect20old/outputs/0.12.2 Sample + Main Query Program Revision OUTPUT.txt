@@ -1,0 +1,140 @@
+% PROGRAM CHANGED? [CHANGED]
+% BC+ signature
+:- sorts
+    floor;
+    passenger.
+
+:- objects
+    f0, f1 :: floor;
+    p0 :: passenger.
+
+:- variables
+    F, F1, F2 :: floor;
+    P :: passenger.
+
+:- constants
+    board(floor, passenger) :: exogenousAction;
+    depart(floor, passenger) :: exogenousAction;
+    up(floor, floor) :: exogenousAction;
+    down(floor, floor) :: exogenousAction;
+
+    % Elevator location: loc(F)=true means elevator is at floor F
+    loc(floor) :: inertialFluent(boolean);
+
+    origin(passenger) :: inertialFluent(floor);
+    dest(passenger) :: inertialFluent(floor);
+
+    passengerFlag(passenger) :: inertialFluent(boolean);
+    boarded(passenger) :: inertialFluent(boolean);
+    served(passenger) :: inertialFluent(boolean);
+
+    above(floor, floor) :: inertialFluent(boolean);
+    validFloor(floor) :: inertialFluent(boolean).
+
+% Generated constraints
+
+% 1. The elevator cannot be at two different floors at the same time.
+impossible loc(F1) & loc(F2) & F1\=F2.
+
+% 2-5. Boarding preconditions.
+nonexecutable board(F,P) if ~validFloor(F).
+nonexecutable board(F,P) if ~loc(F).
+nonexecutable board(F,P) if origin(P)\=F.
+nonexecutable board(F,P) if passengerFlag(P).
+
+% 6. When boarding happens, the person becomes a passenger and is on board.
+board(F,P) causes passengerFlag(P).
+board(F,P) causes boarded(P).
+
+% 7-11. Departing preconditions.
+nonexecutable depart(F,P) if ~validFloor(F).
+nonexecutable depart(F,P) if ~passengerFlag(P).
+nonexecutable depart(F,P) if ~loc(F).
+nonexecutable depart(F,P) if dest(P)\=F.
+nonexecutable depart(F,P) if ~boarded(P).
+
+% 12-13. Depart effects.
+depart(F,P) causes ~boarded(P).
+depart(F,P) causes served(P).
+
+% 14-19. Moving up.
+nonexecutable up(F1,F2) if ~validFloor(F1).
+nonexecutable up(F1,F2) if ~validFloor(F2).
+nonexecutable up(F1,F2) if ~loc(F1).
+nonexecutable up(F1,F2) if ~above(F2,F1).
+up(F1,F2) causes loc(F2).
+up(F1,F2) causes ~loc(F1).
+
+% 20-25. Moving down.
+nonexecutable down(F1,F2) if ~validFloor(F1).
+nonexecutable down(F1,F2) if ~validFloor(F2).
+nonexecutable down(F1,F2) if ~loc(F1).
+nonexecutable down(F1,F2) if ~above(F1,F2).
+down(F1,F2) causes loc(F2).
+down(F1,F2) causes ~loc(F1).
+
+% Constrain above/2 to avoid pathological models.
+impossible above(F,F).
+impossible above(F1,F2) & above(F2,F1) & F1\=F2.
+
+% Floors are valid by default unless stated otherwise.
+default validFloor(F).
+
+% Prevent "teleporting": elevator must be at some floor in every state.
+impossible ~loc(f0) & ~loc(f1).
+
+% MAIN QUERY CHANGED? [UNCHANGED]
+:- query
+    0: validFloor(f0) & validFloor(f1) & above(f0,f1) &
+       origin(p0)=f0 & dest(p0)=f1 &
+       loc(f0) &
+       ~passengerFlag(p0) & ~boarded(p0) & ~served(p0);
+    maxstep: served(p0).
+
+% SAMPLE QUERIES CHANGED? [UNCHANGED]
+% Query 1: Basic boarding works at the passenger's origin when the elevator is there and the floor is valid. (satisfiable)
+:- query
+    label :: q1_board_ok;
+    0: validFloor(f0) & validFloor(f1) & above(f0,f1) &
+       loc(f0) &
+       origin(p0)=f0 & dest(p0)=f1 &
+       ~passengerFlag(p0) & ~boarded(p0) & ~served(p0);
+    0: board(f0,p0).
+
+% Query 2: Boarding is not allowed at the wrong floor (origin mismatch). (unsatisfiable)
+:- query
+    label :: q2_board_wrong_floor;
+    0: validFloor(f0) & validFloor(f1) & above(f0,f1) &
+       loc(f1) &
+       origin(p0)=f0 & dest(p0)=f1 &
+       ~passengerFlag(p0) & ~boarded(p0) & ~served(p0);
+    0: board(f1,p0).
+
+% Query 3: Depart is not allowed if the elevator is NOT at the departure floor. (unsatisfiable)
+:- query
+    label :: q3_depart_when_elevator_not_there;
+    0: validFloor(f0) & validFloor(f1) & above(f0,f1) &
+       loc(f0) &
+       origin(p0)=f0 & dest(p0)=f1 &
+       passengerFlag(p0) & boarded(p0) & ~served(p0);
+    0: depart(f1,p0).
+
+% Query 4: A concrete serve plan per intended rules. (satisfiable)
+:- query
+    label :: q4_serve_plan;
+    0: validFloor(f0) & validFloor(f1) & above(f0,f1) &
+       loc(f0) &
+       origin(p0)=f0 & dest(p0)=f1 &
+       ~passengerFlag(p0) & ~boarded(p0) & ~served(p0);
+    0: board(f0,p0);
+    1: up(f0,f1);
+    2: depart(f1,p0);
+    maxstep: served(p0).
+
+% Query 5: The elevator cannot be at two different floors in the same state. (unsatisfiable)
+:- query
+    label :: q5_unique_loc;
+    0: validFloor(f0) & validFloor(f1) & above(f0,f1) &
+       loc(f0) & loc(f1) &
+       origin(p0)=f0 & dest(p0)=f1 &
+       ~passengerFlag(p0) & ~boarded(p0) & ~served(p0).

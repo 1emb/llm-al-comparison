@@ -1,0 +1,148 @@
+
+
+:- sorts
+    loc >> block.
+
+
+:- objects
+    b1, b2, b3, b4, b5, b6 :: block;
+    table :: loc.
+
+:- variables
+    B, B1, B2, B3, B4, B5, B6, B7 :: block;
+    L, L1, L2, L3, L4 :: loc.
+
+
+:- constants
+    pickupBlock(block) :: exogenousAction;
+    putdownBlock(block) :: exogenousAction;
+    stackBlock(block, block) :: exogenousAction;
+    unstackBlock(block, block) :: exogenousAction;
+
+    % on/1 is a fluent whose values are locations (table or another block).
+    on(block) :: inertialFluent(loc);
+
+    clear(block) :: inertialFluent(boolean);
+    holding(block) :: inertialFluent(boolean);
+    handEmpty :: inertialFluent(boolean).
+
+% Generated constraints
+
+% 1. A block cannot be on two different locs at the same time.
+impossible on(B)=L1 & on(B)=L2 & L1\=L2.
+
+% 2. Two different blocks cannot be on the same block at the same time.
+impossible on(B1)=B & on(B2)=B & B1\=B2.
+
+% 3. If a block is holding, then it is not on any loc.
+impossible holding(B) & on(B)=L.
+
+% 4. If a block is on some block, then it is not on the table.
+impossible on(B)=B1 & on(B)=table.
+
+% 5. If a block is on the table, then it is not on any block.
+impossible on(B)=table & on(B)=B1.
+
+% 6. If a block is holding, then the hand is not empty.
+impossible holding(B) & handEmpty.
+
+% 7. If the hand is empty, then no block is holding.
+impossible handEmpty & holding(B).
+
+% 8. At most one block can be holding at a time.
+impossible holding(B1) & holding(B2) & B1\=B2.
+
+% 9. If a block has another block on it, then it is not clear.
+impossible on(B1)=B2 & clear(B2).
+
+% 10. If a block is holding, then it is not clear.
+impossible holding(B) & clear(B).
+
+% Additional state constraint needed because we use on(B)=B as a "not on anything" marker.
+% Forbid self-support in all states unless the block is holding.
+impossible ~holding(B) & on(B)=B.
+
+% Action effects and executability conditions (fixed)
+
+% pickup: requires clear(B), on(B)=table, handEmpty.
+% Effects: holding(B), ~handEmpty, and remove it from its support by setting on(B)=B.
+pickupBlock(B) causes holding(B).
+pickupBlock(B) causes ~handEmpty.
+pickupBlock(B) causes on(B)=B.
+pickupBlock(B) causes ~clear(B).
+
+nonexecutable pickupBlock(B) if ~clear(B).
+nonexecutable pickupBlock(B) if on(B)\=table.
+nonexecutable pickupBlock(B) if ~handEmpty.
+
+% putdown: requires holding(B).
+% Effects: ~holding, on table, clear, handEmpty.
+putdownBlock(B) causes ~holding(B).
+putdownBlock(B) causes on(B)=table.
+putdownBlock(B) causes clear(B).
+putdownBlock(B) causes handEmpty.
+
+nonexecutable putdownBlock(B) if ~holding(B).
+
+% stack: requires holding(B1) and clear(B2) and B1\=B2.
+% Effects: on(B1)=B2, ~holding(B1), clear(B1), ~clear(B2), handEmpty.
+stackBlock(B1,B2) causes on(B1)=B2.
+stackBlock(B1,B2) causes ~holding(B1).
+stackBlock(B1,B2) causes clear(B1).
+stackBlock(B1,B2) causes ~clear(B2).
+stackBlock(B1,B2) causes handEmpty.
+
+nonexecutable stackBlock(B1,B2) if ~holding(B1).
+nonexecutable stackBlock(B1,B2) if ~clear(B2).
+nonexecutable stackBlock(B1,B2) if B1=B2.
+
+% unstack: requires on(B1)=B2, clear(B1), handEmpty, and B1\=B2.
+% Effects: holding(B1), clear(B2), ~handEmpty, and remove support by setting on(B1)=B1.
+unstackBlock(B1,B2) causes holding(B1).
+unstackBlock(B1,B2) causes clear(B2).
+unstackBlock(B1,B2) causes ~handEmpty.
+unstackBlock(B1,B2) causes on(B1)=B1.
+unstackBlock(B1,B2) causes ~clear(B1).
+
+nonexecutable unstackBlock(B1,B2) if on(B1)\=B2.
+nonexecutable unstackBlock(B1,B2) if ~clear(B1).
+nonexecutable unstackBlock(B1,B2) if ~handEmpty.
+nonexecutable unstackBlock(B1,B2) if B1=B2.
+
+% Concurrency constraints (kept)
+nonexecutable pickupBlock(B1) & pickupBlock(B2) if B1\=B2.
+nonexecutable putdownBlock(B1) & putdownBlock(B2) if B1\=B2.
+nonexecutable stackBlock(B1,B2) & stackBlock(B3,B4) if B1\=B3.
+nonexecutable unstackBlock(B1,B2) & unstackBlock(B3,B4) if B1\=B3.
+
+nonexecutable pickupBlock(B1) & putdownBlock(B2).
+nonexecutable pickupBlock(B1) & stackBlock(B2,B3).
+nonexecutable pickupBlock(B1) & unstackBlock(B2,B3).
+nonexecutable putdownBlock(B1) & stackBlock(B2,B3).
+nonexecutable putdownBlock(B1) & unstackBlock(B2,B3).
+nonexecutable stackBlock(B1,B2) & unstackBlock(B3,B4).
+
+% Notes on why the earlier sample runs were UNSAT:
+% The earlier program was missing two critical effects:
+% - pickup should make the picked block not clear (~clear(B)), otherwise it violates
+%   the state constraint "impossible holding(B) & clear(B)".
+% - unstack should make the removed block not clear (~clear(B1)), otherwise it violates
+%   the same constraint after unstack makes it holding(B1).
+noconcurrency.
+
+
+:- query
+    0: handEmpty
+       & on(b4)=table & clear(b4) & ~holding(b4)
+       & on(b3)=table & clear(b3) & ~holding(b3)
+       & on(b1)=table & clear(b1) & ~holding(b1)
+       & on(b5)=table & ~clear(b5) & ~holding(b5)
+       & on(b6)=b5 & clear(b6) & ~holding(b6)
+       & on(b2)=table & clear(b2) & ~holding(b2);
+    maxstep: handEmpty
+             & on(b1)=table & clear(b1) & ~holding(b1)
+             & on(b2)=table & clear(b2) & ~holding(b2)
+             & on(b3)=table & clear(b3) & ~holding(b3)
+             & on(b4)=table & clear(b4) & ~holding(b4)
+             & on(b5)=table & clear(b5) & ~holding(b5)
+             & on(b6)=table & clear(b6) & ~holding(b6).

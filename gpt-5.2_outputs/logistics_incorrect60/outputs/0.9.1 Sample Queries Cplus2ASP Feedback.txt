@@ -1,0 +1,122 @@
+% Query 1: Load a package into a truck when both are co-located and the package is not already in any vehicle. (satisfiable)
+:- query
+    0: inCity(l0_0)=c0 & isAirport(l0_0) & inCity(l1_0)=c1 & isAirport(l1_0);
+    0: loc(t0)=l0_0 & loc(p0)=l0_0;
+    0: ~in(p0,t0);
+    0: loadTruck(p0,t0,l0_0).
+
+Cplus2ASP Output:
+
+Solving...
+	
+
+	0:  inCity(l0_0)=c0 inCity(l1_0)=c1 isAirport(l0_0) isAirport(l1_0) loc(a0)=l1_0 loc(p0)=l0_0 loc(p1)=l0_0 loc(t0)=l0_0 loc(t1)=l1_0
+
+	ACTIONS:  loadTruck(p0, t0, l0_0)
+
+	1:  inCity(l0_0)=c0 inCity(l1_0)=c1 isAirport(l0_0) isAirport(l1_0) loc(a0)=l1_0 loc(p0)=l0_0 loc(p1)=l0_0 loc(t0)=l0_0 loc(t1)=l1_0 in(p0, t0)
+
+SATISFIABLE
+Models       : 1+
+
+
+% Query 2: Try to load a package into a truck when the truck is not at the loading location. (unsatisfiable)
+:- query
+    0: inCity(l0_0)=c0 & isAirport(l0_0) & inCity(l1_0)=c1 & isAirport(l1_0);
+    0: loc(t0)=l0_0 & loc(p0)=l1_0;
+    0: ~in(p0,t0);
+    0: loadTruck(p0,t0,l1_0).
+
+Cplus2ASP Output:
+
+Solving...
+UNSATISFIABLE
+Models       : 0
+No solution.
+
+
+
+% Query 3: Drive a truck within the same city from one location to another. (satisfiable)
+:- query
+    0: inCity(l0_0)=c0 & inCity(l1_0)=c0 & isAirport(l0_0) & isAirport(l1_0);
+    0: loc(t0)=l0_0;
+    0: drive(t0,l0_0,l1_0,c0);
+    maxstep: loc(t0)=l1_0.
+
+Cplus2ASP Output:
+
+Solving...
+	
+
+	0:  inCity(l0_0)=c0 inCity(l1_0)=c0 isAirport(l0_0) isAirport(l1_0) loc(a0)=l1_0 loc(p0)=l1_0 loc(p1)=l1_0 loc(t0)=l0_0 loc(t1)=l1_0
+
+	ACTIONS:  drive(t0, l0_0, l1_0, c0)
+
+	1:  inCity(l0_0)=c0 inCity(l1_0)=c0 isAirport(l0_0) isAirport(l1_0) loc(a0)=l1_0 loc(p0)=l1_0 loc(p1)=l1_0 loc(t0)=l1_0 loc(t1)=l1_0
+
+SATISFIABLE
+Models       : 1+
+
+
+% Query 4: Try to fly from a non-airport location. (unsatisfiable)
+:- query
+    0: inCity(l0_0)=c0 & isAirport(l0_0) & inCity(l1_0)=c0 & ~isAirport(l1_0);
+    0: loc(a0)=l1_0;
+    0: fly(a0,l1_0,l0_0).
+
+Cplus2ASP Output:
+
+Solving...
+UNSATISFIABLE
+Models       : 0
+No solution.
+
+
+
+% Query 5: Try to load and unload the same package with the same truck at the same location at the same time. (unsatisfiable)
+:- query
+    0: inCity(l0_0)=c0 & isAirport(l0_0);
+    0: loc(t0)=l0_0 & loc(p0)=l0_0;
+    0: ~in(p0,t0);
+    0: loadTruck(p0,t0,l0_0) & unloadTruck(p0,t0,l0_0).
+
+Cplus2ASP Output:
+
+Solving...
+UNSATISFIABLE
+Models       : 0
+No solution.
+
+
+
+
+
+:- query
+    0: inCity(l0_0)=c0 & isAirport(l0_0) & inCity(l1_0)=c1 & isAirport(l1_0);
+    0: loc(a0)=l1_0 & loc(t0)=l0_0 & loc(t1)=l1_0;
+    0: loc(p0)=l1_0 & loc(p1)=l1_0 & ~in(p0,t0) & ~in(p0,t1) & ~in(p0,a0) & ~in(p1,t0) & ~in(p1,t1) & ~in(p1,a0);
+    maxstep: loc(p0)=l0_0 & loc(p1)=l0_0.
+
+
+Cplus2ASP Output:
+
+Solving...
+	
+
+	0:  inCity(l0_0)=c0 inCity(l1_0)=c1 isAirport(l0_0) isAirport(l1_0) loc(a0)=l1_0 loc(p0)=l1_0 loc(p1)=l1_0 loc(t0)=l0_0 loc(t1)=l1_0
+
+	ACTIONS:  loadAirplane(p0, a0, l1_0)
+
+	1:  inCity(l0_0)=c0 inCity(l1_0)=c1 isAirport(l0_0) isAirport(l1_0) loc(a0)=l1_0 loc(p0)=l1_0 loc(p1)=l1_0 loc(t0)=l0_0 loc(t1)=l1_0 in(p0, a0)
+
+	ACTIONS:  loadAirplane(p1, a0, l1_0)
+
+	2:  inCity(l0_0)=c0 inCity(l1_0)=c1 isAirport(l0_0) isAirport(l1_0) loc(a0)=l1_0 loc(p0)=l1_0 loc(p1)=l1_0 loc(t0)=l0_0 loc(t1)=l1_0 in(p0, a0) in(p1, a0)
+
+	ACTIONS:  fly(a0, l1_0, l0_0)
+
+	3:  inCity(l0_0)=c0 inCity(l1_0)=c1 isAirport(l0_0) isAirport(l1_0) loc(a0)=l0_0 loc(p0)=l0_0 loc(p1)=l0_0 loc(t0)=l0_0 loc(t1)=l1_0 in(p0, a0) in(p1, a0)
+
+SATISFIABLE
+Models       : 1+
+

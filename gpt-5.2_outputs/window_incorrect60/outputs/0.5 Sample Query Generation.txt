@@ -1,0 +1,27 @@
+% Query 1: Try to open w1 even though it is a window (should be blocked by nonexecutable openWin(W) if isWindow(W)) (unsatisfiable)
+:- query
+    0: isWindow(w1) & isClosed(w1) & ~isUnlocked(w1) & ~isOpen(w1) & ~isLocked(w1);
+    0: openWin(w1).
+
+% Query 2: Open w1 when it is NOT a window, is closed, and is NOT unlocked; after opening, it should become not open and not closed (satisfiable)
+:- query
+    0: ~isWindow(w1) & isClosed(w1) & ~isUnlocked(w1) & isOpen(w1) & ~isLocked(w1);
+    0: openWin(w1);
+    maxstep: ~isOpen(w1) & ~isClosed(w1).
+
+% Query 3: Try to open w1 when it is not closed (should be blocked by nonexecutable openWin(W) if ~isClosed(W)) (unsatisfiable)
+:- query
+    0: ~isWindow(w1) & ~isClosed(w1) & ~isUnlocked(w1) & ~isOpen(w1) & ~isLocked(w1);
+    0: openWin(w1).
+
+% Query 4: Close w1 when it IS a window and is NOT open; after closing, it should become not closed and not open (satisfiable)
+:- query
+    0: isWindow(w1) & ~isOpen(w1) & isClosed(w1) & ~isLocked(w1) & ~isUnlocked(w1);
+    0: closeWin(w1);
+    maxstep: ~isClosed(w1) & ~isOpen(w1).
+
+% Query 5: Unlock w1 when it is NOT a window and is locked; after unlocking, it should be both unlocked and locked (as specified by the effects) (satisfiable)
+:- query
+    0: ~isWindow(w1) & isLocked(w1) & ~isUnlocked(w1) & ~isOpen(w1) & isClosed(w1);
+    0: unlockWin(w1);
+    maxstep: isUnlocked(w1) & isLocked(w1).

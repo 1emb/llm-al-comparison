@@ -1,0 +1,199 @@
+% PROGRAM CHANGED? [CHANGED]
+% BC+ signature
+:- sorts
+    loc >> block.
+
+:- objects
+    b1, b2, b3, b4, b5, b6, b7 :: block;
+    table :: loc.
+
+:- variables
+    B, B1, B2, B3, B4 :: block;
+    L, L1, L2, L3, L4 :: loc;
+    Bool, Bool1, Bool2, Bool3, Bool4 :: boolean.
+
+:- constants
+    pickup(block) :: exogenousAction;
+    putdown(block) :: exogenousAction;
+    stack(block, block) :: exogenousAction;
+    unstack(block, block) :: exogenousAction;
+
+    loc(block) :: inertialFluent(loc);
+    on(block, block) :: inertialFluent(boolean);
+    onTable(block) :: inertialFluent(boolean);
+    clear(block) :: inertialFluent(boolean);
+    held(block) :: inertialFluent(boolean);
+    handEmpty :: inertialFluent(boolean).
+
+% Generated constraints
+% 1. A block cannot be on top of itself.
+impossible on(B,B).
+
+% 2. Two different blocks cannot be on top of each other in both directions at the same time.
+impossible on(B1,B2) & on(B2,B1) & B1\=B2.
+
+% 3. If on(B1,B2) holds, then B1 is not on the table.
+impossible on(B1,B2) & onTable(B1).
+
+% 4. If on(B1,B2) holds, then B2 is not being held.
+impossible on(B1,B2) & held(B2).
+
+% 5. If on(B1,B2) holds, then B1 is not being held.
+impossible on(B1,B2) & held(B1).
+
+% 6. If a block is being held, then the hand is not empty.
+impossible held(B) & handEmpty.
+
+% 7. If the hand is empty, then no block is being held.
+impossible handEmpty & held(B).
+
+% 8. Two different blocks cannot both be held at the same time.
+impossible held(B1) & held(B2) & B1\=B2.
+
+% 9. If a block is clear, then there is no block on top of it.
+impossible clear(B2) & on(B1,B2).
+
+% 10. If some block is on top of a block, then that block is not clear.
+impossible on(B1,B2) & clear(B2).
+
+% 11. If onTable(B) holds, then loc(B) is table.
+loc(B)=table if onTable(B).
+
+% 12. If loc(B) is table, then onTable(B) holds.
+onTable(B) if loc(B)=table.
+
+% 13. If on(B1,B2) holds, then loc(B1) is B2.
+loc(B1)=B2 if on(B1,B2).
+
+% 14. A block cannot be both on the table and on top of another block at the same time.
+impossible onTable(B1) & on(B1,B2).
+
+% 15. A block cannot be both clear and held at the same time.
+impossible clear(B) & held(B).
+
+% Added: if a block is held, it is not on the table.
+impossible held(B) & onTable(B).
+
+% Added: if a block is held, it is not on any block.
+impossible held(B1) & on(B1,B2).
+
+% Added: if a block is on the table, it is not on any block.
+impossible onTable(B1) & on(B1,B2).
+
+% Action laws
+% pickup(B): pick a clear block from the table into the hand.
+% FIX: precondition should be handEmpty (not ~handEmpty), otherwise pickup is never possible when handEmpty is true.
+nonexecutable pickup(B) if ~clear(B).
+nonexecutable pickup(B) if ~onTable(B).
+nonexecutable pickup(B) if handEmpty.
+nonexecutable pickup(B) if on(B1,B).
+
+pickup(B) causes held(B).
+pickup(B) causes ~handEmpty.
+pickup(B) causes ~onTable(B).
+pickup(B) causes ~clear(B).
+
+% putdown(B): put a held block onto the table and free the hand.
+nonexecutable putdown(B) if ~held(B).
+
+putdown(B) causes ~held(B).
+putdown(B) causes handEmpty.
+putdown(B) causes onTable(B).
+putdown(B) causes clear(B).
+
+% stack(B1,B2): place held B1 onto clear B2.
+nonexecutable stack(B1,B2) if ~held(B1).
+nonexecutable stack(B1,B2) if ~clear(B2).
+
+stack(B1,B2) causes on(B1,B2).
+stack(B1,B2) causes ~held(B1).
+stack(B1,B2) causes handEmpty.
+stack(B1,B2) causes clear(B1).
+stack(B1,B2) causes ~clear(B2).
+stack(B1,B2) causes ~onTable(B1).
+
+% unstack(B1,B2): remove clear B1 from on B2 into the hand.
+nonexecutable unstack(B1,B2) if ~on(B1,B2).
+nonexecutable unstack(B1,B2) if ~clear(B1).
+nonexecutable unstack(B1,B2) if ~handEmpty.
+
+unstack(B1,B2) causes held(B1).
+unstack(B1,B2) causes ~handEmpty.
+unstack(B1,B2) causes ~on(B1,B2).
+unstack(B1,B2) causes clear(B2).
+unstack(B1,B2) causes ~clear(B1).
+
+% Concurrency constraints (kept)
+nonexecutable pickup(B) & putdown(B).
+nonexecutable pickup(B) & stack(B,B2).
+nonexecutable pickup(B) & unstack(B,B2).
+nonexecutable putdown(B) & stack(B,B2).
+nonexecutable putdown(B) & unstack(B,B2).
+nonexecutable stack(B1,B2) & unstack(B1,B2).
+
+% MAIN QUERY CHANGED? [UNCHANGED]
+:- query
+    0: handEmpty &
+       onTable(b3) & clear(b3) &
+       onTable(b1) &
+       on(b7,b1) & clear(b7) &
+       onTable(b2) & clear(b2) &
+       onTable(b6) & clear(b6) &
+       onTable(b4) & clear(b4) &
+       onTable(b5) & clear(b5);
+    maxstep: onTable(b1) & clear(b1) &
+             onTable(b3) & clear(b3) &
+             onTable(b4) &
+             on(b7,b4) & clear(b7) &
+             onTable(b5) & clear(b5) &
+             onTable(b6) & clear(b6) &
+             onTable(b2) & clear(b2).
+
+% SAMPLE QUERIES CHANGED? [CHANGED]
+% Query 1: Pick up a clear block from the table with empty hand; should be satisfiable.
+:- query
+    0: handEmpty &
+       onTable(b3) & clear(b3) &
+       onTable(b1) & clear(b1) &
+       onTable(b2) & clear(b2) &
+       onTable(b4) & clear(b4) &
+       onTable(b5) & clear(b5) &
+       onTable(b6) & clear(b6) &
+       onTable(b7) & clear(b7);
+    0: pickup(b3).
+
+% Query 2: Put down a block that is not being held; should be unsatisfiable.
+:- query
+    0: handEmpty &
+       onTable(b3) & clear(b3) &
+       onTable(b1) &
+       on(b7,b1) & clear(b7) &
+       onTable(b2) & clear(b2) &
+       onTable(b6) & clear(b6) &
+       onTable(b4) & clear(b4) &
+       onTable(b5) & clear(b5);
+    0: putdown(b2).
+
+% Query 3: Stack b7 onto b4 while b7 is not held; should be unsatisfiable.
+:- query
+    0: handEmpty &
+       onTable(b3) & clear(b3) &
+       onTable(b1) &
+       on(b7,b1) & clear(b7) &
+       onTable(b2) & clear(b2) &
+       onTable(b6) & clear(b6) &
+       onTable(b4) & clear(b4) &
+       onTable(b5) & clear(b5);
+    0: stack(b7,b4).
+
+% Query 4: Unstack b7 from b1 when b7 is on b1 and clear and the hand is empty; should be satisfiable.
+:- query
+    0: handEmpty &
+       onTable(b3) & clear(b3) &
+       onTable(b1) &
+       on(b7,b1) & clear(b7) &
+       onTable(b2) & clear(b2) &
+       onTable(b6) & clear(b6) &
+       onTable(b4) & clear(b4) &
+       onTable(b5) & clear(b5);
+    0: unstack(b7,b1).

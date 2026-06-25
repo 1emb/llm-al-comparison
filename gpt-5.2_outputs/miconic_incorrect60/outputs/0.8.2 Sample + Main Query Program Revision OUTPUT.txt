@@ -1,0 +1,130 @@
+% PROGRAM CHANGED? [CHANGED]
+% BC+ signature
+:- sorts
+    floor;
+    passenger.
+
+:- objects
+    f0, f1, f2, f3 :: floor;
+    p0, p1 :: passenger.
+
+:- variables
+    F, F1, F2 :: floor;
+    P, P1 :: passenger.
+
+:- constants
+    board(passenger,floor) :: exogenousAction;
+    depart(passenger,floor) :: exogenousAction;
+    moveUp(floor,floor) :: exogenousAction;
+    moveDown(floor,floor) :: exogenousAction;
+
+    isFloor(floor) :: inertialFluent(boolean);
+    isPassenger(passenger) :: inertialFluent(boolean);
+    liftAt(floor) :: inertialFluent(boolean);
+    above(floor,floor) :: inertialFluent(boolean);
+
+    origin(passenger) :: inertialFluent(floor);
+    dest(passenger) :: inertialFluent(floor);
+    boarded(passenger) :: inertialFluent(boolean);
+    served(passenger) :: inertialFluent(boolean).
+
+% Generated constraints
+
+% Boarding preconditions: must be at a floor, lift at that floor, person is not a passenger, and board only at origin.
+nonexecutable board(P,F) if ~isFloor(F).
+nonexecutable board(P,F) if ~liftAt(F).
+nonexecutable board(P,F) if isPassenger(P).
+nonexecutable board(P,F) if origin(P)\=F.
+
+% Boarding effect: person becomes boarded.
+board(P,F) causes boarded(P).
+
+% Departing preconditions: must be at a floor, lift at that floor, person is not a passenger, depart only at destination, and must already be boarded.
+nonexecutable depart(P,F) if ~isFloor(F).
+nonexecutable depart(P,F) if ~liftAt(F).
+nonexecutable depart(P,F) if isPassenger(P).
+nonexecutable depart(P,F) if dest(P)\=F.
+nonexecutable depart(P,F) if ~boarded(P).
+
+% Departing effects: person becomes unboarded and served.
+depart(P,F) causes ~boarded(P).
+depart(P,F) causes served(P).
+
+% Movement: endpoints are floors, lift at source, and above relation matches direction.
+
+% Move up: from lower floor F1 to higher floor F2, so above(F2,F1) must hold.
+nonexecutable moveUp(F1,F2) if ~isFloor(F1).
+nonexecutable moveUp(F1,F2) if ~isFloor(F2).
+nonexecutable moveUp(F1,F2) if ~liftAt(F1).
+nonexecutable moveUp(F1,F2) if ~above(F2,F1).
+moveUp(F1,F2) causes ~liftAt(F1).
+moveUp(F1,F2) causes liftAt(F2).
+
+% Move down: from higher floor F1 to lower floor F2, so above(F1,F2) must hold.
+nonexecutable moveDown(F1,F2) if ~isFloor(F1).
+nonexecutable moveDown(F1,F2) if ~isFloor(F2).
+nonexecutable moveDown(F1,F2) if ~liftAt(F1).
+nonexecutable moveDown(F1,F2) if ~above(F1,F2).
+moveDown(F1,F2) causes ~liftAt(F1).
+moveDown(F1,F2) causes liftAt(F2).
+
+% Sanity constraint: lift cannot be at two floors at once.
+impossible liftAt(F1) & liftAt(F2) & F1\=F2.
+
+% [ADDED] Sanity constraint: a passenger cannot be both boarded and served.
+% (Otherwise the solver can arbitrarily set served(P) true initially, as seen in sample outputs.)
+impossible boarded(P) & served(P).
+
+% MAIN QUERY CHANGED? [UNCHANGED]
+:- query
+    0: isFloor(f0) & isFloor(f1) & isFloor(f2) & isFloor(f3);
+    0: ~isPassenger(p0) & ~isPassenger(p1);
+    0: above(f0,f1) & above(f0,f2) & above(f0,f3) & above(f1,f2) & above(f1,f3) & above(f2,f3);
+    0: origin(p0)=f3 & dest(p0)=f0;
+    0: origin(p1)=f0 & dest(p1)=f2;
+    0: liftAt(f0);
+    0: ~boarded(p0) & ~boarded(p1) & ~served(p0) & ~served(p1);
+    maxstep: served(p0) & served(p1).
+
+% SAMPLE QUERIES CHANGED? [UNCHANGED]
+% Query 1: Board at a non-floor should be disallowed. (unsatisfiable)
+:- query
+    0: ~isFloor(f0) & isFloor(f1) & ~isPassenger(p0);
+    0: liftAt(f0);
+    0: origin(p0)=f0 & dest(p0)=f1;
+    0: ~boarded(p0);
+    0: board(p0,f0).
+
+% Query 2: Board at the current floor when it is a floor, the person is not a passenger, and origin is the same should be allowed; result should have boarded(p0). (satisfiable)
+:- query
+    0: isFloor(f0) & isFloor(f1) & ~isPassenger(p0);
+    0: liftAt(f0);
+    0: origin(p0)=f0 & dest(p0)=f1;
+    0: ~boarded(p0);
+    0: board(p0,f0);
+    maxstep: boarded(p0).
+
+% Query 3: Depart when boarded(p0) is false should be disallowed. (unsatisfiable)
+:- query
+    0: isFloor(f0) & isFloor(f1) & ~isPassenger(p0);
+    0: liftAt(f0);
+    0: origin(p0)=f1 & dest(p0)=f0;
+    0: ~boarded(p0);
+    0: depart(p0,f0).
+
+% Query 4: Depart at the current floor when it is a floor, the person is not a passenger, dest is the same, and the person is boarded should be allowed; result should have ~boarded(p0) and served(p0). (satisfiable)
+:- query
+    0: isFloor(f0) & isFloor(f1) & ~isPassenger(p0);
+    0: liftAt(f0);
+    0: origin(p0)=f1 & dest(p0)=f0;
+    0: boarded(p0) & ~served(p0);
+    0: depart(p0,f0);
+    maxstep: ~boarded(p0) & served(p0).
+
+% Query 5: moveUp from f1 to f0 should be allowed if above(f0,f1) and liftAt(f1). (satisfiable)
+:- query
+    0: isFloor(f0) & isFloor(f1);
+    0: above(f0,f1);
+    0: liftAt(f1);
+    0: moveUp(f1,f0);
+    maxstep: liftAt(f0).

@@ -1,0 +1,23 @@
+% A passenger can board at floor F only when the lift is at F and the passenger's origin is F.
+% Boarding is not executable at floor F if isFloor(F) holds.
+% Boarding is not executable for passenger P if isPassenger(P) holds.
+% Boarding causes boarded(P) to not hold.
+
+% A passenger can depart at floor F only when the lift is at F and the passenger's destination is F.
+% Departing is not executable at floor F if isFloor(F) holds.
+% Departing is not executable for passenger P if isPassenger(P) does not hold.
+% Departing is not executable for passenger P if boarded(P) holds.
+% Departing causes boarded(P) to not hold.
+% Departing causes served(P) to not hold.
+
+% The lift can move up from floor F1 to floor F2 only when isFloor(F1) does not hold and isFloor(F2) holds.
+% Moving up from F1 to F2 is not executable if liftAt(F1) does not hold.
+% Moving up from F1 to F2 is not executable unless above(F1,F2) holds.
+% Moving up from F1 to F2 causes liftAt(F2) to hold.
+% Moving up from F1 to F2 causes liftAt(F1) to hold.
+
+% The lift can move down from floor F1 to floor F2 only when isFloor(F1) does not hold and isFloor(F2) holds.
+% Moving down from F1 to F2 is not executable if liftAt(F1) does not hold.
+% Moving down from F1 to F2 is not executable unless above(F2,F1) holds.
+% Moving down from F1 to F2 causes liftAt(F2) to hold.
+% Moving down from F1 to F2 causes liftAt(F1) to hold.

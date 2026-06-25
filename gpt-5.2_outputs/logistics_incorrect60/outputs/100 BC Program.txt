@@ -1,0 +1,134 @@
+:- sorts
+    vehicle >> truck;
+    vehicle >> airplane;
+    thing >> package;
+    thing >> vehicle;
+    package;
+    truck;
+    airplane;
+    location;
+    city.
+
+
+
+:- objects
+    p0, p1 :: package;
+    t0, t1 :: truck;
+    a0 :: airplane;
+    l0_0, l1_0 :: location;
+    c0, c1 :: city.
+
+
+
+:- variables
+    P, P1, P2 :: package;
+    T, T1, T2 :: truck;
+    A, A1, A2 :: airplane;
+    V, V1, V2 :: vehicle;
+    L, L1, L2 :: location;
+    C, C1, C2 :: city.
+
+
+
+:- constants
+    loadTruck(package,truck,location) :: exogenousAction;
+    loadAirplane(package,airplane,location) :: exogenousAction;
+    unloadTruck(package,truck,location) :: exogenousAction;
+    unloadAirplane(package,airplane,location) :: exogenousAction;
+    drive(truck,location,location,city) :: exogenousAction;
+    fly(airplane,location,location) :: exogenousAction;
+
+    loc(thing) :: inertialFluent(location);
+    in(package,vehicle) :: inertialFluent(boolean);
+    inCity(location) :: inertialFluent(city);
+    isAirport(location) :: inertialFluent(boolean).
+
+% Generated constraints
+
+% A package cannot be inside two different vehicles at the same time.
+impossible in(P,V1) & in(P,V2) & V1\=V2.
+
+% If a package is inside a vehicle, then the package is at the same location as that vehicle.
+loc(P)=L if in(P,V) & loc(V)=L.
+
+% If a package is inside a vehicle, then the package is not directly at any location different from the vehicle's location.
+impossible in(P,V) & loc(V)=L1 & loc(P)=L2 & L1\=L2.
+
+% Loading into a truck: effects.
+loadTruck(P,T,L) causes in(P,T).
+loadTruck(P,T,L) causes loc(P)=L.
+
+% Loading into a truck: executability.
+nonexecutable loadTruck(P,T,L) if loc(P)\=L.
+nonexecutable loadTruck(P,T,L) if loc(T)\=L.
+nonexecutable loadTruck(P,T,L) if in(P,V).
+
+% Loading into an airplane: effects.
+loadAirplane(P,A,L) causes in(P,A).
+loadAirplane(P,A,L) causes loc(P)=L.
+
+% Loading into an airplane: executability.
+nonexecutable loadAirplane(P,A,L) if loc(P)\=L.
+nonexecutable loadAirplane(P,A,L) if loc(A)\=L.
+nonexecutable loadAirplane(P,A,L) if in(P,V).
+
+% Unloading from a truck: effects.
+unloadTruck(P,T,L) causes ~in(P,T).
+unloadTruck(P,T,L) causes loc(P)=L.
+
+% Unloading from a truck: executability.
+nonexecutable unloadTruck(P,T,L) if loc(T)\=L.
+nonexecutable unloadTruck(P,T,L) if ~in(P,T).
+
+% Unloading from an airplane: effects.
+unloadAirplane(P,A,L) causes ~in(P,A).
+unloadAirplane(P,A,L) causes loc(P)=L.
+
+% Unloading from an airplane: executability.
+nonexecutable unloadAirplane(P,A,L) if loc(A)\=L.
+nonexecutable unloadAirplane(P,A,L) if ~in(P,A).
+
+% Driving a truck: effects.
+drive(T,L1,L2,C) causes loc(T)=L2.
+
+% Driving a truck: executability.
+nonexecutable drive(T,L1,L2,C) if loc(T)\=L1.
+nonexecutable drive(T,L1,L2,C) if inCity(L1)\=C.
+nonexecutable drive(T,L1,L2,C) if inCity(L2)\=C.
+nonexecutable drive(T,L1,L2,C) if L1=L2.
+
+% Flying an airplane: effects.
+fly(A,L1,L2) causes loc(A)=L2.
+
+% Flying an airplane: executability.
+nonexecutable fly(A,L1,L2) if loc(A)\=L1.
+nonexecutable fly(A,L1,L2) if ~isAirport(L1).
+nonexecutable fly(A,L1,L2) if ~isAirport(L2).
+nonexecutable fly(A,L1,L2) if L1=L2.
+
+% Packages move with their carrier.
+loc(P)=L2 if in(P,T) after drive(T,L1,L2,C).
+loc(P)=L2 if in(P,A) after fly(A,L1,L2).
+
+% No simultaneous load/unload of same package with same carrier at same location.
+nonexecutable loadTruck(P,T,L) & unloadTruck(P,T,L) if true.
+nonexecutable loadAirplane(P,A,L) & unloadAirplane(P,A,L) if true.
+
+% No driving while loading/unloading that same truck.
+nonexecutable drive(T,L1,L2,C) & loadTruck(P,T,L) if true.
+nonexecutable drive(T,L1,L2,C) & unloadTruck(P,T,L) if true.
+
+% No flying while loading/unloading that same airplane.
+nonexecutable fly(A,L1,L2) & loadAirplane(P,A,L) if true.
+nonexecutable fly(A,L1,L2) & unloadAirplane(P,A,L) if true.
+
+
+
+noconcurrency.
+
+:- query
+    0: inCity(l0_0)=c0 & isAirport(l0_0) & inCity(l1_0)=c1 & isAirport(l1_0);
+    0: loc(a0)=l1_0 & loc(t0)=l0_0 & loc(t1)=l1_0;
+    0: loc(p0)=l1_0 & loc(p1)=l1_0 & ~in(p0,t0) & ~in(p0,t1) & ~in(p0,a0) & ~in(p1,t0) & ~in(p1,t1) & ~in(p1,a0);
+    maxstep: loc(p0)=l0_0 & loc(p1)=l0_0.
+

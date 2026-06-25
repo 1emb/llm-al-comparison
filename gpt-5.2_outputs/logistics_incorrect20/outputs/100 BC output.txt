@@ -1,0 +1,23 @@
+Solving...
+Solution: 1 (Time: 0.019s)
+	
+
+	0:  loc(a0)=l00 loc(p0)=l10 loc(t0)=l00 loc(t1)=l10 inCity(l00, c0) inCity(l10, c1)
+
+	ACTIONS:  fly(a0, l00, l10)
+
+	1:  loc(a0)=l10 loc(p0)=l10 loc(t0)=l00 loc(t1)=l10
+
+	ACTIONS:  loadPlane(p0, a0, l10)
+
+	2:  loc(a0)=l10 loc(p0)=l10 loc(t0)=l00 loc(t1)=l10 in(p0, a0)
+
+	ACTIONS:  fly(a0, l10, l00)
+
+	3:  loc(a0)=l00 loc(p0)=l00 loc(t0)=l00 loc(t1)=l10 in(p0, a0)
+
+SATISFIABLE
+Models       : 1+
+Calls        : 4
+Time         : 0.019s (Solving: 0.00s 1st Model: 0.00s Unsat: 0.00s)
+CPU Time     : 0.019s

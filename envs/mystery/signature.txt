@@ -1,0 +1,16 @@
+There is one type of thing: "entity".
+
+a, b, c, and d are entities.
+
+Fluents
+Whether an (entity) is a province is an inertial fluent (boolean).
+Whether an (entity) is a planet is an inertial fluent (boolean).
+Whether harmony holds globally is an inertial fluent (boolean).
+Whether an (entity) is in pain is an inertial fluent (boolean).
+Whether an (entity) craves another (entity) is an inertial fluent (boolean).
+
+Actions
+Attacking an (entity) is an action.
+Succumbing for an (entity) is an action.
+Overcoming by an (entity) over another (entity) is an action.
+Feasting by an (entity) on another (entity) is an action.

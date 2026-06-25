@@ -1,0 +1,99 @@
+% Query 1: Open a closed, unlocked, and not-locked window w1 (satisfiable)
+:- query
+    0: isClosed(w1) & isUnlocked(w1) & ~isOpen(w1) & ~isLocked(w1);
+    0: openWin(w1);
+    maxstep: isOpen(w1) & ~isClosed(w1).
+
+Cplus2ASP Output:
+
+Solving...
+	
+
+	0:  isClosed(w1) isUnlocked(w1)
+
+	ACTIONS:  openWin(w1)
+
+	1:  isOpen(w1) isUnlocked(w1)
+
+SATISFIABLE
+Models       : 1+
+
+
+% Query 2: Try to open w1 while it is locked (unsatisfiable)
+:- query
+    0: isClosed(w1) & isLocked(w1) & ~isOpen(w1) & ~isUnlocked(w1);
+    0: openWin(w1).
+
+Cplus2ASP Output:
+
+Solving...
+UNSATISFIABLE
+Models       : 0
+No solution.
+
+
+
+% Query 3: Lock a closed and unlocked window w1 (satisfiable)
+:- query
+    0: isClosed(w1) & isUnlocked(w1) & ~isOpen(w1) & ~isLocked(w1);
+    0: lockWin(w1);
+    maxstep: isLocked(w1) & ~isUnlocked(w1).
+
+Cplus2ASP Output:
+
+Solving...
+	
+
+	0:  isClosed(w1) isUnlocked(w1)
+
+	ACTIONS:  lockWin(w1)
+
+	1:  isClosed(w1) isLocked(w1)
+
+SATISFIABLE
+Models       : 1+
+
+
+% Query 4: Try to lock w1 when it is not closed (it is open) (unsatisfiable)
+:- query
+    0: isOpen(w1) & isUnlocked(w1) & ~isClosed(w1) & ~isLocked(w1);
+    0: lockWin(w1).
+
+Cplus2ASP Output:
+
+Solving...
+UNSATISFIABLE
+Models       : 0
+No solution.
+
+
+
+% Query 5: Execute open and close on the same window w1 concurrently (unsatisfiable)
+:- query
+    0: isClosed(w1) & isUnlocked(w1) & ~isOpen(w1) & ~isLocked(w1);
+    0: openWin(w1) & closeWin(w1).
+
+Cplus2ASP Output:
+
+Solving...
+UNSATISFIABLE
+Models       : 0
+No solution.
+
+
+
+
+
+:- query
+    0: isClosed(w1) & isLocked(w1) & ~isOpen(w1) & ~isUnlocked(w1)
+     & isOpen(w2) & isUnlocked(w2) & ~isClosed(w2) & ~isLocked(w2)
+     & isClosed(w3) & isUnlocked(w3) & ~isOpen(w3) & ~isLocked(w3);
+    maxstep: isOpen(w1) & isLocked(w2) & isLocked(w3).
+
+Cplus2ASP Output:
+
+ERROR: temp.bc:119:18]: Encountered undeclared identifier "w3/0".
+ERROR: temp.bc:119:35]: Encountered undeclared identifier "w3/0".
+ERROR: temp.bc:119:49]: Encountered undeclared identifier "w3/0".
+ERROR: temp.bc:119:65]: Encountered undeclared identifier "w3/0".
+ERROR: temp.bc:120:52]: Encountered undeclared identifier "w3/0".

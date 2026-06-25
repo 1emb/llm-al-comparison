@@ -1,0 +1,51 @@
+% A block cannot be on itself.
+% A block cannot be on two different locations at the same time.
+% Two different blocks cannot be on the same block at the same time.
+% If a block is holding in the hand, then it is not on the table and it is not on any block.
+% If the hand is empty, then the hand is not holding any block.
+% If the hand is holding some block, then the hand is not empty.
+% The hand cannot be holding two different blocks at the same time.
+% A block is clear exactly when there is no block on top of it.
+% If a block is on another block, then the two blocks are different.
+% If a block is on another block, then the block it is on is not clear.
+
+% Picking up a block causes the hand to be holding that block.
+% Picking up a block causes the hand to not be empty.
+% Picking up a block causes the block to not be on the table.
+% Picking up a block causes the block to not be clear.
+% Picking up a block is not executable if the hand is not empty.
+% Picking up a block is not executable if the block is not clear.
+% Picking up a block is not executable if the block is not on the table.
+% Picking up a block is not executable if the hand is already holding some block.
+
+% Putting down a block causes the block to be on the table.
+% Putting down a block causes the block to be clear.
+% Putting down a block causes the hand to be empty.
+% Putting down a block causes the hand to not be holding that block.
+% Putting down a block is not executable if the hand is not holding that block.
+
+% Stacking a block onto another block causes the first block to be on the second block.
+% Stacking a block onto another block causes the first block to be clear.
+% Stacking a block onto another block causes the second block to not be clear.
+% Stacking a block onto another block causes the hand to be empty.
+% Stacking a block onto another block causes the hand to not be holding the first block.
+% Stacking a block onto another block is not executable if the hand is not holding the first block.
+% Stacking a block onto another block is not executable if the second block is not clear.
+% Stacking a block onto another block is not executable if the two blocks are the same.
+
+% Unstacking a block from on top of another block causes the hand to be holding the first block.
+% Unstacking a block from on top of another block causes the hand to not be empty.
+% Unstacking a block from on top of another block causes the second block to be clear.
+% Unstacking a block from on top of another block causes the first block to not be clear.
+% Unstacking a block from on top of another block causes the first block to not be on the second block.
+% Unstacking a block from on top of another block is not executable if the hand is not empty.
+% Unstacking a block from on top of another block is not executable if the first block is not clear.
+% Unstacking a block from on top of another block is not executable if the first block is not on the second block.
+% Unstacking a block from on top of another block is not executable if the two blocks are the same.
+
+% It is not executable to pick up a block and put down a block at the same time.
+% It is not executable to pick up a block and stack a block at the same time.
+% It is not executable to pick up a block and unstack a block at the same time.
+% It is not executable to put down a block and stack a block at the same time.
+% It is not executable to put down a block and unstack a block at the same time.
+% It is not executable to stack a block and unstack a block at the same time.

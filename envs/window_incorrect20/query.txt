@@ -1,0 +1,1 @@
+There are three windows w1, w2, and w3. w1 is closed and locked. w2 is open and unlocked. w3 is closed and unlocked. Find a plan to make w1 open, w2 locked, and w3 locked.

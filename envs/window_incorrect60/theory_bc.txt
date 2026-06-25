@@ -1,0 +1,54 @@
+:- sorts
+    window.
+
+:- objects
+    w1, w2 :: window.
+
+:- variables
+    W :: window.
+
+:- constants
+    open_window(window) :: exogenousAction;
+    close_window(window) :: exogenousAction;
+    lock_window(window) :: exogenousAction;
+    unlock_window(window) :: exogenousAction;
+    open(window) :: inertialFluent(boolean);
+    closed(window) :: inertialFluent(boolean);
+    locked(window) :: inertialFluent(boolean);
+    unlocked(window) :: inertialFluent(boolean).
+
+% open_window(W): W is closed and unlocked
+nonexecutable open_window(W) if ~closed(W).
+nonexecutable open_window(W) if ~unlocked(W).
+open_window(W) causes open(W).
+open_window(W) causes ~closed(W).
+
+% close_window(W): W is open
+nonexecutable close_window(W) if ~open(W).
+close_window(W) causes closed(W).
+close_window(W) causes ~open(W).
+
+% lock_window(W): W is closed and unlocked
+nonexecutable lock_window(W) if ~closed(W).
+nonexecutable lock_window(W) if ~unlocked(W).
+lock_window(W) causes locked(W).
+lock_window(W) causes ~unlocked(W).
+
+% unlock_window(W): W is locked
+nonexecutable unlock_window(W) if ~locked(W).
+unlock_window(W) causes unlocked(W).
+unlock_window(W) causes ~locked(W).
+
+% State constraints
+% A window cannot be both open and closed
+impossible open(W) & closed(W).
+% A window cannot be both locked and unlocked
+impossible locked(W) & unlocked(W).
+
+% CWA defaults
+default ~open(W).
+default ~closed(W).
+default ~locked(W).
+default ~unlocked(W).
+
+noconcurrency.

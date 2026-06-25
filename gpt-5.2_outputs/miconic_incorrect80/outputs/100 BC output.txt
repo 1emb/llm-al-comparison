@@ -1,0 +1,23 @@
+Solving...
+Solution: 1 (Time: 0.013s)
+	
+
+	0:  dest(p0)=f0 elevAt(f1) isFloor(f0) isFloor(f1) isPassenger(p0) origin(p0)=f1 above(f1, f0)
+
+	ACTIONS:  board(p0, f1)
+
+	1:  boarded(p0) dest(p0)=f0 elevAt(f1) isFloor(f0) isFloor(f1) isPassenger(p0) origin(p0)=f1 above(f1, f0)
+
+	ACTIONS:  moveUp(f1, f0)
+
+	2:  boarded(p0) dest(p0)=f0 elevAt(f0) isFloor(f0) isFloor(f1) isPassenger(p0) origin(p0)=f1 above(f1, f0)
+
+	ACTIONS:  depart(p0, f0)
+
+	3:  dest(p0)=f0 elevAt(f0) isFloor(f0) isFloor(f1) isPassenger(p0) origin(p0)=f1 served(p0) above(f1, f0)
+
+SATISFIABLE
+Models       : 1+
+Calls        : 4
+Time         : 0.013s (Solving: 0.00s 1st Model: 0.00s Unsat: 0.00s)
+CPU Time     : 0.013s

@@ -1,0 +1,37 @@
+
+% An ant cannot be at two different places at the same time.
+% If an ant is at a place, then it is not at any other different place.
+
+% Moving an ant from a starting place to a destination place causes the ant to be at the destination place.
+% Moving an ant from a starting place to a destination place causes the ant to no longer be at the starting place.
+
+% The move action is not executable if the ant is not at the stated starting place.
+% The move action is not executable if the stated starting place is not adjacent to the stated destination place.
+% The move action is not executable if the stated destination place is clear.
+
+% Picking up food by an ant at a place causes the ant to have food.
+% Picking up food by an ant at a place causes the place to no longer have food.
+
+% The pick-up-food action is not executable if the ant is not at the specified place.
+% The pick-up-food action is not executable if the specified place does not have food.
+% The pick-up-food action is not executable if the ant already has food.
+
+% Dropping food at a nest by an ant at a place causes the ant to no longer have food.
+% Dropping food at a nest by an ant at a place causes the place to have food.
+
+% The drop-food-at-nest action is not executable if the ant is not at the specified place.
+% The drop-food-at-nest action is not executable if the specified place is not a nest.
+% The drop-food-at-nest action is not executable if the ant does not have food.
+
+% Clearing an obstacle at a blocked place from a starting place causes the blocked place to no longer be clear.
+
+% The clear-obstacle action is not executable if the ant is not at the stated starting place.
+% The clear-obstacle action is not executable if the stated starting place is not adjacent to the blocked place.
+% The clear-obstacle action is not executable if the blocked place is not clear.
+
+% It is not executable for the same ant to perform move and pick-up-food at the same time.
+% It is not executable for the same ant to perform move and drop-food-at-nest at the same time.
+% It is not executable for the same ant to perform move and clear-obstacle at the same time.
+% It is not executable for the same ant to perform pick-up-food and drop-food-at-nest at the same time.
+% It is not executable for the same ant to perform pick-up-food and clear-obstacle at the same time.
+% It is not executable for the same ant to perform drop-food-at-nest and clear-obstacle at the same time.

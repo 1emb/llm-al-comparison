@@ -1,0 +1,55 @@
+Objects:
+:- objects
+    w1, w2, w3, w4, w5 :: window.
+
+Query:
+:- query
+    0: isWindow(w1) & isOpen(w1) & ~isClosed(w1) & isUnlocked(w1) & ~isLocked(w1);
+    0: isWindow(w2) & isClosed(w2) & ~isOpen(w2) & isUnlocked(w2) & ~isLocked(w2);
+    0: isWindow(w3) & isClosed(w3) & ~isOpen(w3) & isLocked(w3) & ~isUnlocked(w3);
+    0: isWindow(w4) & isOpen(w4) & ~isClosed(w4) & isUnlocked(w4) & ~isLocked(w4);
+    0: isWindow(w5) & isClosed(w5) & ~isOpen(w5) & isUnlocked(w5) & ~isLocked(w5);
+    maxstep: isLocked(w1) & isOpen(w3) & isLocked(w4) & isOpen(w5).
+
+Status: True
+
+Output:
+Solving...
+Solution: 1 (Time: 0.022s)
+	
+
+	0:  isClosed(w2) isClosed(w3) isClosed(w5) isLocked(w3) isOpen(w1) isOpen(w4) isUnlocked(w1) isUnlocked(w2) isUnlocked(w4) isUnlocked(w5) isWindow(w1) isWindow(w2) isWindow(w3) isWindow(w4) isWindow(w5)
+
+	ACTIONS:  unlockWin(w3)
+
+	1:  isClosed(w2) isClosed(w3) isClosed(w5) isOpen(w1) isOpen(w4) isUnlocked(w1) isUnlocked(w2) isUnlocked(w3) isUnlocked(w4) isUnlocked(w5) isWindow(w1) isWindow(w2) isWindow(w3) isWindow(w4) isWindow(w5)
+
+	ACTIONS:  openWin(w5)
+
+	2:  isClosed(w2) isClosed(w3) isOpen(w1) isOpen(w4) isOpen(w5) isUnlocked(w1) isUnlocked(w2) isUnlocked(w3) isUnlocked(w4) isUnlocked(w5) isWindow(w1) isWindow(w2) isWindow(w3) isWindow(w4) isWindow(w5)
+
+	ACTIONS:  closeWin(w1)
+
+	3:  isClosed(w1) isClosed(w2) isClosed(w3) isOpen(w4) isOpen(w5) isUnlocked(w1) isUnlocked(w2) isUnlocked(w3) isUnlocked(w4) isUnlocked(w5) isWindow(w1) isWindow(w2) isWindow(w3) isWindow(w4) isWindow(w5)
+
+	ACTIONS:  closeWin(w4)
+
+	4:  isClosed(w1) isClosed(w2) isClosed(w3) isClosed(w4) isOpen(w5) isUnlocked(w1) isUnlocked(w2) isUnlocked(w3) isUnlocked(w4) isUnlocked(w5) isWindow(w1) isWindow(w2) isWindow(w3) isWindow(w4) isWindow(w5)
+
+	ACTIONS:  openWin(w3)
+
+	5:  isClosed(w1) isClosed(w2) isClosed(w4) isOpen(w3) isOpen(w5) isUnlocked(w1) isUnlocked(w2) isUnlocked(w3) isUnlocked(w4) isUnlocked(w5) isWindow(w1) isWindow(w2) isWindow(w3) isWindow(w4) isWindow(w5)
+
+	ACTIONS:  lockWin(w4)
+
+	6:  isClosed(w1) isClosed(w2) isClosed(w4) isLocked(w4) isOpen(w3) isOpen(w5) isUnlocked(w1) isUnlocked(w2) isUnlocked(w3) isUnlocked(w5) isWindow(w1) isWindow(w2) isWindow(w3) isWindow(w4) isWindow(w5)
+
+	ACTIONS:  lockWin(w1)
+
+	7:  isClosed(w1) isClosed(w2) isClosed(w4) isLocked(w1) isLocked(w4) isOpen(w3) isOpen(w5) isUnlocked(w2) isUnlocked(w3) isUnlocked(w5) isWindow(w1) isWindow(w2) isWindow(w3) isWindow(w4) isWindow(w5)
+
+SATISFIABLE
+Models       : 1+
+Calls        : 8
+Time         : 0.021s (Solving: 0.00s 1st Model: 0.00s Unsat: 0.00s)
+CPU Time     : 0.021s

@@ -1,0 +1,50 @@
+Objects:
+:- objects
+    b1, b2, b3, b4, b5, b6, b7 :: block;
+    table :: loc;
+    hand :: loc.
+
+Query:
+:- query
+    0: handEmpty
+       & ~holding(b1) & ~holding(b2) & ~holding(b3) & ~holding(b4) & ~holding(b5) & ~holding(b6) & ~holding(b7)
+       & loc(b3)=table & clear(b3)
+       & loc(b1)=table
+       & loc(b7)=b1 & clear(b7)
+       & loc(b2)=table & clear(b2)
+       & loc(b6)=table & clear(b6)
+       & loc(b4)=table & clear(b4)
+       & loc(b5)=table & clear(b5)
+       & ~clear(b1);
+    maxstep: handEmpty
+       & ~holding(b1) & ~holding(b2) & ~holding(b3) & ~holding(b4) & ~holding(b5) & ~holding(b6) & ~holding(b7)
+       & loc(b1)=table & clear(b1)
+       & loc(b3)=table & clear(b3)
+       & loc(b4)=table
+       & loc(b7)=b4 & clear(b7)
+       & loc(b5)=table & clear(b5)
+       & loc(b6)=table & clear(b6)
+       & loc(b2)=table & clear(b2).
+
+Status: True
+
+Output:
+Solving...
+Solution: 1 (Time: 0.037s)
+	
+
+	0:  handEmpty clear(b2) clear(b3) clear(b4) clear(b5) clear(b6) clear(b7) loc(b1)=table loc(b2)=table loc(b3)=table loc(b4)=table loc(b5)=table loc(b6)=table loc(b7)=b1
+
+	ACTIONS:  pickup(b7)
+
+	1:  clear(b1) clear(b2) clear(b3) clear(b4) clear(b5) clear(b6) clear(b7) holding(b7) loc(b1)=table loc(b2)=table loc(b3)=table loc(b4)=table loc(b5)=table loc(b6)=table loc(b7)=hand
+
+	ACTIONS:  stack(b7, b4)
+
+	2:  handEmpty clear(b1) clear(b2) clear(b3) clear(b5) clear(b6) clear(b7) loc(b1)=table loc(b2)=table loc(b3)=table loc(b4)=table loc(b5)=table loc(b6)=table loc(b7)=b4
+
+SATISFIABLE
+Models       : 1+
+Calls        : 3
+Time         : 0.037s (Solving: 0.00s 1st Model: 0.00s Unsat: 0.00s)
+CPU Time     : 0.037s

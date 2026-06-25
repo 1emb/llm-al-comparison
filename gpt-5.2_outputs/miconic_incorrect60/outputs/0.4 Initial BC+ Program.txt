@@ -1,0 +1,113 @@
+:- sorts
+    floor;
+    passenger.
+
+
+:- objects
+    f0, f1 :: floor;
+    p0 :: passenger.
+
+
+:- variables
+    F, F1, F2, F3, F4 :: floor;
+    P, P1, P2, P3, P4 :: passenger;
+    Bool, Bool1, Bool2, Bool3, Bool4 :: boolean.
+
+
+:- constants
+    board(passenger,floor) :: exogenousAction;
+    depart(passenger,floor) :: exogenousAction;
+    moveUp(floor,floor) :: exogenousAction;
+    moveDown(floor,floor) :: exogenousAction;
+
+    isFloor(floor) :: inertialFluent(boolean);
+    isPassenger(passenger) :: inertialFluent(boolean);
+    liftAt(floor) :: inertialFluent(boolean);
+    above(floor,floor) :: inertialFluent(boolean);
+
+    origin(passenger) :: inertialFluent(floor);
+    dest(passenger) :: inertialFluent(floor);
+    boarded(passenger) :: inertialFluent(boolean);
+    served(passenger) :: inertialFluent(boolean).
+
+
+% constraints/rules
+% 1. Boarding at a floor is not executable unless that location is a floor.
+nonexecutable board(P,F) if ~isFloor(F).
+
+% 2. Boarding at a floor is not executable unless the lift is currently at that floor.
+nonexecutable board(P,F) if ~liftAt(F).
+
+% 3. Boarding is not executable if the person involved is a passenger.
+nonexecutable board(P,F) if isPassenger(P).
+
+% 4. Boarding at a floor is not executable if the person's origin is that floor.
+nonexecutable board(P,F) if origin(P)=F.
+
+% 5. Boarding a person at a floor causes the person to be not boarded.
+board(P,F) causes ~boarded(P).
+
+% 6. Departing at a floor is not executable unless that location is a floor.
+nonexecutable depart(P,F) if ~isFloor(F).
+
+% 7. Departing at a floor is not executable unless the lift is currently at that floor.
+nonexecutable depart(P,F) if ~liftAt(F).
+
+% 8. Departing is not executable if the person involved is a passenger.
+nonexecutable depart(P,F) if isPassenger(P).
+
+% 9. Departing at a floor is not executable if the person's destination is that floor.
+nonexecutable depart(P,F) if dest(P)=F.
+
+% 10. Departing at a floor is not executable if the person is boarded.
+nonexecutable depart(P,F) if boarded(P).
+
+% 11. Departing a person at a floor causes the person to be boarded.
+depart(P,F) causes boarded(P).
+
+% 12. Departing a person at a floor causes the person to be served.
+depart(P,F) causes served(P).
+
+% 13. Moving up from one floor to another is not executable if the first location is a floor.
+nonexecutable moveUp(F1,F2) if isFloor(F1).
+
+% 14. Moving up from one floor to another is not executable unless the second location is a floor.
+nonexecutable moveUp(F1,F2) if ~isFloor(F2).
+
+% 15. Moving up is not executable if the lift is at the first location.
+nonexecutable moveUp(F1,F2) if liftAt(F1).
+
+% 16. Moving up is not executable unless the first location is above the second location.
+nonexecutable moveUp(F1,F2) if ~above(F1,F2).
+
+% 17. Moving up from the first location to the second location causes any record that the lift is at the second location to be removed.
+moveUp(F1,F2) causes ~liftAt(F2).
+
+% 18. Moving up from the first location to the second location causes any record that the lift is at the first location to be removed.
+moveUp(F1,F2) causes ~liftAt(F1).
+
+% 19. Moving down from one location to another is not executable unless the first location is a floor.
+nonexecutable moveDown(F1,F2) if ~isFloor(F1).
+
+% 20. Moving down from one location to another is not executable if the second location is a floor.
+nonexecutable moveDown(F1,F2) if isFloor(F2).
+
+% 21. Moving down is not executable unless the lift is at the first location.
+nonexecutable moveDown(F1,F2) if ~liftAt(F1).
+
+% 22. Moving down is not executable if the second location is above the first location.
+nonexecutable moveDown(F1,F2) if above(F2,F1).
+
+% 23. Moving down from the first location to the second location causes any record that the lift is at the second location to be removed.
+moveDown(F1,F2) causes ~liftAt(F2).
+
+% 24. Moving down from the first location to the second location causes any record that the lift is at the first location to be removed.
+moveDown(F1,F2) causes ~liftAt(F1).
+
+
+% query
+:- query
+    0: above(f0,f1) & above(f0,f2) & above(f0,f3) & above(f1,f2) & above(f1,f3) & above(f2,f3);
+    0: origin(p0)=f3 & dest(p0)=f0;
+    0: liftAt(f0);
+    maxstep: served(p0) & served(p1).

@@ -1,0 +1,65 @@
+:- sorts
+    ant;
+    place.
+
+:- objects
+    ant1 :: ant;
+    p1, p2 :: place.
+
+:- variables
+    A :: ant;
+    P, P1, P2 :: place.
+
+:- constants
+    move(ant, place, place) :: exogenousAction;
+    pick_up_food(ant, place) :: exogenousAction;
+    drop_food(ant, place) :: exogenousAction;
+    clear_obstacle(ant, place, place) :: exogenousAction;
+    loc(ant, place) :: inertialFluent(boolean);
+    adjacent(place, place) :: inertialFluent(boolean);
+    clear(place) :: inertialFluent(boolean);
+    food(place) :: inertialFluent(boolean);
+    has_food(ant) :: inertialFluent(boolean);
+    nest(place) :: inertialFluent(boolean).
+
+% move(A, P1, P2): A at P1, P1 adjacent to P2, P2 is clear
+nonexecutable move(A, P1, P2) if ~loc(A, P1).
+nonexecutable move(A, P1, P2) if ~adjacent(P1, P2).
+nonexecutable move(A, P1, P2) if ~clear(P2).
+move(A, P1, P2) causes ~loc(A, P1).
+move(A, P1, P2) causes loc(A, P2).
+
+% pick_up_food(A, P): A at P, food at P, A not carrying food
+nonexecutable pick_up_food(A, P) if ~loc(A, P).
+nonexecutable pick_up_food(A, P) if ~food(P).
+nonexecutable pick_up_food(A, P) if has_food(A).
+pick_up_food(A, P) causes has_food(A).
+pick_up_food(A, P) causes ~food(P).
+
+% drop_food(A, P): A at P, P is a nest, A carrying food
+nonexecutable drop_food(A, P) if ~loc(A, P).
+nonexecutable drop_food(A, P) if ~nest(P).
+nonexecutable drop_food(A, P) if ~has_food(A).
+drop_food(A, P) causes ~has_food(A).
+drop_food(A, P) causes food(P).
+
+% clear_obstacle(A, P1, P2): A at P1, P1 adjacent to P2, P2 is blocked
+nonexecutable clear_obstacle(A, P1, P2) if ~loc(A, P1).
+nonexecutable clear_obstacle(A, P1, P2) if ~adjacent(P1, P2).
+nonexecutable clear_obstacle(A, P1, P2) if clear(P2).
+clear_obstacle(A, P1, P2) causes clear(P2).
+
+% State constraints
+% An ant can only be at one place at a time
+impossible loc(A, P1) & loc(A, P2) & P1 \= P2.
+% An ant cannot carry food and have no food at the same time (no constraint needed beyond CWA)
+
+% CWA defaults
+default ~loc(A, P).
+default ~adjacent(P1, P2).
+default ~clear(P).
+default ~food(P).
+default ~has_food(A).
+default ~nest(P).
+
+noconcurrency.

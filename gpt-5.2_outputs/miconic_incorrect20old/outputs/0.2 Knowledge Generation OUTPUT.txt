@@ -1,0 +1,28 @@
+% The elevator cannot be at two different floors at the same time.
+% Boarding at floor F by passenger P is not executable if validFloor(F) does not hold.
+% Boarding at floor F by passenger P is not executable if at(F) does not hold.
+% Boarding at floor F by passenger P is not executable if origin(P) is not F.
+% Boarding at floor F by passenger P is not executable if passengerFlag(P) holds.
+% When boarding at floor F by passenger P happens, boarded(P) becomes false.
+
+% Departing at floor F by passenger P is not executable if validFloor(F) does not hold.
+% Departing at floor F by passenger P is not executable if passengerFlag(P) does not hold.
+% Departing at floor F by passenger P is not executable if at(F) holds.
+% Departing at floor F by passenger P is not executable if dest(P) is not F.
+% Departing at floor F by passenger P is not executable if boarded(P) does not hold.
+% When departing at floor F by passenger P happens, boarded(P) becomes true.
+% When departing at floor F by passenger P happens, served(P) becomes true.
+
+% Moving up from floor F1 to floor F2 is not executable if validFloor(F1) does not hold.
+% Moving up from floor F1 to floor F2 is not executable if validFloor(F2) does not hold.
+% Moving up from floor F1 to floor F2 is not executable if at(F1) holds.
+% Moving up from floor F1 to floor F2 is not executable if above(F1,F2) does not hold.
+% When moving up from floor F1 to floor F2 happens, at(F2) becomes false.
+% When moving up from floor F1 to floor F2 happens, at(F1) becomes false.
+
+% Moving down from floor F1 to floor F2 is not executable if validFloor(F1) does not hold.
+% Moving down from floor F1 to floor F2 is not executable if validFloor(F2) does not hold.
+% Moving down from floor F1 to floor F2 is not executable if at(F1) holds.
+% Moving down from floor F1 to floor F2 is not executable if above(F2,F1) does not hold.
+% When moving down from floor F1 to floor F2 happens, at(F2) becomes true.
+% When moving down from floor F1 to floor F2 happens, at(F1) becomes true.

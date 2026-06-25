@@ -1,0 +1,50 @@
+```
+Actions:
+- move(ant, place, place) - move an ant from one place to another place.
+- pickupFood(ant, place) - an ant picks up food at a place.
+- dropFood(ant, place) - an ant drops food at a place (must be a nest).
+- clearObstacle(ant, place, place) - an ant clears an obstacle at an adjacent place (target) from its current place (source).
+
+Constants:
+- loc(ant) :: inertialFluent(place)
+  Reading: the current location of an ant.
+- adjacent(place, place) :: inertialFluent(boolean)
+  Reading: whether two places are adjacent (used to restrict movement/clearing to adjacent places).
+- clear(place) :: inertialFluent(boolean)
+  Reading: whether a place is clear (the ant can only enter clear places).
+- isNest(place) :: inertialFluent(boolean)
+  Reading: whether a place is a nest (dropping food is only allowed at a nest).
+- hasFood(place) :: inertialFluent(boolean)
+  Reading: whether there is food available at a place.
+- carryingFood(ant) :: inertialFluent(boolean)
+  Reading: whether an ant is currently carrying food.
+
+BC+ Signature:
+:- sorts
+    ant;
+    place.
+
+:- objects
+    ant1 :: ant;
+    p1, p2 :: place.
+
+:- variables
+    A, A1, A2, A3, A4 :: ant;
+    P, P1, P2, P3, P4 :: place;
+    Bool, Bool1, Bool2, Bool3, Bool4 :: boolean.
+
+:- constants
+    % Actions
+    move(ant, place, place) :: exogenousAction;
+    pickupFood(ant, place) :: exogenousAction;
+    dropFood(ant, place) :: exogenousAction;
+    clearObstacle(ant, place, place) :: exogenousAction;
+
+    % Fluents
+    loc(ant) :: inertialFluent(place);
+    adjacent(place, place) :: inertialFluent(boolean);
+    clear(place) :: inertialFluent(boolean);
+    isNest(place) :: inertialFluent(boolean);
+    hasFood(place) :: inertialFluent(boolean);
+    carryingFood(ant) :: inertialFluent(boolean).
+```

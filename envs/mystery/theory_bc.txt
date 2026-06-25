@@ -1,0 +1,63 @@
+:- sorts
+    entity.
+
+:- objects
+    a, b, c, d :: entity.
+
+:- variables
+    X, Y :: entity.
+
+:- constants
+    attack(entity) :: exogenousAction;
+    succumb(entity) :: exogenousAction;
+    overcome(entity, entity) :: exogenousAction;
+    feast(entity, entity) :: exogenousAction;
+    province(entity) :: inertialFluent(boolean);
+    planet(entity) :: inertialFluent(boolean);
+    harmony :: inertialFluent(boolean);
+    pain(entity) :: inertialFluent(boolean);
+    craves(entity, entity) :: inertialFluent(boolean).
+
+% attack(X): X is a province, a planet, and harmony holds
+nonexecutable attack(X) if ~province(X).
+nonexecutable attack(X) if ~planet(X).
+nonexecutable attack(X) if ~harmony.
+attack(X) causes pain(X).
+attack(X) causes ~province(X).
+attack(X) causes ~planet(X).
+attack(X) causes ~harmony.
+
+% succumb(X): X is in pain
+nonexecutable succumb(X) if ~pain(X).
+succumb(X) causes province(X).
+succumb(X) causes planet(X).
+succumb(X) causes harmony.
+succumb(X) causes ~pain(X).
+
+% overcome(X, Y): Y is a province, X is in pain
+nonexecutable overcome(X, Y) if ~province(Y).
+nonexecutable overcome(X, Y) if ~pain(X).
+overcome(X, Y) causes harmony.
+overcome(X, Y) causes province(X).
+overcome(X, Y) causes craves(X, Y).
+overcome(X, Y) causes ~province(Y).
+overcome(X, Y) causes ~pain(X).
+
+% feast(X, Y): X craves Y, X is a province, harmony holds
+nonexecutable feast(X, Y) if ~craves(X, Y).
+nonexecutable feast(X, Y) if ~province(X).
+nonexecutable feast(X, Y) if ~harmony.
+feast(X, Y) causes pain(X).
+feast(X, Y) causes province(Y).
+feast(X, Y) causes ~craves(X, Y).
+feast(X, Y) causes ~province(X).
+feast(X, Y) causes ~harmony.
+
+% CWA defaults
+default ~province(X).
+default ~planet(X).
+default ~harmony.
+default ~pain(X).
+default ~craves(X, Y).
+
+noconcurrency.

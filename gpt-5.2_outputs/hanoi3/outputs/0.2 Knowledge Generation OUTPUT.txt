@@ -1,0 +1,9 @@
+% Each disk is on exactly one location (either a peg or another disk) at any time.
+% It is impossible for two different disks to be on the same disk at the same time.
+% Moving a disk to a location causes that disk to be on that destination location.
+% A move of a disk to a location is not executable if the disk is already on that location.
+% A disk cannot be moved if there is another disk on top of it (i.e., if some other disk is on it).
+% A disk cannot be moved onto another disk if it is heavier than that destination disk.
+% If a disk is moved onto another disk, then after the move the destination disk has that disk on top of it.
+% It is not executable to perform two different move actions involving the same disk at the same time.
+% It is not executable to move two different disks onto the same destination disk at the same time.

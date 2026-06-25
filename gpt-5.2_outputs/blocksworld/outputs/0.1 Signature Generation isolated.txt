@@ -1,0 +1,23 @@
+BC+ Signature:
+:- sorts
+    loc >> block.
+
+:- objects
+    b1, b2, b3, b4, b5, b6, b7 :: block;
+    table :: loc.
+
+:- variables
+    B, B1, B2, B3, B4 :: block;
+    L, L1, L2, L3, L4 :: loc;
+    Bool, Bool1, Bool2, Bool3, Bool4 :: boolean.
+
+:- constants
+    pickupBlock(block) :: exogenousAction;
+    putdownBlock(block) :: exogenousAction;
+    stackBlock(block, block) :: exogenousAction;
+    unstackBlock(block, block) :: exogenousAction;
+
+    on(block) :: inertialFluent(loc);
+    clear(block) :: inertialFluent(boolean);
+    holding(block) :: inertialFluent(boolean);
+    handEmpty :: inertialFluent(boolean).

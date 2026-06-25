@@ -1,0 +1,120 @@
+% PROGRAM CHANGED? [UNCHANGED]
+% BC+ signature
+:- sorts
+    window.
+
+:- objects
+    w1, w2 :: window.
+
+:- variables
+    W, W1, W2, W3, W4 :: window;
+    Bool, Bool1, Bool2, Bool3, Bool4 :: boolean.
+
+:- constants
+    openWin(window) :: exogenousAction;
+    closeWin(window) :: exogenousAction;
+    lockWin(window) :: exogenousAction;
+    unlockWin(window) :: exogenousAction;
+
+    isOpen(window) :: inertialFluent(boolean);
+    isClosed(window) :: inertialFluent(boolean);
+    isLocked(window) :: inertialFluent(boolean);
+    isUnlocked(window) :: inertialFluent(boolean).
+
+% Generated constraints
+% 1. A window cannot be both open and closed at the same time.
+impossible isOpen(W) & isClosed(W).
+
+% 2. A window cannot be both locked and unlocked at the same time.
+impossible isLocked(W) & isUnlocked(W).
+
+% 3. Opening a window makes that window open.
+openWin(W) causes isOpen(W).
+
+% 4. Opening a window makes that window not closed.
+openWin(W) causes ~isClosed(W).
+
+% 5. Opening a window is not executable if the window is already open.
+nonexecutable openWin(W) if isOpen(W).
+
+% 6. Opening a window is not executable if the window is not closed.
+nonexecutable openWin(W) if ~isClosed(W).
+
+% 7. Opening a window is not executable if the window is not unlocked.
+nonexecutable openWin(W) if ~isUnlocked(W).
+
+% 8. Closing a window makes that window closed.
+closeWin(W) causes isClosed(W).
+
+% 9. Closing a window makes that window not open.
+closeWin(W) causes ~isOpen(W).
+
+% 10. Closing a window is not executable if the window is already closed.
+nonexecutable closeWin(W) if isClosed(W).
+
+% 11. Closing a window is not executable if the window is not open.
+nonexecutable closeWin(W) if ~isOpen(W).
+
+% 12. Locking a window makes that window locked.
+lockWin(W) causes isLocked(W).
+
+% 13. Locking a window makes that window not unlocked.
+lockWin(W) causes ~isUnlocked(W).
+
+% 14. Locking a window is not executable if the window is already locked.
+nonexecutable lockWin(W) if isLocked(W).
+
+% 15. Locking a window is not executable if the window is not closed.
+nonexecutable lockWin(W) if ~isClosed(W).
+
+% 16. Locking a window is not executable if the window is not unlocked.
+nonexecutable lockWin(W) if ~isUnlocked(W).
+
+% 17. Unlocking a window makes that window unlocked.
+unlockWin(W) causes isUnlocked(W).
+
+% 18. Unlocking a window makes that window not locked.
+unlockWin(W) causes ~isLocked(W).
+
+% 19. Unlocking a window is not executable if the window is already unlocked.
+nonexecutable unlockWin(W) if isUnlocked(W).
+
+% 20. Unlocking a window is not executable if the window is not locked.
+nonexecutable unlockWin(W) if ~isLocked(W).
+
+% MAIN QUERY CHANGED? [UNCHANGED]
+:- query
+    0: isClosed(w1) & isUnlocked(w1) & isOpen(w2) & isUnlocked(w2);
+    maxstep: isOpen(w1) & isLocked(w2).
+
+% SAMPLE QUERIES CHANGED? [UNCHANGED]
+% Query 1: Open w1 when it is closed and unlocked. This should be allowed and result in w1 being open. (satisfiable)
+:- query
+    0: isClosed(w1) & isUnlocked(w1) & ~isOpen(w1) & ~isLocked(w1);
+    0: openWin(w1);
+    maxstep: isOpen(w1) & ~isClosed(w1).
+
+% Query 2: Try to open w1 while it is locked (and closed). Opening requires unlocked, so this should be rejected. (unsatisfiable)
+:- query
+    0: isClosed(w1) & isLocked(w1) & ~isUnlocked(w1) & ~isOpen(w1);
+    0: openWin(w1).
+
+% Query 3: Lock w1 when it is closed and unlocked. This should be allowed and result in w1 being locked. (satisfiable)
+:- query
+    0: isClosed(w1) & isUnlocked(w1) & ~isLocked(w1) & ~isOpen(w1);
+    0: lockWin(w1);
+    maxstep: isLocked(w1) & ~isUnlocked(w1).
+
+% Query 4: Try to lock w2 while it is open and unlocked. Locking requires closed, so this should be rejected. (unsatisfiable)
+:- query
+    0: isOpen(w2) & isUnlocked(w2) & ~isClosed(w2) & ~isLocked(w2);
+    0: lockWin(w2).
+
+% Query 5: Achieve the main goal with an explicit 2-step plan: open w1, then lock w2 (closing w2 first if needed). (satisfiable)
+:- query
+    0: isClosed(w1) & isUnlocked(w1) & ~isOpen(w1) & ~isLocked(w1) &
+       isOpen(w2) & isUnlocked(w2) & ~isClosed(w2) & ~isLocked(w2);
+    0: openWin(w1);
+    1: closeWin(w2);
+    2: lockWin(w2);
+    maxstep: isOpen(w1) & isLocked(w2).

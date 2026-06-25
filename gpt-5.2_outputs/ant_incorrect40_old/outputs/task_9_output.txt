@@ -1,0 +1,27 @@
+Objects:
+:- objects
+    ant :: ant;
+    p1, p2, p3, p4, p5, p6, p7, p8, p9, p10 :: place.
+
+Query:
+:- query
+    0: loc(ant)=p1
+       & adjacent(p1,p2) & adjacent(p2,p1)
+       & adjacent(p2,p3) & adjacent(p3,p2)
+       & adjacent(p3,p4) & adjacent(p4,p3)
+       & adjacent(p4,p5) & adjacent(p5,p4)
+       & adjacent(p5,p6) & adjacent(p6,p5)
+       & adjacent(p6,p7) & adjacent(p7,p6)
+       & adjacent(p7,p8) & adjacent(p8,p7)
+       & adjacent(p8,p9) & adjacent(p9,p8)
+       & adjacent(p9,p10) & adjacent(p10,p9)
+       & clear(p1) & clear(p2) & clear(p4) & clear(p5) & clear(p7) & clear(p8) & clear(p10) & clear(p3)=false & clear(p6)=false & clear(p9)=false
+       & isNest(p1) & ~isNest(p2) & ~isNest(p3) & ~isNest(p4) & ~isNest(p5) & ~isNest(p6) & ~isNest(p7) & ~isNest(p8) & ~isNest(p9) & ~isNest(p10)
+       & hasFood(p1)=false & hasFood(p2)=false & hasFood(p3)=false & hasFood(p4)=false & hasFood(p5)=false & hasFood(p6)=false & hasFood(p7)=false & hasFood(p8)=false & hasFood(p9)=false & hasFood(p10)=true
+       & carryingFood(ant)=false;
+    maxstep: hasFood(p1)=true.
+
+Status: FAIL
+
+Output:
+/home/grad24/mnguyen/.cplus2asp.config: cannot open file

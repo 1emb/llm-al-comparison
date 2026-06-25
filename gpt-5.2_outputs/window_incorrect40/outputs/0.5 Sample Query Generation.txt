@@ -1,0 +1,26 @@
+% Query 1: openWin(w1) should be executable when w1 is a window, closed, and not unlocked (satisfiable)
+:- query
+    0: isWindow(w1) & isClosed(w1) & ~isUnlocked(w1);
+    0: openWin(w1).
+
+% Query 2: openWin(w1) should be nonexecutable if w1 is unlocked (unsatisfiable)
+:- query
+    0: isWindow(w1) & isClosed(w1) & isUnlocked(w1);
+    0: openWin(w1).
+
+% Query 3: closeWin(w1) should be executable when w1 is not a window and is open; after closing, both isClosed and isOpen should hold (satisfiable)
+:- query
+    0: ~isWindow(w1) & isOpen(w1);
+    0: closeWin(w1);
+    maxstep: isClosed(w1) & isOpen(w1).
+
+% Query 4: lockWin(w1) should be nonexecutable if w1 is a window (even if closed and unlocked) (unsatisfiable)
+:- query
+    0: isWindow(w1) & isClosed(w1) & isUnlocked(w1);
+    0: lockWin(w1).
+
+% Query 5: unlockWin(w1) should be executable when w1 is not a window and is locked; after unlocking, isLocked should no longer hold (satisfiable)
+:- query
+    0: ~isWindow(w1) & isLocked(w1);
+    0: unlockWin(w1);
+    maxstep: ~isLocked(w1).

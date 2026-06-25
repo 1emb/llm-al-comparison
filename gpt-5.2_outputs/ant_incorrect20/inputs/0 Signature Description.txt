@@ -1,0 +1,10 @@
+There are two types of objects: "ant" and "place".
+
+ant1 is an ant.
+p1 and p2 are places.
+
+Actions
+Moving an ant from a place to a place is an action.
+An ant picking up food at a place is an action.
+An ant dropping food at a place is an action.
+An ant clearing an obstacle at a place from a place is an action.

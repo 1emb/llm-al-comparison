@@ -1,0 +1,47 @@
+Objects:
+:- objects
+    b1, b2, b3, b4, b5, b6, b7 :: block;
+    table :: loc.
+
+Query:
+:- query
+    0: handEmpty &
+       ~held(b1) & ~held(b2) & ~held(b3) & ~held(b4) & ~held(b5) & ~held(b6) & ~held(b7) &
+       onTable(b5) & ~clear(b5) &
+       ~onTable(b4) & on(b4,b5) & clear(b4) &
+       onTable(b1) & clear(b1) &
+       onTable(b7) & clear(b7) &
+       onTable(b3) & clear(b3) &
+       onTable(b6) & ~clear(b6) &
+       ~onTable(b2) & on(b2,b6) & clear(b2) &
+       ~on(b1,b2) & ~on(b1,b3) & ~on(b1,b4) & ~on(b1,b5) & ~on(b1,b6) & ~on(b1,b7) &
+       ~on(b2,b1) & ~on(b2,b3) & ~on(b2,b4) & ~on(b2,b5) & ~on(b2,b7) &
+       ~on(b3,b1) & ~on(b3,b2) & ~on(b3,b4) & ~on(b3,b5) & ~on(b3,b6) & ~on(b3,b7) &
+       ~on(b4,b1) & ~on(b4,b2) & ~on(b4,b3) & ~on(b4,b4) & ~on(b4,b6) & ~on(b4,b7) &
+       ~on(b5,b1) & ~on(b5,b2) & ~on(b5,b3) & ~on(b5,b4) & ~on(b5,b6) & ~on(b5,b7) &
+       ~on(b6,b1) & ~on(b6,b2) & ~on(b6,b3) & ~on(b6,b4) & ~on(b6,b5) & ~on(b6,b7) &
+       ~on(b7,b1) & ~on(b7,b2) & ~on(b7,b3) & ~on(b7,b4) & ~on(b7,b5) & ~on(b7,b6);
+    maxstep: onTable(b3) &
+             on(b1,b3) &
+             on(b5,b1) &
+             on(b2,b5) & clear(b2) &
+             onTable(b6) &
+             on(b7,b6) &
+             on(b4,b7) & clear(b4) &
+             ~held(b1) & ~held(b2) & ~held(b3) & ~held(b4) & ~held(b5) & ~held(b6) & ~held(b7) &
+             handEmpty &
+             ~onTable(b1) & ~onTable(b2) & ~onTable(b4) & ~onTable(b5) & ~onTable(b7) &
+             clear(b4) & clear(b2) &
+             ~clear(b3) & ~clear(b1) & ~clear(b5) & ~clear(b6) & ~clear(b7) &
+             ~on(b1,b2) & ~on(b1,b4) & ~on(b1,b5) & ~on(b1,b6) & ~on(b1,b7) &
+             ~on(b2,b1) & ~on(b2,b3) & ~on(b2,b4) & ~on(b2,b6) & ~on(b2,b7) &
+             ~on(b3,b1) & ~on(b3,b2) & ~on(b3,b4) & ~on(b3,b5) & ~on(b3,b6) & ~on(b3,b7) &
+             ~on(b4,b1) & ~on(b4,b2) & ~on(b4,b3) & ~on(b4,b5) & ~on(b4,b6) &
+             ~on(b5,b2) & ~on(b5,b3) & ~on(b5,b4) & ~on(b5,b6) & ~on(b5,b7) &
+             ~on(b6,b1) & ~on(b6,b2) & ~on(b6,b3) & ~on(b6,b4) & ~on(b6,b5) & ~on(b6,b7) &
+             ~on(b7,b1) & ~on(b7,b2) & ~on(b7,b3) & ~on(b7,b4) & ~on(b7,b5).
+
+Status: TIMEOUT
+
+Output:
+TIMEOUT

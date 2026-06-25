@@ -1,0 +1,115 @@
+% Query 1: Unstack a clear block b1 from b5 while hand is empty (satisfiable)
+:- query
+    0: handEmpty
+       & loc(b1)=b5 & ~onTable(b1) & clear(b1)
+       & onTable(b5) & loc(b5)=table & ~clear(b5)
+       & onTable(b2) & loc(b2)=table & clear(b2);
+    0: unstack(b1,b5).
+
+Cplus2ASP Output:
+
+Solving...
+UNSATISFIABLE
+Models       : 0
+No solution.
+
+
+
+% Query 2: Pick up a block that is on the table (should be allowed if clear and hand empty) (satisfiable)
+:- query
+    0: handEmpty
+       & onTable(b3) & loc(b3)=table & clear(b3)
+       & onTable(b5) & loc(b5)=table & clear(b5);
+    0: pickup(b3).
+
+Cplus2ASP Output:
+
+Solving...
+	
+
+	0:  handEmpty clear(b1) clear(b2) clear(b3) clear(b4) clear(b5) clear(b6) clear(b7) loc(b1)=table loc(b2)=table loc(b3)=table loc(b4)=table loc(b5)=table loc(b6)=table loc(b7)=table onTable(b1) onTable(b2) onTable(b3) onTable(b4) onTable(b5) onTable(b6) onTable(b7)
+
+	ACTIONS:  pickup(b3)
+
+	1:  clear(b1) clear(b2) clear(b3) clear(b4) clear(b5) clear(b6) clear(b7) holding(b3) loc(b1)=table loc(b2)=table loc(b3)=table loc(b4)=table loc(b5)=table loc(b6)=table loc(b7)=table onTable(b1) onTable(b2) onTable(b4) onTable(b5) onTable(b6) onTable(b7)
+
+SATISFIABLE
+Models       : 1+
+
+
+% Query 3: Put down a block that is not being held (unsatisfiable)
+:- query
+    0: handEmpty
+       & ~holding(b4)
+       & onTable(b2) & loc(b2)=table & clear(b2);
+    0: putdown(b4).
+
+Cplus2ASP Output:
+
+Solving...
+UNSATISFIABLE
+Models       : 0
+No solution.
+
+
+
+% Query 4: Stack onto a destination block that is not clear (unsatisfiable)
+:- query
+    0: ~handEmpty & holding(b1)
+       & ~onTable(b1) & clear(b1)
+       & loc(b4)=b2 & ~onTable(b4) & clear(b4)
+       & loc(b2)=table & onTable(b2) & ~clear(b2);
+    0: stack(b1,b2).
+
+Cplus2ASP Output:
+
+Solving...
+UNSATISFIABLE
+Models       : 0
+No solution.
+
+
+
+% the program bug in pickup/unstack interactions; after fixing pickup, this query should be SAT.
+% Still, we keep it minimal and consistent:
+:- query
+    0: handEmpty
+       & loc(b4)=b2 & ~onTable(b4) & clear(b4)
+       & loc(b2)=table & onTable(b2) & ~clear(b2)
+       & onTable(b5) & loc(b5)=table & clear(b5);
+    0: unstack(b4,b2).
+
+Cplus2ASP Output:
+
+Solving...
+UNSATISFIABLE
+Models       : 0
+No solution.
+
+
+
+
+
+:- query
+    0: handEmpty
+       & onTable(b5) & loc(b5)=table & ~clear(b5)
+       & loc(b1)=b5 & clear(b1) & ~onTable(b1)
+       & onTable(b3) & loc(b3)=table & clear(b3)
+       & onTable(b2) & loc(b2)=table & ~clear(b2)
+       & loc(b4)=b2 & clear(b4) & ~onTable(b4);
+    maxstep: onTable(b3) & loc(b3)=table & clear(b3)
+             & onTable(b1) & loc(b1)=table & clear(b1)
+             & loc(b4)=b1 & clear(b4)
+             & onTable(b2) & loc(b2)=table & clear(b2)
+             & onTable(b5) & loc(b5)=table & clear(b5).
+
+
+
+Cplus2ASP Output:
+
+Solving...
+UNSATISFIABLE
+Models       : 0
+No solution.
+
+

@@ -1,0 +1,44 @@
+```json
+[
+  {
+    "objects": ":- objects\n    ant :: ant;\n    p1, p2 :: place.",
+    "query": ":- query\n    0: loc(ant)=p1\n       & adjacent(p1,p2) & adjacent(p2,p1)\n       & clear(p1) & clear(p2)\n       & isNest(p1) & ~isNest(p2)\n       & hasFood(p1)=false & hasFood(p2)=true\n       & carryingFood(ant)=false;\n    maxstep: hasFood(p1)=true."
+  },
+  {
+    "objects": ":- objects\n    ant :: ant;\n    p1, p2, p3 :: place.",
+    "query": ":- query\n    0: loc(ant)=p1\n       & adjacent(p1,p2) & adjacent(p2,p1)\n       & adjacent(p2,p3) & adjacent(p3,p2)\n       & clear(p1) & clear(p2) & clear(p3)\n       & isNest(p1) & ~isNest(p2) & ~isNest(p3)\n       & hasFood(p1)=false & hasFood(p2)=false & hasFood(p3)=true\n       & carryingFood(ant)=false;\n    maxstep: hasFood(p1)=true."
+  },
+  {
+    "objects": ":- objects\n    ant :: ant;\n    p1, p2, p3, p4 :: place.",
+    "query": ":- query\n    0: loc(ant)=p1\n       & adjacent(p1,p2) & adjacent(p2,p1)\n       & adjacent(p2,p3) & adjacent(p3,p2)\n       & adjacent(p3,p4) & adjacent(p4,p3)\n       & clear(p1) & clear(p2) & clear(p4) & clear(p3)=false\n       & isNest(p1) & ~isNest(p2) & ~isNest(p3) & ~isNest(p4)\n       & hasFood(p1)=false & hasFood(p2)=false & hasFood(p3)=false & hasFood(p4)=true\n       & carryingFood(ant)=false;\n    maxstep: hasFood(p1)=true."
+  },
+  {
+    "objects": ":- objects\n    ant :: ant;\n    p1, p2, p3, p4, p5 :: place.",
+    "query": ":- query\n    0: loc(ant)=p1\n       & adjacent(p1,p2) & adjacent(p2,p1)\n       & adjacent(p2,p3) & adjacent(p3,p2)\n       & adjacent(p3,p4) & adjacent(p4,p3)\n       & adjacent(p4,p5) & adjacent(p5,p4)\n       & clear(p1) & clear(p2) & clear(p3) & clear(p5) & clear(p4)=false\n       & isNest(p1) & ~isNest(p2) & ~isNest(p3) & ~isNest(p4) & ~isNest(p5)\n       & hasFood(p1)=false & hasFood(p2)=false & hasFood(p3)=false & hasFood(p4)=false & hasFood(p5)=true\n       & carryingFood(ant)=false;\n    maxstep: hasFood(p1)=true."
+  },
+  {
+    "objects": ":- objects\n    ant :: ant;\n    p1, p2, p3, p4, p5, p6 :: place.",
+    "query": ":- query\n    0: loc(ant)=p1\n       & adjacent(p1,p2) & adjacent(p2,p1)\n       & adjacent(p2,p3) & adjacent(p3,p2)\n       & adjacent(p3,p4) & adjacent(p4,p3)\n       & adjacent(p4,p5) & adjacent(p5,p4)\n       & adjacent(p5,p6) & adjacent(p6,p5)\n       & clear(p1) & clear(p2) & clear(p4) & clear(p5) & clear(p6) & clear(p3)=false\n       & isNest(p1) & ~isNest(p2) & ~isNest(p3) & ~isNest(p4) & ~isNest(p5) & ~isNest(p6)\n       & hasFood(p1)=false & hasFood(p2)=false & hasFood(p3)=false & hasFood(p4)=false & hasFood(p5)=false & hasFood(p6)=true\n       & carryingFood(ant)=false;\n    maxstep: hasFood(p1)=true."
+  },
+  {
+    "objects": ":- objects\n    ant :: ant;\n    p1, p2, p3, p4, p5, p6, p7 :: place.",
+    "query": ":- query\n    0: loc(ant)=p1\n       & adjacent(p1,p2) & adjacent(p2,p1)\n       & adjacent(p2,p3) & adjacent(p3,p2)\n       & adjacent(p3,p4) & adjacent(p4,p3)\n       & adjacent(p4,p5) & adjacent(p5,p4)\n       & adjacent(p5,p6) & adjacent(p6,p5)\n       & adjacent(p6,p7) & adjacent(p7,p6)\n       & clear(p1) & clear(p2) & clear(p3) & clear(p5) & clear(p7) & clear(p4)=false & clear(p6)=false\n       & isNest(p1) & ~isNest(p2) & ~isNest(p3) & ~isNest(p4) & ~isNest(p5) & ~isNest(p6) & ~isNest(p7)\n       & hasFood(p1)=false & hasFood(p2)=false & hasFood(p3)=false & hasFood(p4)=false & hasFood(p5)=false & hasFood(p6)=false & hasFood(p7)=true\n       & carryingFood(ant)=false;\n    maxstep: hasFood(p1)=true."
+  },
+  {
+    "objects": ":- objects\n    ant :: ant;\n    p1, p2, p3, p4, p5, p6, p7, p8 :: place.",
+    "query": ":- query\n    0: loc(ant)=p1\n       & adjacent(p1,p2) & adjacent(p2,p1)\n       & adjacent(p2,p3) & adjacent(p3,p2)\n       & adjacent(p3,p4) & adjacent(p4,p3)\n       & adjacent(p4,p5) & adjacent(p5,p4)\n       & adjacent(p5,p6) & adjacent(p6,p5)\n       & adjacent(p6,p7) & adjacent(p7,p6)\n       & adjacent(p7,p8) & adjacent(p8,p7)\n       & clear(p1) & clear(p2) & clear(p4) & clear(p5) & clear(p7) & clear(p8) & clear(p3)=false & clear(p6)=false\n       & isNest(p1) & ~isNest(p2) & ~isNest(p3) & ~isNest(p4) & ~isNest(p5) & ~isNest(p6) & ~isNest(p7) & ~isNest(p8)\n       & hasFood(p1)=false & hasFood(p2)=false & hasFood(p3)=false & hasFood(p4)=false & hasFood(p5)=false & hasFood(p6)=false & hasFood(p7)=false & hasFood(p8)=true\n       & carryingFood(ant)=false;\n    maxstep: hasFood(p1)=true."
+  },
+  {
+    "objects": ":- objects\n    ant :: ant;\n    p1, p2, p3, p4, p5, p6, p7, p8, p9 :: place.",
+    "query": ":- query\n    0: loc(ant)=p1\n       & adjacent(p1,p2) & adjacent(p2,p1)\n       & adjacent(p2,p3) & adjacent(p3,p2)\n       & adjacent(p3,p4) & adjacent(p4,p3)\n       & adjacent(p4,p5) & adjacent(p5,p4)\n       & adjacent(p5,p6) & adjacent(p6,p5)\n       & adjacent(p6,p7) & adjacent(p7,p6)\n       & adjacent(p7,p8) & adjacent(p8,p7)\n       & adjacent(p8,p9) & adjacent(p9,p8)\n       & clear(p1) & clear(p2) & clear(p3) & clear(p5) & clear(p6) & clear(p8) & clear(p9) & clear(p4)=false & clear(p7)=false\n       & isNest(p1) & ~isNest(p2) & ~isNest(p3) & ~isNest(p4) & ~isNest(p5) & ~isNest(p6) & ~isNest(p7) & ~isNest(p8) & ~isNest(p9)\n       & hasFood(p1)=false & hasFood(p2)=false & hasFood(p3)=false & hasFood(p4)=false & hasFood(p5)=false & hasFood(p6)=false & hasFood(p7)=false & hasFood(p8)=false & hasFood(p9)=true\n       & carryingFood(ant)=false;\n    maxstep: hasFood(p1)=true."
+  },
+  {
+    "objects": ":- objects\n    ant :: ant;\n    p1, p2, p3, p4, p5, p6, p7, p8, p9, p10 :: place.",
+    "query": ":- query\n    0: loc(ant)=p1\n       & adjacent(p1,p2) & adjacent(p2,p1)\n       & adjacent(p2,p3) & adjacent(p3,p2)\n       & adjacent(p3,p4) & adjacent(p4,p3)\n       & adjacent(p4,p5) & adjacent(p5,p4)\n       & adjacent(p5,p6) & adjacent(p6,p5)\n       & adjacent(p6,p7) & adjacent(p7,p6)\n       & adjacent(p7,p8) & adjacent(p8,p7)\n       & adjacent(p8,p9) & adjacent(p9,p8)\n       & adjacent(p9,p10) & adjacent(p10,p9)\n       & clear(p1) & clear(p2) & clear(p4) & clear(p5) & clear(p7) & clear(p8) & clear(p10) & clear(p3)=false & clear(p6)=false & clear(p9)=false\n       & isNest(p1) & ~isNest(p2) & ~isNest(p3) & ~isNest(p4) & ~isNest(p5) & ~isNest(p6) & ~isNest(p7) & ~isNest(p8) & ~isNest(p9) & ~isNest(p10)\n       & hasFood(p1)=false & hasFood(p2)=false & hasFood(p3)=false & hasFood(p4)=false & hasFood(p5)=false & hasFood(p6)=false & hasFood(p7)=false & hasFood(p8)=false & hasFood(p9)=false & hasFood(p10)=true\n       & carryingFood(ant)=false;\n    maxstep: hasFood(p1)=true."
+  },
+  {
+    "objects": ":- objects\n    ant :: ant;\n    p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11 :: place.",
+    "query": ":- query\n    0: loc(ant)=p1\n       & adjacent(p1,p2) & adjacent(p2,p1)\n       & adjacent(p2,p3) & adjacent(p3,p2)\n       & adjacent(p3,p4) & adjacent(p4,p3)\n       & adjacent(p4,p5) & adjacent(p5,p4)\n       & adjacent(p5,p6) & adjacent(p6,p5)\n       & adjacent(p6,p7) & adjacent(p7,p6)\n       & adjacent(p7,p8) & adjacent(p8,p7)\n       & adjacent(p8,p9) & adjacent(p9,p8)\n       & adjacent(p9,p10) & adjacent(p10,p9)\n       & adjacent(p10,p11) & adjacent(p11,p10)\n       & clear(p1) & clear(p2) & clear(p3) & clear(p5) & clear(p6) & clear(p8) & clear(p9) & clear(p11) & clear(p4)=false & clear(p7)=false & clear(p10)=false\n       & isNest(p1) & ~isNest(p2) & ~isNest(p3) & ~isNest(p4) & ~isNest(p5) & ~isNest(p6) & ~isNest(p7) & ~isNest(p8) & ~isNest(p9) & ~isNest(p10) & ~isNest(p11)\n       & hasFood(p1)=false & hasFood(p2)=false & hasFood(p3)=false & hasFood(p4)=false & hasFood(p5)=false & hasFood(p6)=false & hasFood(p7)=false & hasFood(p8)=false & hasFood(p9)=false & hasFood(p10)=false & hasFood(p11)=true\n       & carryingFood(ant)=false;\n    maxstep: hasFood(p1)=true."
+  }
+]
+```

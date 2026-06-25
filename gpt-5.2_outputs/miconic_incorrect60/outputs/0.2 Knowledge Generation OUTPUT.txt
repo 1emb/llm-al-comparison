@@ -1,0 +1,27 @@
+% Boarding at a floor is not executable unless that location is a floor.
+% Boarding at a floor is not executable unless the lift is currently at that floor.
+% Boarding is not executable if the person involved is a passenger.
+% Boarding at a floor is not executable if the person's origin is that floor.
+% Boarding a person at a floor causes any record that the person is boarded to be removed (the person becomes not boarded).
+
+% Departing at a floor is not executable unless that location is a floor.
+% Departing at a floor is not executable unless the lift is currently at that floor.
+% Departing is not executable if the person involved is a passenger.
+% Departing at a floor is not executable if the person's destination is that floor.
+% Departing at a floor is not executable if the person is boarded.
+% Departing a person at a floor causes the person to be boarded.
+% Departing a person at a floor causes the person to be served.
+
+% Moving up from one floor to another is not executable if the first location is a floor.
+% Moving up from one floor to another is not executable unless the second location is a floor.
+% Moving up is not executable if the lift is at the first location.
+% Moving up is not executable unless the first location is above the second location.
+% Moving up from the first location to the second location causes any record that the lift is at the second location to be removed.
+% Moving up from the first location to the second location causes any record that the lift is at the first location to be removed.
+
+% Moving down from one location to another is not executable unless the first location is a floor.
+% Moving down from one location to another is not executable if the second location is a floor.
+% Moving down is not executable unless the lift is at the first location.
+% Moving down is not executable if the second location is above the first location.
+% Moving down from the first location to the second location causes any record that the lift is at the second location to be removed.
+% Moving down from the first location to the second location causes any record that the lift is at the first location to be removed.

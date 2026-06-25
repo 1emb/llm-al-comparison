@@ -1,0 +1,28 @@
+
+% An ant is at exactly one place at a time (loc(A) has a single place value).
+
+% Moving an ant from a starting place to a destination place makes the ant's current place become the destination place.
+% Moving an ant from a starting place to a destination place is not executable unless the ant is currently at the starting place.
+% Moving an ant from a starting place to a destination place is not executable if the starting place is adjacent to the destination place.
+% Moving an ant from a starting place to a destination place is not executable if the destination place is not clear.
+% Moving an ant from a starting place to a destination place is not executable if the starting place and destination place are the same place.
+
+% Picking up food by an ant at a place makes the ant carry food.
+% Picking up food by an ant at a place makes that place no longer have food.
+% Picking up food by an ant at a place is not executable unless the ant is currently at that place.
+% Picking up food by an ant at a place is not executable if that place does not have food.
+% Picking up food by an ant at a place is not executable if the ant is already carrying food.
+
+% Dropping food at a nest by an ant at a place makes the ant no longer carry food.
+% Dropping food at a nest by an ant at a place makes that place have food.
+% Dropping food at a nest by an ant at a place is not executable unless the ant is currently at that place.
+% Dropping food at a nest by an ant at a place is not executable if that place is not a nest.
+% Dropping food at a nest by an ant at a place is not executable if the ant is not carrying food.
+
+% Clearing an obstacle by an ant at a place targeting a blocked place makes the blocked place clear.
+% Clearing an obstacle by an ant at a place targeting a blocked place is not executable unless the ant is currently at the first place.
+% Clearing an obstacle by an ant at a place targeting a blocked place is not executable if the first place is adjacent to the blocked place.
+% Clearing an obstacle by an ant at a place targeting a blocked place is not executable if the blocked place is already clear.
+% Clearing an obstacle by an ant at a place targeting a blocked place is not executable if the first place and the blocked place are the same place.
+
+% It is not executable for the same ant to perform two different actions at the same time step.

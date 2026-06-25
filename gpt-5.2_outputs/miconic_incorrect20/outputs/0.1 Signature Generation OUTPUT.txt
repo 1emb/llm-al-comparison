@@ -1,0 +1,48 @@
+```
+Actions:
+board(passenger,floor)   - Passenger P boards the elevator at floor F.
+depart(passenger,floor)  - Passenger P departs the elevator at floor F.
+moveUp(floor,floor)      - Elevator moves up from floor F1 to floor F2.
+moveDown(floor,floor)    - Elevator moves down from floor F1 to floor F2.
+
+Constants:
+isFloor(floor)           - Whether a given object of sort floor is a valid floor (inertial fluent).
+at(floor)                - Elevator is at floor F (inertial fluent).
+above(floor,floor)       - Floor F1 is above floor F2 (inertial fluent; could also be rigid, but inertial is safe for now).
+origin(passenger)        - The origin floor of passenger P (inertial fluent).
+dest(passenger)          - The destination floor of passenger P (inertial fluent).
+passengerFlag(passenger) - Whether P is marked as a passenger (inertial fluent).
+boarded(passenger)       - Whether P is marked as boarded (inertial fluent).
+served(passenger)        - Whether P is marked as served (inertial fluent).
+
+BC+ Signature:
+:- sorts
+    floor;
+    passenger.
+
+:- objects
+    f0, f1 :: floor;
+    p0 :: passenger.
+
+:- variables
+    F, F1, F2, F3, F4 :: floor;
+    P, P1, P2, P3, P4 :: passenger;
+    Bool, Bool1, Bool2, Bool3, Bool4 :: boolean.
+
+:- constants
+    board(passenger,floor) :: exogenousAction;
+    depart(passenger,floor) :: exogenousAction;
+    moveUp(floor,floor) :: exogenousAction;
+    moveDown(floor,floor) :: exogenousAction;
+
+    isFloor(floor) :: inertialFluent(boolean);
+    at(floor) :: inertialFluent(boolean);
+    above(floor,floor) :: inertialFluent(boolean);
+
+    origin(passenger) :: inertialFluent(floor);
+    dest(passenger) :: inertialFluent(floor);
+
+    passengerFlag(passenger) :: inertialFluent(boolean);
+    boarded(passenger) :: inertialFluent(boolean);
+    served(passenger) :: inertialFluent(boolean).
+```

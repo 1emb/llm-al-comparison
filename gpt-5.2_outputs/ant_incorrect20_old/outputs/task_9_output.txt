@@ -1,0 +1,64 @@
+Objects:
+:- objects
+    ant :: ant;
+    p1, p2, p3, p4, p5, p6, p7, p8, p9, p10 :: place.
+
+Query:
+:- query
+    0: at(ant,p1) & ~at(ant,p2) & ~at(ant,p3) & ~at(ant,p4) & ~at(ant,p5) & ~at(ant,p6) & ~at(ant,p7) & ~at(ant,p8) & ~at(ant,p9) & ~at(ant,p10)
+       & adjacent(p1,p2) & adjacent(p2,p1)
+       & adjacent(p2,p3) & adjacent(p3,p2)
+       & adjacent(p3,p4) & adjacent(p4,p3)
+       & adjacent(p4,p5) & adjacent(p5,p4)
+       & adjacent(p5,p6) & adjacent(p6,p5)
+       & adjacent(p6,p7) & adjacent(p7,p6)
+       & adjacent(p7,p8) & adjacent(p8,p7)
+       & adjacent(p8,p9) & adjacent(p9,p8)
+       & adjacent(p9,p10) & adjacent(p10,p9)
+       & ~adjacent(p1,p1) & ~adjacent(p2,p2) & ~adjacent(p3,p3) & ~adjacent(p4,p4) & ~adjacent(p5,p5) & ~adjacent(p6,p6) & ~adjacent(p7,p7) & ~adjacent(p8,p8) & ~adjacent(p9,p9) & ~adjacent(p10,p10)
+       & ~adjacent(p1,p3) & ~adjacent(p3,p1)
+       & ~adjacent(p1,p4) & ~adjacent(p4,p1)
+       & ~adjacent(p1,p5) & ~adjacent(p5,p1)
+       & ~adjacent(p1,p6) & ~adjacent(p6,p1)
+       & ~adjacent(p1,p7) & ~adjacent(p7,p1)
+       & ~adjacent(p1,p8) & ~adjacent(p8,p1)
+       & ~adjacent(p1,p9) & ~adjacent(p9,p1)
+       & ~adjacent(p1,p10) & ~adjacent(p10,p1)
+       & ~adjacent(p2,p4) & ~adjacent(p4,p2)
+       & ~adjacent(p2,p5) & ~adjacent(p5,p2)
+       & ~adjacent(p2,p6) & ~adjacent(p6,p2)
+       & ~adjacent(p2,p7) & ~adjacent(p7,p2)
+       & ~adjacent(p2,p8) & ~adjacent(p8,p2)
+       & ~adjacent(p2,p9) & ~adjacent(p9,p2)
+       & ~adjacent(p2,p10) & ~adjacent(p10,p2)
+       & ~adjacent(p3,p5) & ~adjacent(p5,p3)
+       & ~adjacent(p3,p6) & ~adjacent(p6,p3)
+       & ~adjacent(p3,p7) & ~adjacent(p7,p3)
+       & ~adjacent(p3,p8) & ~adjacent(p8,p3)
+       & ~adjacent(p3,p9) & ~adjacent(p9,p3)
+       & ~adjacent(p3,p10) & ~adjacent(p10,p3)
+       & ~adjacent(p4,p6) & ~adjacent(p6,p4)
+       & ~adjacent(p4,p7) & ~adjacent(p7,p4)
+       & ~adjacent(p4,p8) & ~adjacent(p8,p4)
+       & ~adjacent(p4,p9) & ~adjacent(p9,p4)
+       & ~adjacent(p4,p10) & ~adjacent(p10,p4)
+       & ~adjacent(p5,p7) & ~adjacent(p7,p5)
+       & ~adjacent(p5,p8) & ~adjacent(p8,p5)
+       & ~adjacent(p5,p9) & ~adjacent(p9,p5)
+       & ~adjacent(p5,p10) & ~adjacent(p10,p5)
+       & ~adjacent(p6,p8) & ~adjacent(p8,p6)
+       & ~adjacent(p6,p9) & ~adjacent(p9,p6)
+       & ~adjacent(p6,p10) & ~adjacent(p10,p6)
+       & ~adjacent(p7,p9) & ~adjacent(p9,p7)
+       & ~adjacent(p7,p10) & ~adjacent(p10,p7)
+       & ~adjacent(p8,p10) & ~adjacent(p10,p8)
+       & clear(p1) & clear(p2) & ~clear(p3) & clear(p4) & clear(p5) & ~clear(p6) & clear(p7) & clear(p8) & ~clear(p9) & clear(p10)
+       & isNest(p1) & ~isNest(p2) & ~isNest(p3) & ~isNest(p4) & ~isNest(p5) & ~isNest(p6) & ~isNest(p7) & ~isNest(p8) & ~isNest(p9) & ~isNest(p10)
+       & ~hasFood(p1) & ~hasFood(p2) & ~hasFood(p3) & ~hasFood(p4) & ~hasFood(p5) & ~hasFood(p6) & ~hasFood(p7) & ~hasFood(p8) & ~hasFood(p9) & hasFood(p10)
+       & ~carryingFood(ant);
+    maxstep: hasFood(p1).
+
+Status: FAIL
+
+Output:
+/home/grad24/mnguyen/.cplus2asp.config: cannot open file

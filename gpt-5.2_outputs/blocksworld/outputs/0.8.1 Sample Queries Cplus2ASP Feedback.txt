@@ -1,0 +1,145 @@
+% Query 1: Pick up a clear block from the table with an empty hand (satisfiable)
+:- query
+    0: handEmpty
+       & on(b1)=table & clear(b1)
+       & on(b2)=table & clear(b2)
+       & on(b3)=table & clear(b3)
+       & ~holding(b1) & ~holding(b2) & ~holding(b3);
+    0: pickupBlock(b1);
+    maxstep: holding(b1) & ~handEmpty.
+
+Cplus2ASP Output:
+
+Solving...
+	
+
+	0:  handEmpty clear(b1) clear(b2) clear(b3) on(b1)=table on(b2)=table on(b3)=table on(b4)=table on(b5)=table on(b6)=table on(b7)=table
+
+	ACTIONS:  pickupBlock(b1)
+
+	1:  clear(b2) clear(b3) holding(b1) on(b1)=inHand on(b2)=table on(b3)=table on(b4)=table on(b5)=table on(b6)=table on(b7)=table
+
+SATISFIABLE
+Models       : 1+
+
+
+% Query 2: Try to pick up a block when the hand is not empty (unsatisfiable)
+:- query
+    0: ~handEmpty
+       & holding(b2)
+       & on(b1)=table & clear(b1)
+       & on(b2)=table & ~clear(b2)
+       & ~holding(b1);
+    0: pickupBlock(b1).
+
+Cplus2ASP Output:
+
+Solving...
+UNSATISFIABLE
+Models       : 0
+No solution.
+
+
+
+% Query 3: Unstack a clear block from on top of another block with an empty hand (satisfiable)
+:- query
+    0: handEmpty
+       & on(b1)=b2 & clear(b1)
+       & on(b2)=table
+       & on(b3)=table & clear(b3)
+       & ~holding(b1) & ~holding(b2) & ~holding(b3);
+    0: unstackBlock(b1,b2);
+    maxstep: holding(b1) & ~handEmpty & clear(b2).
+
+Cplus2ASP Output:
+
+Solving...
+	
+
+	0:  handEmpty clear(b1) clear(b3) on(b1)=b2 on(b2)=table on(b3)=table on(b4)=table on(b5)=table on(b6)=table on(b7)=table
+
+	ACTIONS:  unstackBlock(b1, b2)
+
+	1:  clear(b2) clear(b3) holding(b1) on(b1)=inHand on(b2)=table on(b3)=table on(b4)=table on(b5)=table on(b6)=table on(b7)=table
+
+SATISFIABLE
+Models       : 1+
+
+
+% Query 4: Try to stack a held block onto a non-clear block (unsatisfiable)
+:- query
+    0: ~handEmpty
+       & holding(b1)
+       & on(b2)=table
+       & on(b3)=b2 & clear(b3)
+       & ~clear(b2)
+       & ~holding(b2) & ~holding(b3);
+    0: stackBlock(b1,b2).
+
+Cplus2ASP Output:
+
+Solving...
+UNSATISFIABLE
+Models       : 0
+No solution.
+
+
+
+% Query 5: Put down a held block onto the table (satisfiable)
+:- query
+    0: ~handEmpty
+       & holding(b1)
+       & on(b2)=table & clear(b2)
+       & ~holding(b2);
+    0: putdownBlock(b1);
+    maxstep: handEmpty & ~holding(b1) & on(b1)=table & clear(b1).
+
+Cplus2ASP Output:
+
+Solving...
+	
+
+	0:  clear(b2) holding(b1) on(b1)=inHand on(b2)=table on(b3)=table on(b4)=table on(b5)=table on(b6)=table on(b7)=table
+
+	ACTIONS:  putdownBlock(b1)
+
+	1:  handEmpty clear(b1) clear(b2) on(b1)=table on(b2)=table on(b3)=table on(b4)=table on(b5)=table on(b6)=table on(b7)=table
+
+SATISFIABLE
+Models       : 1+
+
+
+
+
+:- query
+    0: handEmpty
+       & on(b3)=table & clear(b3)
+       & on(b1)=table & clear(b1)
+       & on(b2)=table
+       & on(b4)=b2 & clear(b4)
+       & ~holding(b1) & ~holding(b2) & ~holding(b3) & ~holding(b4)
+       & on(b1)\=inHand & on(b2)\=inHand & on(b3)\=inHand & on(b4)\=inHand;
+    maxstep: on(b3)=table & clear(b3)
+             & on(b2)=table
+             & on(b4)=b2
+             & on(b1)=b4 & clear(b1).
+
+
+Cplus2ASP Output:
+
+Solving...
+	
+
+	0:  handEmpty clear(b1) clear(b3) clear(b4) on(b1)=table on(b2)=table on(b3)=table on(b4)=b2 on(b5)=table on(b6)=table on(b7)=table
+
+	ACTIONS:  pickupBlock(b1)
+
+	1:  clear(b3) clear(b4) holding(b1) on(b1)=inHand on(b2)=table on(b3)=table on(b4)=b2 on(b5)=table on(b6)=table on(b7)=table
+
+	ACTIONS:  stackBlock(b1, b4)
+
+	2:  handEmpty clear(b1) clear(b3) on(b1)=b4 on(b2)=table on(b3)=table on(b4)=b2 on(b5)=table on(b6)=table on(b7)=table
+
+SATISFIABLE
+Models       : 1+
+

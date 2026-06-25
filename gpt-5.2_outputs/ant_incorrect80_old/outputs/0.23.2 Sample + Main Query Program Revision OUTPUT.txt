@@ -1,0 +1,173 @@
+% PROGRAM CHANGED? [CHANGED]
+% BC+ signature
+:- sorts
+    ant;
+    place.
+
+:- objects
+    ant1 :: ant;
+    p1, p2 :: place.
+
+:- variables
+    A :: ant;
+    P, P1, P2, P3, P4 :: place.
+
+:- constants
+    % actions
+    move(ant, place, place) :: exogenousAction;
+    pickUpFood(ant, place) :: exogenousAction;
+    dropFoodAtNest(ant, place) :: exogenousAction;
+    clearObstacle(ant, place, place) :: exogenousAction;
+
+    % fluents
+    loc(ant) :: inertialFluent(place);
+    hasFood(ant) :: inertialFluent(boolean);
+    hasFoodAt(place) :: inertialFluent(boolean);
+    isNest(place) :: inertialFluent(boolean);
+    isClear(place) :: inertialFluent(boolean);
+
+    % adjacency should be rigid, but rigidFluent is not available here; keep inertialFluent(boolean)
+    adjacent(place, place) :: inertialFluent(boolean).
+
+% Generated constraints
+
+% 1. An ant cannot be at two different places at the same time.
+impossible loc(A)=P1 & loc(A)=P2 & P1\=P2.
+
+% 2-5. move:
+% Can occur only when ant is at P1, P1 adjacent to P2, and destination P2 is NOT clear.
+% After it happens: ant is at P2.
+move(A,P1,P2) causes loc(A)=P2.
+nonexecutable move(A,P1,P2) if loc(A)\=P1.
+nonexecutable move(A,P1,P2) if ~adjacent(P1,P2).
+nonexecutable move(A,P1,P2) if isClear(P2).
+
+% 6-10. pickUpFood:
+% Can occur only when ant is at P, P has food, and ant does NOT have food.
+% After it happens: ant HAS food and place NO LONGER has food.
+pickUpFood(A,P) causes hasFood(A).
+pickUpFood(A,P) causes ~hasFoodAt(P).
+nonexecutable pickUpFood(A,P) if loc(A)\=P.
+nonexecutable pickUpFood(A,P) if ~hasFoodAt(P).
+nonexecutable pickUpFood(A,P) if hasFood(A).
+
+% 11-15. dropFoodAtNest:
+% Can occur only when ant is at P, P is a nest, and ant HAS food.
+% After it happens: ant does NOT have food and nest HAS food.
+dropFoodAtNest(A,P) causes ~hasFood(A).
+dropFoodAtNest(A,P) causes hasFoodAt(P).
+nonexecutable dropFoodAtNest(A,P) if loc(A)\=P.
+nonexecutable dropFoodAtNest(A,P) if ~isNest(P).
+nonexecutable dropFoodAtNest(A,P) if ~hasFood(A).
+
+% 16-19. clearObstacle:
+% Can occur only when ant is at P1, P1 adjacent to P2, and P2 is clear.
+% After it happens: P2 is no longer clear.
+clearObstacle(A,P1,P2) causes ~isClear(P2).
+nonexecutable clearObstacle(A,P1,P2) if loc(A)\=P1.
+nonexecutable clearObstacle(A,P1,P2) if ~adjacent(P1,P2).
+nonexecutable clearObstacle(A,P1,P2) if ~isClear(P2).
+
+% 20-26. Concurrency restrictions (same as before)
+nonexecutable move(A,P1,P2) & move(A,P3,P4) if (P1\=P3 | P2\=P4).
+nonexecutable move(A,P1,P2) & pickUpFood(A,P3).
+nonexecutable move(A,P1,P2) & dropFoodAtNest(A,P3).
+nonexecutable move(A,P1,P2) & clearObstacle(A,P3,P4).
+nonexecutable pickUpFood(A,P1) & dropFoodAtNest(A,P2).
+nonexecutable pickUpFood(A,P1) & clearObstacle(A,P2,P3).
+nonexecutable dropFoodAtNest(A,P1) & clearObstacle(A,P2,P3).
+
+% 27-31. Defaults to avoid solver inventing facts
+default ~isNest(P).
+default ~adjacent(P1,P2).
+default ~isClear(P).
+default ~hasFoodAt(P).
+default ~hasFood(A).
+
+% Prevent self-adjacency.
+impossible adjacent(P,P).
+
+% [CHANGED] Fix: prevent clearing the ant's current location, otherwise the solver can
+% "clear" p1 (where the ant is) to enable moving into p2, which contradicts the intended
+% meaning of clearObstacle (it should clear the blocked place, not the start place).
+nonexecutable clearObstacle(A,P1,P2) if P1=P2.
+
+
+% MAIN QUERY CHANGED? [UNCHANGED]
+:- query
+    0: loc(ant1)=p1
+       & adjacent(p1,p2) & adjacent(p2,p1)
+       & isNest(p1)
+       & hasFoodAt(p2) & ~hasFoodAt(p1)
+       & ~hasFood(ant1)
+       & isClear(p1) & isClear(p2);
+    maxstep: hasFoodAt(p1).
+
+
+% SAMPLE QUERIES CHANGED? [CHANGED]
+% Query 1: Simple move from p1 to p2 when adjacent and destination is not clear (satisfiable)
+:- query
+    0: loc(ant1)=p1
+       & adjacent(p1,p2) & adjacent(p2,p1)
+       & ~isClear(p2)
+       & ~hasFood(ant1)
+       & ~hasFoodAt(p1) & ~hasFoodAt(p2)
+       & ~isNest(p1) & ~isNest(p2);
+    0: move(ant1,p1,p2);
+    maxstep: loc(ant1)=p2.
+
+% Query 2: Attempt to move when the destination is clear (should be blocked by nonexecutable) (unsatisfiable)
+:- query
+    0: loc(ant1)=p1
+       & adjacent(p1,p2) & adjacent(p2,p1)
+       & isClear(p2)
+       & ~hasFood(ant1)
+       & ~hasFoodAt(p1) & ~hasFoodAt(p2)
+       & ~isNest(p1) & ~isNest(p2);
+    0: move(ant1,p1,p2).
+
+% Query 3: Pick up food at p1 requires ant does NOT have food, and after pickUpFood ant gains food and place loses food. (satisfiable)
+:- query
+    0: loc(ant1)=p1
+       & adjacent(p1,p2) & adjacent(p2,p1)
+       & ~isClear(p1) & ~isClear(p2)
+       & hasFoodAt(p1) & ~hasFoodAt(p2)
+       & ~hasFood(ant1)
+       & ~isNest(p1) & ~isNest(p2);
+    0: pickUpFood(ant1,p1);
+    maxstep: hasFood(ant1) & ~hasFoodAt(p1).
+
+% Query 4: Drop food at a nest requires ant HAS food, and after dropFoodAtNest ant loses food and nest gains food. (satisfiable)
+:- query
+    0: loc(ant1)=p1
+       & adjacent(p1,p2) & adjacent(p2,p1)
+       & ~isClear(p1) & ~isClear(p2)
+       & isNest(p1) & ~isNest(p2)
+       & hasFood(ant1)
+       & ~hasFoodAt(p1) & ~hasFoodAt(p2);
+    0: dropFoodAtNest(ant1,p1);
+    maxstep: ~hasFood(ant1) & hasFoodAt(p1).
+
+% Query 5: Try to execute two different move actions for the same ant at the same time (blocked by concurrency constraint) (unsatisfiable)
+:- query
+    0: loc(ant1)=p1
+       & adjacent(p1,p2) & adjacent(p2,p1)
+       & ~isClear(p1) & ~isClear(p2)
+       & ~hasFood(ant1)
+       & ~hasFoodAt(p1) & ~hasFoodAt(p2)
+       & ~isNest(p1) & ~isNest(p2);
+    0: move(ant1,p1,p2) & move(ant1,p2,p1).
+
+% Query 6: Main-query sanity check: with both places clear, moving into p2 is impossible,
+% but clearing p2 first should make the goal reachable (satisfiable).
+% [CHANGED] Add an explicit clearObstacle action at step 0 to ensure the intended plan exists
+% and to avoid relying on the solver "clearing p1" (which is now disallowed).
+:- query
+    0: loc(ant1)=p1
+       & adjacent(p1,p2) & adjacent(p2,p1)
+       & isNest(p1)
+       & hasFoodAt(p2) & ~hasFoodAt(p1)
+       & ~hasFood(ant1)
+       & isClear(p1) & isClear(p2);
+    0: clearObstacle(ant1,p1,p2);
+    maxstep: hasFoodAt(p1).

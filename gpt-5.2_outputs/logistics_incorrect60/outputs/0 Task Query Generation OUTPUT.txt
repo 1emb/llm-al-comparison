@@ -1,0 +1,44 @@
+```json
+[
+  {
+    "objects": ":- objects\n    p0 :: package;\n    t0, t1 :: truck;\n    a0, a1 :: airplane;\n    l0_0, l1_0 :: location;\n    c0, c1 :: city.",
+    "query": ":- query\n    0: inCity(l0_0)=c0 & isAirport(l0_0) & inCity(l1_0)=c1 & isAirport(l1_0);\n    0: loc(a0)=l0_0 & loc(a1)=l0_0 & loc(t0)=l0_0 & loc(t1)=l1_0;\n    0: loc(p0)=l1_0 & ~in(p0,t0) & ~in(p0,t1) & ~in(p0,a0) & ~in(p0,a1);\n    maxstep: loc(p0)=l0_0."
+  },
+  {
+    "objects": ":- objects\n    p0 :: package;\n    t0, t1 :: truck;\n    a0, a1 :: airplane;\n    l0_0, l1_0 :: location;\n    c0, c1 :: city.",
+    "query": ":- query\n    0: inCity(l0_0)=c0 & isAirport(l0_0) & inCity(l1_0)=c1 & isAirport(l1_0);\n    0: loc(a0)=l1_0 & loc(a1)=l1_0 & loc(t0)=l0_0 & loc(t1)=l1_0;\n    0: loc(p0)=l1_0 & ~in(p0,t0) & ~in(p0,t1) & ~in(p0,a0) & ~in(p0,a1);\n    maxstep: loc(p0)=l0_0."
+  },
+  {
+    "objects": ":- objects\n    p0, p1 :: package;\n    t0, t1 :: truck;\n    a0 :: airplane;\n    l0_0, l1_0 :: location;\n    c0, c1 :: city.",
+    "query": ":- query\n    0: inCity(l0_0)=c0 & isAirport(l0_0) & inCity(l1_0)=c1 & isAirport(l1_0);\n    0: loc(a0)=l1_0 & loc(t0)=l0_0 & loc(t1)=l1_0;\n    0: loc(p0)=l1_0 & loc(p1)=l0_0 & ~in(p0,t0) & ~in(p0,t1) & ~in(p0,a0) & ~in(p1,t0) & ~in(p1,t1) & ~in(p1,a0);\n    maxstep: loc(p0)=l1_0 & loc(p1)=l1_0."
+  },
+  {
+    "objects": ":- objects\n    p0, p1 :: package;\n    t0, t1 :: truck;\n    a0 :: airplane;\n    l0_0, l1_0 :: location;\n    c0, c1 :: city.",
+    "query": ":- query\n    0: inCity(l0_0)=c0 & isAirport(l0_0) & inCity(l1_0)=c1 & isAirport(l1_0);\n    0: loc(a0)=l1_0 & loc(t0)=l0_0 & loc(t1)=l1_0;\n    0: loc(p0)=l1_0 & loc(p1)=l1_0 & ~in(p0,t0) & ~in(p0,t1) & ~in(p0,a0) & ~in(p1,t0) & ~in(p1,t1) & ~in(p1,a0);\n    maxstep: loc(p0)=l0_0 & loc(p1)=l0_0."
+  },
+  {
+    "objects": ":- objects\n    p0 :: package;\n    t0, t1 :: truck;\n    a0 :: airplane;\n    l0_0, l0_1, l1_0, l1_1 :: location;\n    c0, c1 :: city.",
+    "query": ":- query\n    0: inCity(l0_0)=c0 & isAirport(l0_0) & inCity(l0_1)=c0 & ~isAirport(l0_1) & inCity(l1_0)=c1 & isAirport(l1_0) & inCity(l1_1)=c1 & ~isAirport(l1_1);\n    0: loc(a0)=l0_0 & loc(t0)=l0_0 & loc(t1)=l1_1;\n    0: loc(p0)=l0_1 & ~in(p0,t0) & ~in(p0,t1) & ~in(p0,a0);\n    maxstep: loc(p0)=l1_0."
+  },
+  {
+    "objects": ":- objects\n    p0, p1 :: package;\n    t0, t1 :: truck;\n    a0 :: airplane;\n    l0_0, l0_1, l1_0, l1_1 :: location;\n    c0, c1 :: city.",
+    "query": ":- query\n    0: inCity(l0_0)=c0 & isAirport(l0_0) & inCity(l0_1)=c0 & ~isAirport(l0_1) & inCity(l1_0)=c1 & isAirport(l1_0) & inCity(l1_1)=c1 & ~isAirport(l1_1);\n    0: loc(a0)=l0_0 & loc(t0)=l0_0 & loc(t1)=l1_1;\n    0: loc(p0)=l0_0 & loc(p1)=l0_0 & ~in(p0,t0) & ~in(p0,t1) & ~in(p0,a0) & ~in(p1,t0) & ~in(p1,t1) & ~in(p1,a0);\n    maxstep: loc(p0)=l0_1 & loc(p1)=l0_1."
+  },
+  {
+    "objects": ":- objects\n    p0, p1 :: package;\n    t0, t1 :: truck;\n    a0, a1 :: airplane;\n    l0_0, l0_1, l1_0, l1_1 :: location;\n    c0, c1 :: city.",
+    "query": ":- query\n    0: inCity(l0_0)=c0 & isAirport(l0_0) & inCity(l0_1)=c0 & ~isAirport(l0_1) & inCity(l1_0)=c1 & isAirport(l1_0) & inCity(l1_1)=c1 & ~isAirport(l1_1);\n    0: loc(a0)=l1_0 & loc(a1)=l0_0 & loc(t0)=l0_0 & loc(t1)=l1_0;\n    0: loc(p0)=l0_0 & loc(p1)=l1_1 & ~in(p0,t0) & ~in(p0,t1) & ~in(p0,a0) & ~in(p0,a1) & ~in(p1,t0) & ~in(p1,t1) & ~in(p1,a0) & ~in(p1,a1);\n    maxstep: loc(p0)=l0_1 & loc(p1)=l1_0."
+  },
+  {
+    "objects": ":- objects\n    p0, p1, p2 :: package;\n    t0, t1 :: truck;\n    a0 :: airplane;\n    l0_0, l0_1, l1_0, l1_1 :: location;\n    c0, c1 :: city.",
+    "query": ":- query\n    0: inCity(l0_0)=c0 & isAirport(l0_0) & inCity(l0_1)=c0 & ~isAirport(l0_1) & inCity(l1_0)=c1 & isAirport(l1_0) & inCity(l1_1)=c1 & ~isAirport(l1_1);\n    0: loc(a0)=l0_0 & loc(t0)=l0_0 & loc(t1)=l1_0;\n    0: loc(p0)=l0_0 & loc(p1)=l1_1 & loc(p2)=l0_1 & ~in(p0,t0) & ~in(p0,t1) & ~in(p0,a0) & ~in(p1,t0) & ~in(p1,t1) & ~in(p1,a0) & ~in(p2,t0) & ~in(p2,t1) & ~in(p2,a0);\n    maxstep: loc(p0)=l1_0 & loc(p1)=l1_0 & loc(p2)=l1_0."
+  },
+  {
+    "objects": ":- objects\n    p0, p1, p2 :: package;\n    t0, t1 :: truck;\n    a0, a1 :: airplane;\n    l0_0, l0_1, l1_0, l1_1 :: location;\n    c0, c1 :: city.",
+    "query": ":- query\n    0: inCity(l0_0)=c0 & isAirport(l0_0) & inCity(l0_1)=c0 & ~isAirport(l0_1) & inCity(l1_0)=c1 & isAirport(l1_0) & inCity(l1_1)=c1 & ~isAirport(l1_1);\n    0: loc(a0)=l0_0 & loc(a1)=l1_0 & loc(t0)=l0_1 & loc(t1)=l1_0;\n    0: loc(p0)=l1_1 & loc(p1)=l0_0 & loc(p2)=l0_0 & ~in(p0,t0) & ~in(p0,t1) & ~in(p0,a0) & ~in(p0,a1) & ~in(p1,t0) & ~in(p1,t1) & ~in(p1,a0) & ~in(p1,a1) & ~in(p2,t0) & ~in(p2,t1) & ~in(p2,a0) & ~in(p2,a1);\n    maxstep: loc(p0)=l0_1 & loc(p1)=l1_1 & loc(p2)=l1_0."
+  },
+  {
+    "objects": ":- objects\n    p0, p1, p2, p3 :: package;\n    t0, t1 :: truck;\n    a0 :: airplane;\n    l0_0, l0_1, l1_0, l1_1 :: location;\n    c0, c1 :: city.",
+    "query": ":- query\n    0: inCity(l0_0)=c0 & isAirport(l0_0) & inCity(l0_1)=c0 & ~isAirport(l0_1) & inCity(l1_0)=c1 & isAirport(l1_0) & inCity(l1_1)=c1 & ~isAirport(l1_1);\n    0: loc(a0)=l0_0 & loc(t0)=l0_1 & loc(t1)=l1_1;\n    0: loc(p0)=l1_1 & loc(p1)=l1_0 & loc(p2)=l1_1 & loc(p3)=l0_0 & ~in(p0,t0) & ~in(p0,t1) & ~in(p0,a0) & ~in(p1,t0) & ~in(p1,t1) & ~in(p1,a0) & ~in(p2,t0) & ~in(p2,t1) & ~in(p2,a0) & ~in(p3,t0) & ~in(p3,t1) & ~in(p3,a0);\n    maxstep: loc(p0)=l0_0 & loc(p1)=l1_1 & loc(p2)=l0_1 & loc(p3)=l1_1."
+  }
+]
+```

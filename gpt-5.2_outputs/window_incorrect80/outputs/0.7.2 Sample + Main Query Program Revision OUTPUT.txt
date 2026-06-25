@@ -1,0 +1,137 @@
+% PROGRAM CHANGED? [CHANGED/UNCHANGED]
+% BC+ signature
+:- sorts
+    window.
+
+:- objects
+    w1, w2, w3, w4, w5, w6, w7, w8, w9, w10, w11 :: window.
+
+:- variables
+    W, W1, W2, W3, W4 :: window;
+    Bool, Bool1, Bool2, Bool3, Bool4 :: boolean.
+
+:- constants
+    openWin(window) :: exogenousAction;
+    closeWin(window) :: exogenousAction;
+    lockWin(window) :: exogenousAction;
+    unlockWin(window) :: exogenousAction;
+
+    isWindow(window) :: inertialFluent(boolean);
+    isOpen(window) :: inertialFluent(boolean);
+    isClosed(window) :: inertialFluent(boolean);
+    isLocked(window) :: inertialFluent(boolean);
+    isUnlocked(window) :: inertialFluent(boolean).
+
+% Generated constraints
+% NOTE: The original natural language description says actions apply only when the item is explicitly NOT a window.
+% Since all objects are of sort window, we enforce this by requiring ~isWindow(W) as a precondition.
+
+% 1. Opening is nonexecutable unless the item is not a window, it is closed, and it is not unlocked.
+nonexecutable openWin(W) if isWindow(W).
+nonexecutable openWin(W) if ~isClosed(W).
+nonexecutable openWin(W) if isUnlocked(W).
+
+% 2. Opening causes the item to be closed.
+openWin(W) causes isClosed(W).
+
+% 3. Opening causes the item to be not open.
+openWin(W) causes ~isOpen(W).
+
+% 4. Closing is nonexecutable unless the item is not a window and it is not open.
+nonexecutable closeWin(W) if isWindow(W).
+nonexecutable closeWin(W) if isOpen(W).
+
+% 5. Closing causes the item to be open.
+closeWin(W) causes isOpen(W).
+
+% 6. Closing causes the item to be not closed.
+closeWin(W) causes ~isClosed(W).
+
+% 7. Locking is nonexecutable unless the item is not a window, it is closed, and it is not unlocked.
+nonexecutable lockWin(W) if isWindow(W).
+nonexecutable lockWin(W) if ~isClosed(W).
+nonexecutable lockWin(W) if isUnlocked(W).
+
+% 8. Locking causes the item to be unlocked.
+lockWin(W) causes isUnlocked(W).
+
+% 9. Locking causes the item to be not locked.
+lockWin(W) causes ~isLocked(W).
+
+% 10. Unlocking is nonexecutable unless the item is not a window and it is not locked.
+nonexecutable unlockWin(W) if isWindow(W).
+nonexecutable unlockWin(W) if isLocked(W).
+
+% 11. Unlocking causes the item to be locked.
+unlockWin(W) causes isLocked(W).
+
+% 12. Unlocking causes the item to be not unlocked.
+unlockWin(W) causes ~isUnlocked(W).
+
+
+% MAIN QUERY CHANGED? [CHANGED]
+% Reason for change:
+% The provided Cplus2ASP output for the main query is satisfiable at step 0 already, because the program does not
+% enforce any relationship between isOpen/isClosed and isLocked/isUnlocked, and inertia allows arbitrary extra
+% fluents (e.g., isLocked(w1) can be true even if not stated initially).
+% To preserve the intended meaning of the natural language initial state, we must explicitly state the negatives
+% for each window (closed vs open, locked vs unlocked) in the initial condition.
+
+:- query
+    0: isOpen(w1) & ~isClosed(w1) & isUnlocked(w1) & ~isLocked(w1) &
+       isClosed(w2) & ~isOpen(w2) & isUnlocked(w2) & ~isLocked(w2) &
+       isClosed(w3) & ~isOpen(w3) & isLocked(w3) & ~isUnlocked(w3) &
+       isOpen(w4) & ~isClosed(w4) & isUnlocked(w4) & ~isLocked(w4) &
+       isClosed(w5) & ~isOpen(w5) & isUnlocked(w5) & ~isLocked(w5) &
+       isOpen(w6) & ~isClosed(w6) & isUnlocked(w6) & ~isLocked(w6) &
+       isClosed(w7) & ~isOpen(w7) & isLocked(w7) & ~isUnlocked(w7) &
+       isOpen(w8) & ~isClosed(w8) & isUnlocked(w8) & ~isLocked(w8) &
+       isClosed(w9) & ~isOpen(w9) & isUnlocked(w9) & ~isLocked(w9) &
+       isClosed(w10) & ~isOpen(w10) & isLocked(w10) & ~isUnlocked(w10) &
+       isOpen(w11) & ~isClosed(w11) & isUnlocked(w11) & ~isLocked(w11) &
+       ~isWindow(w1) & ~isWindow(w2) & ~isWindow(w3) & ~isWindow(w4) & ~isWindow(w5) &
+       ~isWindow(w6) & ~isWindow(w7) & ~isWindow(w8) & ~isWindow(w9) & ~isWindow(w10) &
+       ~isWindow(w11);
+    maxstep: isLocked(w1) &
+             isOpen(w3) &
+             isLocked(w4) &
+             isOpen(w5) &
+             isClosed(w6) &
+             isOpen(w7) &
+             isLocked(w8) &
+             isOpen(w9) &
+             isOpen(w10) &
+             isClosed(w11).
+
+
+% SAMPLE QUERIES CHANGED? [UNCHANGED]
+% Query 1: Try to open w1 when it is explicitly not a window, closed, and not unlocked
+% (should be executable; after the action it stays closed and becomes not open) (satisfiable)
+:- query
+    0: ~isWindow(w1) & isClosed(w1) & ~isUnlocked(w1) & isOpen(w1);
+    0: openWin(w1);
+    maxstep: isClosed(w1) & ~isOpen(w1).
+
+% Query 2: Try to open w1 when it is unlocked (opening is nonexecutable if isUnlocked is true) (unsatisfiable)
+:- query
+    0: ~isWindow(w1) & isClosed(w1) & isUnlocked(w1) & ~isOpen(w1);
+    0: openWin(w1).
+
+% Query 3: Try to close w1 when it is explicitly not a window and not open
+% (should be executable; after the action it becomes open and not closed) (satisfiable)
+:- query
+    0: ~isWindow(w1) & ~isOpen(w1) & isClosed(w1);
+    0: closeWin(w1);
+    maxstep: isOpen(w1) & ~isClosed(w1).
+
+% Query 4: Try to lock w1 when it is explicitly not a window, closed, and not unlocked
+% (should be executable; after the action it becomes unlocked and not locked) (satisfiable)
+:- query
+    0: ~isWindow(w1) & isClosed(w1) & ~isUnlocked(w1) & isLocked(w1);
+    0: lockWin(w1);
+    maxstep: isUnlocked(w1) & ~isLocked(w1).
+
+% Query 5: Try to unlock w1 when it is locked (unlocking is nonexecutable if isLocked is true) (unsatisfiable)
+:- query
+    0: ~isWindow(w1) & isLocked(w1) & ~isUnlocked(w1);
+    0: unlockWin(w1).

@@ -1,0 +1,45 @@
+Objects:
+:- objects
+    w1, w2, w3 :: window.
+
+Query:
+:- query
+    0: isWindow(w1) & isClosed(w1) & ~isOpen(w1) & isLocked(w1) & ~isUnlocked(w1);
+    0: isWindow(w2) & isOpen(w2) & ~isClosed(w2) & isUnlocked(w2) & ~isLocked(w2);
+    0: isWindow(w3) & isClosed(w3) & ~isOpen(w3) & isUnlocked(w3) & ~isLocked(w3);
+    maxstep: isOpen(w1) & isLocked(w2) & isLocked(w3).
+
+Status: True
+
+Output:
+Solving...
+Solution: 1 (Time: 0.013s)
+	
+
+	0:  isClosed(w1) isClosed(w3) isLocked(w1) isOpen(w2) isUnlocked(w2) isUnlocked(w3) isWindow(w1) isWindow(w2) isWindow(w3)
+
+	ACTIONS:  unlockWin(w1)
+
+	1:  isClosed(w1) isClosed(w3) isOpen(w2) isUnlocked(w1) isUnlocked(w2) isUnlocked(w3) isWindow(w1) isWindow(w2) isWindow(w3)
+
+	ACTIONS:  closeWin(w2)
+
+	2:  isClosed(w1) isClosed(w2) isClosed(w3) isUnlocked(w1) isUnlocked(w2) isUnlocked(w3) isWindow(w1) isWindow(w2) isWindow(w3)
+
+	ACTIONS:  lockWin(w3)
+
+	3:  isClosed(w1) isClosed(w2) isClosed(w3) isLocked(w3) isUnlocked(w1) isUnlocked(w2) isWindow(w1) isWindow(w2) isWindow(w3)
+
+	ACTIONS:  lockWin(w2)
+
+	4:  isClosed(w1) isClosed(w2) isClosed(w3) isLocked(w2) isLocked(w3) isUnlocked(w1) isWindow(w1) isWindow(w2) isWindow(w3)
+
+	ACTIONS:  openWin(w1)
+
+	5:  isClosed(w2) isClosed(w3) isLocked(w2) isLocked(w3) isOpen(w1) isUnlocked(w1) isWindow(w1) isWindow(w2) isWindow(w3)
+
+SATISFIABLE
+Models       : 1+
+Calls        : 6
+Time         : 0.013s (Solving: 0.00s 1st Model: 0.00s Unsat: 0.00s)
+CPU Time     : 0.013s

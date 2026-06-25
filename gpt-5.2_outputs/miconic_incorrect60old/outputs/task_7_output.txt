@@ -1,0 +1,65 @@
+Objects:
+:- objects
+    f0,f1,f2,f3 :: floor;
+    p0,p1 :: passenger.
+
+Query:
+:- query
+    0: isFloor(f0) & isFloor(f1) & isFloor(f2) & isFloor(f3);
+    0: isPassenger(p0) & isPassenger(p1);
+
+    0: above(f0,f1) & above(f0,f2) & above(f0,f3) &
+       above(f1,f2) & above(f1,f3) &
+       above(f2,f3);
+
+    0: origin(p0)=f0 & dest(p0)=f1;
+    0: origin(p1)=f3 & dest(p1)=f0;
+
+    0: liftAt(f0) & ~liftAt(f1) & ~liftAt(f2) & ~liftAt(f3);
+
+    0: ~boarded(p0) & ~served(p0) & ~boarded(p1) & ~served(p1);
+
+    maxstep: served(p0) & served(p1).
+
+Status: True
+
+Output:
+Solving...
+Solution: 1 (Time: 0.042s)
+	
+
+	0:  dest(p0)=f1 dest(p1)=f0 isFloor(f0) isFloor(f1) isFloor(f2) isFloor(f3) isPassenger(p0) isPassenger(p1) liftAt(f0) origin(p0)=f0 origin(p1)=f3 above(f0, f1) above(f0, f2) above(f0, f3) above(f1, f2) above(f1, f3) above(f2, f3)
+
+	ACTIONS:  down(f0, f3)
+
+	1:  dest(p0)=f1 dest(p1)=f0 isFloor(f0) isFloor(f1) isFloor(f2) isFloor(f3) isPassenger(p0) isPassenger(p1) liftAt(f3) origin(p0)=f0 origin(p1)=f3 above(f0, f1) above(f0, f2) above(f0, f3) above(f1, f2) above(f1, f3) above(f2, f3)
+
+	ACTIONS:  board(f3, p1)
+
+	2:  boarded(p1) dest(p0)=f1 dest(p1)=f0 isFloor(f0) isFloor(f1) isFloor(f2) isFloor(f3) isPassenger(p0) isPassenger(p1) liftAt(f3) origin(p0)=f0 origin(p1)=f3 above(f0, f1) above(f0, f2) above(f0, f3) above(f1, f2) above(f1, f3) above(f2, f3)
+
+	ACTIONS:  up(f3, f0)
+
+	3:  boarded(p1) dest(p0)=f1 dest(p1)=f0 isFloor(f0) isFloor(f1) isFloor(f2) isFloor(f3) isPassenger(p0) isPassenger(p1) liftAt(f0) origin(p0)=f0 origin(p1)=f3 above(f0, f1) above(f0, f2) above(f0, f3) above(f1, f2) above(f1, f3) above(f2, f3)
+
+	ACTIONS:  board(f0, p0)
+
+	4:  boarded(p0) boarded(p1) dest(p0)=f1 dest(p1)=f0 isFloor(f0) isFloor(f1) isFloor(f2) isFloor(f3) isPassenger(p0) isPassenger(p1) liftAt(f0) origin(p0)=f0 origin(p1)=f3 above(f0, f1) above(f0, f2) above(f0, f3) above(f1, f2) above(f1, f3) above(f2, f3)
+
+	ACTIONS:  depart(f0, p1)
+
+	5:  boarded(p0) dest(p0)=f1 dest(p1)=f0 isFloor(f0) isFloor(f1) isFloor(f2) isFloor(f3) isPassenger(p0) isPassenger(p1) liftAt(f0) origin(p0)=f0 origin(p1)=f3 served(p1) above(f0, f1) above(f0, f2) above(f0, f3) above(f1, f2) above(f1, f3) above(f2, f3)
+
+	ACTIONS:  down(f0, f1)
+
+	6:  boarded(p0) dest(p0)=f1 dest(p1)=f0 isFloor(f0) isFloor(f1) isFloor(f2) isFloor(f3) isPassenger(p0) isPassenger(p1) liftAt(f1) origin(p0)=f0 origin(p1)=f3 served(p1) above(f0, f1) above(f0, f2) above(f0, f3) above(f1, f2) above(f1, f3) above(f2, f3)
+
+	ACTIONS:  depart(f1, p0)
+
+	7:  dest(p0)=f1 dest(p1)=f0 isFloor(f0) isFloor(f1) isFloor(f2) isFloor(f3) isPassenger(p0) isPassenger(p1) liftAt(f1) origin(p0)=f0 origin(p1)=f3 served(p0) served(p1) above(f0, f1) above(f0, f2) above(f0, f3) above(f1, f2) above(f1, f3) above(f2, f3)
+
+SATISFIABLE
+Models       : 1+
+Calls        : 8
+Time         : 0.041s (Solving: 0.00s 1st Model: 0.00s Unsat: 0.00s)
+CPU Time     : 0.041s

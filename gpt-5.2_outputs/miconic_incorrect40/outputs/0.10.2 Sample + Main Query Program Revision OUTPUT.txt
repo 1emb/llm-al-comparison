@@ -1,0 +1,157 @@
+% PROGRAM CHANGED? [CHANGED]
+% BC+ signature
+:- sorts
+    floor;
+    passenger.
+
+:- objects
+    f0, f1, f2, f3 :: floor;
+    p0, p1 :: passenger.
+
+:- variables
+    F, F1, F2 :: floor;
+    P :: passenger.
+
+:- constants
+    board(passenger) :: exogenousAction;
+    depart(passenger) :: exogenousAction;
+    moveUp(floor) :: exogenousAction;
+    moveDown(floor) :: exogenousAction;
+
+    % Attributes (must include the action arguments first; action must have at least one argument)
+    atFloor(passenger) :: attribute(floor) of board(passenger);
+    atFloor2(passenger) :: attribute(floor) of depart(passenger);
+    toFloorUp(floor) :: attribute(floor) of moveUp(floor);
+    toFloorDown(floor) :: attribute(floor) of moveDown(floor);
+
+    liftAt :: inertialFluent(floor);
+    origin(passenger) :: inertialFluent(floor);
+    dest(passenger) :: inertialFluent(floor);
+
+    above(floor,floor) :: inertialFluent(boolean);
+
+    isFloor(floor) :: inertialFluent(boolean);
+    isPassenger(passenger) :: inertialFluent(boolean);
+    boarded(passenger) :: inertialFluent(boolean);
+    served(passenger) :: inertialFluent(boolean).
+
+% Generated constraints
+
+% --- Basic sanity constraints ---
+% The elevator cannot be at two different floors at the same time.
+impossible liftAt = F1 & liftAt = F2 & F1\=F2.
+
+% --- Boarding ---
+% A passenger can board only when the lift is at the boarding floor and the passenger's origin is that floor.
+nonexecutable board(P) if atFloor(P)\=liftAt.
+nonexecutable board(P) if origin(P)\=atFloor(P).
+
+% Boarding is not executable at floor F if isFloor(F) holds.
+nonexecutable board(P) if isFloor(F) & atFloor(P)=F.
+
+% Boarding is not executable for passenger P if isPassenger(P) holds.
+nonexecutable board(P) if isPassenger(P).
+
+% Boarding causes boarded(P) to hold.
+board(P) causes boarded(P).
+
+% Boarding makes the person a passenger.
+board(P) causes isPassenger(P).
+
+% --- Departing ---
+% A passenger can depart only when the lift is at the departing floor and the passenger's destination is that floor.
+nonexecutable depart(P) if atFloor2(P)\=liftAt.
+nonexecutable depart(P) if dest(P)\=atFloor2(P).
+
+% Departing is not executable at floor F if isFloor(F) holds.
+nonexecutable depart(P) if isFloor(F) & atFloor2(P)=F.
+
+% Departing is not executable for passenger P if isPassenger(P) does not hold.
+nonexecutable depart(P) if ~isPassenger(P).
+
+% Departing is not executable for passenger P if boarded(P) does not hold.
+nonexecutable depart(P) if ~boarded(P).
+
+% Departing causes boarded(P) to not hold.
+depart(P) causes ~boarded(P).
+
+% Departing causes served(P) to hold.
+depart(P) causes served(P).
+
+% --- Moving up/down ---
+% Fix 1: movement should require the destination to be a floor, but should NOT require ~isFloor(start).
+% Fix 2 (critical): remove the incorrect precondition "~above(...)" that made moves impossible.
+% MoveUp(F1) means "move from current floor F1 to toFloorUp(F1)".
+nonexecutable moveUp(F1) if liftAt\=F1.
+nonexecutable moveUp(F1) if toFloorUp(F1)=F2 & ~isFloor(F2).
+% Require that destination is above the start (i.e., moving up).
+nonexecutable moveUp(F1) if toFloorUp(F1)=F2 & ~above(F2,F1).
+
+moveUp(F1) causes liftAt=F2 if toFloorUp(F1)=F2.
+
+% MoveDown(F1) means "move from current floor F1 to toFloorDown(F1)".
+nonexecutable moveDown(F1) if liftAt\=F1.
+nonexecutable moveDown(F1) if toFloorDown(F1)=F2 & ~isFloor(F2).
+% Require that start is above destination (i.e., moving down).
+nonexecutable moveDown(F1) if toFloorDown(F1)=F2 & ~above(F1,F2).
+
+moveDown(F1) causes liftAt=F2 if toFloorDown(F1)=F2.
+
+
+% MAIN QUERY CHANGED? [UNCHANGED]
+:- query
+    0: above(f0,f1) & above(f0,f2) & above(f0,f3) & above(f1,f2) & above(f1,f3) & above(f2,f3);
+    0: origin(p0)=f3 & dest(p0)=f2 & origin(p1)=f1 & dest(p1)=f3;
+    0: liftAt=f0;
+
+    % Floors are floors (needed because moveUp/moveDown require destination to be a floor).
+    0: isFloor(f0) & isFloor(f1) & isFloor(f2) & isFloor(f3);
+
+    0: ~isPassenger(p0) & ~isPassenger(p1) & ~boarded(p0) & ~boarded(p1) & ~served(p0) & ~served(p1);
+
+    maxstep: served(p0) & served(p1).
+
+
+% SAMPLE QUERIES CHANGED? [CHANGED]
+% Query 1: Board p0 at f0 when the lift is at f0 and origin(p0)=f0, with isFloor(f0)=false and isPassenger(p0)=false (satisfiable)
+:- query
+    0: liftAt=f0;
+    0: origin(p0)=f0 & dest(p0)=f1;
+    0: ~isFloor(f0) & isFloor(f1);
+    0: ~isPassenger(p0) & ~boarded(p0) & ~served(p0);
+    0: board(p0) & atFloor(p0)=f0;
+    maxstep: boarded(p0) & isPassenger(p0).
+
+% Query 2: Try to board p0 at f0 when isFloor(f0)=true (should be blocked) (unsatisfiable)
+:- query
+    0: liftAt=f0;
+    0: origin(p0)=f0 & dest(p0)=f1;
+    0: isFloor(f0) & isFloor(f1);
+    0: ~isPassenger(p0) & ~boarded(p0) & ~served(p0);
+    0: board(p0) & atFloor(p0)=f0.
+
+% Query 3: Depart p0 at f1 when the lift is at f1, dest(p0)=f1, isFloor(f1)=false, isPassenger(p0)=true, and boarded(p0)=true (satisfiable)
+:- query
+    0: liftAt=f1;
+    0: origin(p0)=f0 & dest(p0)=f1;
+    0: ~isFloor(f1) & isFloor(f0);
+    0: isPassenger(p0) & boarded(p0) & ~served(p0);
+    0: depart(p0) & atFloor2(p0)=f1;
+    maxstep: ~boarded(p0) & served(p0).
+
+% Query 4: Try to depart p0 at f1 while boarded(p0)=false (should be blocked by nonexecutable depart if ~boarded(P)) (unsatisfiable)
+:- query
+    0: liftAt=f1;
+    0: origin(p0)=f0 & dest(p0)=f1;
+    0: ~isFloor(f1) & isFloor(f0);
+    0: isPassenger(p0) & ~boarded(p0) & ~served(p0);
+    0: depart(p0) & atFloor2(p0)=f1.
+
+% Query 5: Move down from f0 to f1 when liftAt=f0, isFloor(f1)=true, and above(f0,f1)=true (satisfiable)
+% NOTE: With the intended meaning of above(X,Y) = "X is above Y", moving from f0 to f1 is moving DOWN.
+:- query
+    0: liftAt=f0;
+    0: isFloor(f0) & isFloor(f1);
+    0: above(f0,f1);
+    0: moveDown(f0) & toFloorDown(f0)=f1;
+    maxstep: liftAt=f1.

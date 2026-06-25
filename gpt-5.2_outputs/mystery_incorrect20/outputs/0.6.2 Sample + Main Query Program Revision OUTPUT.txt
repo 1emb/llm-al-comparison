@@ -1,0 +1,131 @@
+% PROGRAM CHANGED? [CHANGED]
+% BC+ signature
+:- sorts
+    entity.
+
+:- objects
+    a, b, c, d :: entity.
+
+:- variables
+    E, E1, E2 :: entity.
+
+:- constants
+    attack(entity) :: exogenousAction;
+    succumb(entity) :: exogenousAction;
+    overcome(entity, entity) :: exogenousAction;
+    feast(entity, entity) :: exogenousAction;
+
+    isProvince(entity) :: inertialFluent(boolean);
+    isPlanet(entity) :: inertialFluent(boolean);
+    harmony :: inertialFluent(boolean);
+    inPain(entity) :: inertialFluent(boolean);
+    craves(entity, entity) :: inertialFluent(boolean).
+
+% Generated constraints
+
+% Attack preconditions: target must be province and planet, and harmony must be absent
+nonexecutable attack(E) if ~isProvince(E).
+nonexecutable attack(E) if ~isPlanet(E).
+nonexecutable attack(E) if harmony.
+
+% Attack effects
+attack(E) causes inPain(E).
+attack(E) causes ~isProvince(E).
+attack(E) causes ~isPlanet(E).
+attack(E) causes harmony.
+
+% Succumb precondition: only if not in pain
+nonexecutable succumb(E) if inPain(E).
+
+% Succumb effects
+succumb(E) causes isProvince(E).
+succumb(E) causes harmony.
+succumb(E) causes ~isPlanet(E).
+succumb(E) causes ~inPain(E).
+
+% Overcome preconditions: E2 must be a province, E1 must not be in pain
+nonexecutable overcome(E1,E2) if ~isProvince(E2).
+nonexecutable overcome(E1,E2) if inPain(E1).
+
+% Overcome effects
+overcome(E1,E2) causes harmony.
+overcome(E1,E2) causes ~isProvince(E1).
+overcome(E1,E2) causes craves(E1,E2).
+overcome(E1,E2) causes ~isProvince(E2).
+overcome(E1,E2) causes ~inPain(E1).
+
+% Feast preconditions: E1 craves E2, E1 not a province, harmony present
+nonexecutable feast(E1,E2) if ~craves(E1,E2).
+nonexecutable feast(E1,E2) if isProvince(E1).
+nonexecutable feast(E1,E2) if ~harmony.
+
+% Feast effects
+feast(E1,E2) causes inPain(E1).
+feast(E1,E2) causes isProvince(E2).
+feast(E1,E2) causes ~craves(E1,E2).
+feast(E1,E2) causes isProvince(E1).
+feast(E1,E2) causes ~harmony.
+
+% NOTE ON THE CHANGE:
+% The original program is syntactically fine, but the shown Cplus2ASP models for the sample queries
+% and main query include many unintended facts (e.g., inPain(b) true without being stated, and
+% craves(x,y) true for almost all pairs). That indicates the domain is underconstrained relative
+% to the intended reading of the queries.
+%
+% To make the solver behavior align with the intended "only what is stated holds" reading in the
+% sample outputs checking executability/effects, we add closed-world defaults for the inertial fluents.
+
+% Closed-world defaults (so unspecified fluents are false by default)
+default ~harmony.
+default ~isProvince(E).
+default ~isPlanet(E).
+default ~inPain(E).
+default ~craves(E1,E2).
+
+% MAIN QUERY CHANGED? [CHANGED]
+:- query
+    0: harmony
+       & craves(a,c) & craves(b,a) & craves(c,d)
+       & isPlanet(d)
+       & isProvince(b)
+       & ~inPain(a) & ~inPain(b) & ~inPain(c) & ~inPain(d)
+       & ~isProvince(a) & ~isProvince(c) & ~isProvince(d)
+       & ~isPlanet(a) & ~isPlanet(b) & ~isPlanet(c);
+    maxstep: craves(b,c) & craves(d,b).
+
+% Rationale for main query change:
+% The original main query was not exhaustive, so the solver could satisfy the goal by freely setting
+% additional craves facts true initially (as seen in the provided output where craves(d,b) already holds).
+% The revised query preserves the natural language meaning but prevents "free" satisfaction by:
+% (i) explicitly setting non-mentioned inPain/isProvince/isPlanet to false at time 0, and
+% (ii) relying on the new defaults to keep other unrelated fluents false unless caused.
+
+% SAMPLE QUERIES CHANGED? [CHANGED]
+
+% Query 1: A valid attack when the target is both a province and a planet and harmony is absent; after attack, target is in pain, no longer province/planet, and harmony becomes present. (satisfiable)
+:- query
+    0: ~harmony & isProvince(a) & isPlanet(a) & ~inPain(a);
+    0: attack(a);
+    maxstep: harmony & inPain(a) & ~isProvince(a) & ~isPlanet(a).
+
+% Query 2: Attempt to attack while harmony is present (should be blocked by nonexecutable). (unsatisfiable)
+:- query
+    0: harmony & isProvince(a) & isPlanet(a) & ~inPain(a);
+    0: attack(a).
+
+% Query 3: Succumb is not allowed if the entity is in pain. (unsatisfiable)
+:- query
+    0: harmony & inPain(b);
+    0: succumb(b).
+
+% Query 4: A valid overcome when the second entity is a province and the first is not in pain; after overcome, harmony is present and craves(E1,E2) holds, and both stop being provinces. (satisfiable)
+:- query
+    0: ~harmony & isProvince(c) & ~inPain(b);
+    0: overcome(b,c);
+    maxstep: harmony & craves(b,c) & ~isProvince(b) & ~isProvince(c) & ~inPain(b).
+
+% Query 5: Feast requires craving, first not a province, and harmony present; after feast, first becomes a province and in pain, craving removed, and harmony becomes absent. (satisfiable)
+:- query
+    0: harmony & craves(a,c) & ~isProvince(a) & ~inPain(a);
+    0: feast(a,c);
+    maxstep: ~harmony & isProvince(a) & inPain(a) & ~craves(a,c) & isProvince(c).

@@ -1,0 +1,181 @@
+% PROGRAM CHANGED? [CHANGED]
+% BC+ signature
+:- sorts
+    floor;
+    passenger.
+
+:- objects
+    f0, f1 :: floor;
+    p0 :: passenger.
+
+:- variables
+    F, F1, F2 :: floor;
+    P :: passenger.
+
+:- constants
+    board(floor, passenger) :: exogenousAction;
+    depart(floor, passenger) :: exogenousAction;
+    up(floor, floor) :: exogenousAction;
+    down(floor, floor) :: exogenousAction;
+
+    % Elevator location: loc(F)=true means elevator is at floor F
+    loc(floor) :: inertialFluent(boolean);
+
+    origin(passenger) :: inertialFluent(floor);
+    dest(passenger) :: inertialFluent(floor);
+
+    passengerFlag(passenger) :: inertialFluent(boolean);
+    boarded(passenger) :: inertialFluent(boolean);
+    served(passenger) :: inertialFluent(boolean);
+
+    above(floor, floor) :: inertialFluent(boolean);
+    validFloor(floor) :: inertialFluent(boolean).
+
+% Generated constraints
+
+% 1. The elevator cannot be at two different floors at the same time.
+impossible loc(F1) & loc(F2) & F1\=F2.
+
+% 2. Boarding at floor F by passenger P is not executable if validFloor(F) does not hold.
+nonexecutable board(F,P) if ~validFloor(F).
+
+% 3. Boarding at floor F by passenger P is not executable if loc(F) does not hold.
+nonexecutable board(F,P) if ~loc(F).
+
+% 4. Boarding at floor F by passenger P is not executable if origin(P) is not F.
+nonexecutable board(F,P) if origin(P)\=F.
+
+% 5. Boarding at floor F by passenger P is not executable if passengerFlag(P) holds.
+nonexecutable board(F,P) if passengerFlag(P).
+
+% 6. When boarding at floor F by passenger P happens, boarded(P) becomes false.
+board(F,P) causes ~boarded(P).
+
+% 7. Departing at floor F by passenger P is not executable if validFloor(F) does not hold.
+nonexecutable depart(F,P) if ~validFloor(F).
+
+% 8. Departing at floor F by passenger P is not executable if passengerFlag(P) does not hold.
+nonexecutable depart(F,P) if ~passengerFlag(P).
+
+% 9. Departing at floor F by passenger P is not executable if loc(F) holds.
+nonexecutable depart(F,P) if loc(F).
+
+% 10. Departing at floor F by passenger P is not executable if dest(P) is not F.
+nonexecutable depart(F,P) if dest(P)\=F.
+
+% 11. Departing at floor F by passenger P is not executable if boarded(P) does not hold.
+nonexecutable depart(F,P) if ~boarded(P).
+
+% 12. When departing at floor F by passenger P happens, boarded(P) becomes true.
+depart(F,P) causes boarded(P).
+
+% 13. When departing at floor F by passenger P happens, served(P) becomes true.
+depart(F,P) causes served(P).
+
+% 14. Moving up from floor F1 to floor F2 is not executable if validFloor(F1) does not hold.
+nonexecutable up(F1,F2) if ~validFloor(F1).
+
+% 15. Moving up from floor F1 to floor F2 is not executable if validFloor(F2) does not hold.
+nonexecutable up(F1,F2) if ~validFloor(F2).
+
+% 16. Moving up from floor F1 to floor F2 is not executable if loc(F1) does not hold.
+nonexecutable up(F1,F2) if ~loc(F1).
+
+% 17. Moving up from floor F1 to floor F2 is not executable if above(F2,F1) does not hold.
+nonexecutable up(F1,F2) if ~above(F2,F1).
+
+% 18. When moving up from floor F1 to floor F2 happens, loc(F2) becomes true.
+up(F1,F2) causes loc(F2).
+
+% 19. When moving up from floor F1 to floor F2 happens, loc(F1) becomes false.
+up(F1,F2) causes ~loc(F1).
+
+% 20. Moving down from floor F1 to floor F2 is not executable if validFloor(F1) does not hold.
+nonexecutable down(F1,F2) if ~validFloor(F1).
+
+% 21. Moving down from floor F1 to floor F2 is not executable if validFloor(F2) does not hold.
+nonexecutable down(F1,F2) if ~validFloor(F2).
+
+% 22. Moving down from floor F1 to floor F2 is not executable if loc(F1) does not hold.
+nonexecutable down(F1,F2) if ~loc(F1).
+
+% 23. Moving down from floor F1 to floor F2 is not executable if above(F1,F2) does not hold.
+nonexecutable down(F1,F2) if ~above(F1,F2).
+
+% 24. When moving down from floor F1 to floor F2 happens, loc(F2) becomes true.
+down(F1,F2) causes loc(F2).
+
+% 25. When moving down from floor F1 to floor F2 happens, loc(F1) becomes false.
+down(F1,F2) causes ~loc(F1).
+
+% Fix 1: above/2 should not be inertial (otherwise it can be arbitrarily set in each state,
+% and grounding can introduce unintended above facts). Make it rigid via static constraints:
+% We cannot change the declaration type here, so we constrain it to be fixed by making it total/acyclic is hard.
+% Minimal fix for the reported UNSAT: explicitly forbid self-loops and require antisymmetry.
+impossible above(F,F).
+impossible above(F1,F2) & above(F2,F1) & F1\=F2.
+
+% Fix 2: validFloor/1 should be a state property but should not be left unconstrained in queries.
+% Keep as inertialFluent, but add a default that floors are valid unless stated otherwise.
+default validFloor(F).
+
+% MAIN QUERY CHANGED? [UNCHANGED]
+:- query
+    0: validFloor(f0) & validFloor(f1) & above(f0,f1) &
+       origin(p0)=f0 & dest(p0)=f1 &
+       loc(f0) &
+       ~passengerFlag(p0) & boarded(p0) & ~served(p0);
+    maxstep: served(p0).
+
+% SAMPLE QUERIES CHANGED? [CHANGED]
+% Query 1: Basic boarding works at the passenger's origin when the elevator is there and the floor is valid. (satisfiable)
+:- query
+    label :: q1_board_ok;
+    0: validFloor(f0) & validFloor(f1) & above(f0,f1) &
+       loc(f0) &
+       origin(p0)=f0 & dest(p0)=f1 &
+       ~passengerFlag(p0) & boarded(p0) & ~served(p0);
+    0: board(f0,p0).
+
+% Query 2: Boarding is not allowed at the wrong floor (origin mismatch). (unsatisfiable)
+:- query
+    label :: q2_board_wrong_floor;
+    0: validFloor(f0) & validFloor(f1) & above(f0,f1) &
+       loc(f1) &
+       origin(p0)=f0 & dest(p0)=f1 &
+       ~passengerFlag(p0) & boarded(p0) & ~served(p0);
+    0: board(f1,p0).
+
+% Query 3: Depart is not allowed if the elevator is at the departure floor (rule says nonexecutable if loc(F)). (unsatisfiable)
+:- query
+    label :: q3_depart_when_elevator_there;
+    0: validFloor(f0) & validFloor(f1) & above(f0,f1) &
+       loc(f1) &
+       origin(p0)=f0 & dest(p0)=f1 &
+       passengerFlag(p0) & boarded(p0) & ~served(p0);
+    0: depart(f1,p0).
+
+% Query 4: A simple plan to serve the passenger.
+% NOTE: With the given domain rules, depart(f1,p0) requires ~loc(f1) at that step.
+% So we must move away from f1 before departing, which is counterintuitive.
+% Keep the query but make it consistent: depart at f1 while elevator is NOT at f1,
+% so we move to f1, then move back to f0, then depart at f1 (still odd but matches rules). (satisfiable)
+:- query
+    label :: q4_serve_plan_per_rules;
+    0: validFloor(f0) & validFloor(f1) & above(f0,f1) &
+       loc(f0) &
+       origin(p0)=f0 & dest(p0)=f1 &
+       ~passengerFlag(p0) & boarded(p0) & ~served(p0);
+    0: board(f0,p0);
+    1: down(f0,f1);
+    2: up(f1,f0);
+    3: depart(f1,p0);
+    maxstep: served(p0).
+
+% Query 5: The elevator cannot be at two different floors in the same state. (unsatisfiable)
+:- query
+    label :: q5_unique_loc;
+    0: validFloor(f0) & validFloor(f1) & above(f0,f1) &
+       loc(f0) & loc(f1) &
+       origin(p0)=f0 & dest(p0)=f1 &
+       ~passengerFlag(p0) & boarded(p0) & ~served(p0).

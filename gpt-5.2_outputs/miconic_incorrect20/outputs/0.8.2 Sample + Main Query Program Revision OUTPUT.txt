@@ -1,0 +1,133 @@
+% PROGRAM CHANGED? [CHANGED]
+% BC+ signature
+:- sorts
+    floor;
+    passenger.
+
+:- objects
+    f0, f1 :: floor;
+    p0 :: passenger.
+
+:- variables
+    F, F1, F2 :: floor;
+    P :: passenger.
+
+:- constants
+    board(passenger,floor) :: exogenousAction;
+    depart(passenger,floor) :: exogenousAction;
+    moveUp(floor,floor) :: exogenousAction;
+    moveDown(floor,floor) :: exogenousAction;
+
+    isFloor(floor) :: inertialFluent(boolean);
+    loc(floor) :: inertialFluent(boolean);
+    above(floor,floor) :: inertialFluent(boolean);
+
+    origin(passenger) :: inertialFluent(floor);
+    dest(passenger) :: inertialFluent(floor);
+
+    passengerFlag(passenger) :: inertialFluent(boolean);
+    boarded(passenger) :: inertialFluent(boolean);
+    served(passenger) :: inertialFluent(boolean).
+
+% Generated constraints
+% NOTE: "at" is a reserved keyword in BC+, so we use loc(F) instead.
+
+% Sanity: elevator cannot be at two floors at once
+impossible loc(F1) & loc(F2) & F1\=F2.
+
+% (Optional but important) Sanity: above should not be reflexive
+impossible above(F,F).
+
+% Boarding preconditions
+nonexecutable board(P,F) if ~isFloor(F).
+nonexecutable board(P,F) if ~loc(F).
+nonexecutable board(P,F) if origin(P)\=F.
+nonexecutable board(P,F) if passengerFlag(P).
+
+% Boarding effects
+board(P,F) causes boarded(P).
+board(P,F) causes passengerFlag(P).
+
+% Departing preconditions
+nonexecutable depart(P,F) if ~isFloor(F).
+nonexecutable depart(P,F) if ~passengerFlag(P).
+nonexecutable depart(P,F) if ~loc(F).          % fix: must be at floor F to depart there
+nonexecutable depart(P,F) if dest(P)\=F.
+nonexecutable depart(P,F) if ~boarded(P).
+
+% Departing effects
+depart(P,F) causes ~boarded(P).
+depart(P,F) causes served(P).
+depart(P,F) causes ~passengerFlag(P).          % optional: no longer a passenger after departing
+
+% Move up preconditions
+nonexecutable moveUp(F1,F2) if ~isFloor(F1).
+nonexecutable moveUp(F1,F2) if ~isFloor(F2).
+nonexecutable moveUp(F1,F2) if ~loc(F1).
+nonexecutable moveUp(F1,F2) if ~above(F1,F2).
+
+% Move up effects
+moveUp(F1,F2) causes ~loc(F1).
+moveUp(F1,F2) causes loc(F2).
+
+% Move down preconditions
+nonexecutable moveDown(F1,F2) if ~isFloor(F1).
+nonexecutable moveDown(F1,F2) if ~isFloor(F2).
+nonexecutable moveDown(F1,F2) if ~loc(F1).
+nonexecutable moveDown(F1,F2) if ~above(F2,F1).
+
+% Move down effects
+moveDown(F1,F2) causes ~loc(F1).
+moveDown(F1,F2) causes loc(F2).
+
+% MAIN QUERY CHANGED? [CHANGED]
+% Original natural language query: There is one passenger p0 and two floors f0 and f1.
+% f0 is above f1. The origin of p0 is f0 and the destination of p0 is f1.
+% The elevator is at f0. Find a plan to serve passenger p0.
+:- query
+    0: isFloor(f0) & isFloor(f1) & above(f0,f1) &
+       origin(p0)=f0 & dest(p0)=f1 &
+       loc(f0) & ~loc(f1) &
+       ~passengerFlag(p0) & ~boarded(p0) & ~served(p0);
+    maxstep: served(p0).
+
+% SAMPLE QUERIES CHANGED? [CHANGED]
+% Query 1: Board p0 at its origin floor f0 while the elevator is at f0 and f0 is a valid floor (satisfiable)
+:- query
+    0: isFloor(f0) & isFloor(f1) & above(f0,f1) &
+       origin(p0)=f0 & dest(p0)=f1 &
+       loc(f0) & ~loc(f1) &
+       ~passengerFlag(p0) & ~boarded(p0) & ~served(p0);
+    0: board(p0,f0).
+
+% Query 2: Try to board p0 at the wrong floor f1 (origin is f0), even though the elevator is at f1 (unsatisfiable)
+:- query
+    0: isFloor(f0) & isFloor(f1) & above(f0,f1) &
+       origin(p0)=f0 & dest(p0)=f1 &
+       loc(f1) & ~loc(f0) &
+       ~passengerFlag(p0) & ~boarded(p0) & ~served(p0);
+    0: board(p0,f1).
+
+% Query 3: Depart p0 at destination f1 while the elevator IS at f1, p0 is a passenger, and p0 is boarded (satisfiable)
+:- query
+    0: isFloor(f0) & isFloor(f1) & above(f0,f1) &
+       origin(p0)=f0 & dest(p0)=f1 &
+       loc(f1) & ~loc(f0) &
+       passengerFlag(p0) & boarded(p0) & ~served(p0);
+    0: depart(p0,f1).
+
+% Query 4: Try to depart p0 at f1 while the elevator is NOT at f1 (violates the nonexecutable condition) (unsatisfiable)
+:- query
+    0: isFloor(f0) & isFloor(f1) & above(f0,f1) &
+       origin(p0)=f0 & dest(p0)=f1 &
+       loc(f0) & ~loc(f1) &
+       passengerFlag(p0) & boarded(p0) & ~served(p0);
+    0: depart(p0,f1).
+
+% Query 5: Try to moveUp from f0 to f1 when above(f0,f1) holds and elevator is at f0 (satisfiable)
+:- query
+    0: isFloor(f0) & isFloor(f1) & above(f0,f1) &
+       origin(p0)=f0 & dest(p0)=f1 &
+       loc(f0) & ~loc(f1) &
+       ~passengerFlag(p0) & ~boarded(p0) & ~served(p0);
+    0: moveUp(f0,f1).

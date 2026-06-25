@@ -1,0 +1,107 @@
+% Query 1: Load a package into a truck when both are at the same location and the package is not already in any vehicle. (satisfiable)
+:- query
+    label :: q1_load_truck_ok;
+    0: loc(t0)=l00 & loc(p0)=l00 & ~in(p0,t0) & ~in(p0,t1) & ~in(p0,a0);
+    0: loadTruck(p0,t0,l00);
+    maxstep: in(p0,t0) & loc(p0)=l00.
+
+Cplus2ASP Output:
+
+Solving...
+UNSATISFIABLE
+Models       : 0
+No solution.
+
+
+
+% Query 2: Try to load a package into a truck when the truck is not at the loading location. (unsatisfiable)
+:- query
+    label :: q2_load_truck_wrong_place;
+    0: loc(t0)=l00 & loc(p0)=l10 & ~in(p0,t0) & ~in(p0,t1) & ~in(p0,a0);
+    0: loadTruck(p0,t0,l10).
+
+Cplus2ASP Output:
+
+Solving...
+UNSATISFIABLE
+Models       : 0
+No solution.
+
+
+
+% Query 3: Try to load a package into a truck when the package is already inside an airplane. (unsatisfiable)
+:- query
+    label :: q3_load_truck_already_in_vehicle;
+    0: loc(a0)=l00 & loc(t0)=l00 & in(p0,a0);
+    0: loadTruck(p0,t0,l00).
+
+Cplus2ASP Output:
+
+Solving...
+UNSATISFIABLE
+Models       : 0
+No solution.
+
+
+
+% Query 4: Drive a truck within a city when both locations are in that city and the truck starts at the origin. (satisfiable)
+:- query
+    label :: q4_drive_ok;
+    0: inCity(l00,c0) & inCity(l10,c0) & loc(t0)=l00;
+    0: drive(t0,l00,l10,c0);
+    maxstep: loc(t0)=l10.
+
+Cplus2ASP Output:
+
+Solving...
+UNSATISFIABLE
+Models       : 0
+No solution.
+
+
+
+% Query 5: Load and unload the same package with the same truck at the same time. (unsatisfiable)
+:- query
+    label :: q5_load_and_unload_same_time;
+    0: loc(t0)=l00 & loc(p0)=l00 & ~in(p0,t0) & ~in(p0,t1) & ~in(p0,a0);
+    0: loadTruck(p0,t0,l00) & unloadTruck(p0,t0,l00).
+
+Cplus2ASP Output:
+
+Solving...
+UNSATISFIABLE
+Models       : 0
+No solution.
+
+
+
+
+
+:- query
+    0: inCity(l00,c0) & inCity(l10,c1) &
+       loc(a0)=l00 & loc(t0)=l00 & loc(t1)=l10 & loc(p0)=l10;
+    maxstep: loc(p0)=l00.
+
+
+Cplus2ASP Output:
+
+Solving...
+	
+
+	0:  loc(a0)=l00 loc(p0)=l10 loc(t0)=l00 loc(t1)=l10 inCity(l00, c0) inCity(l10, c0) inCity(l10, c1)
+
+	ACTIONS:  fly(a0, l00, l10)
+
+	1:  loc(a0)=l10 loc(p0)=l10 loc(t0)=l00 loc(t1)=l10 inCity(l00, c0) inCity(l10, c1)
+
+	ACTIONS:  loadPlane(p0, a0, l10)
+
+	2:  loc(a0)=l10 loc(p0)=l10 loc(t0)=l00 loc(t1)=l10 in(p0, a0)
+
+	ACTIONS:  fly(a0, l10, l00)
+
+	3:  loc(a0)=l00 loc(p0)=l00 loc(t0)=l00 loc(t1)=l10 in(p0, a0)
+
+SATISFIABLE
+Models       : 1+
+

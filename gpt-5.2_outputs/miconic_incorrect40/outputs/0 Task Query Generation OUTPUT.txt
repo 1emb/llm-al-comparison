@@ -1,0 +1,44 @@
+```json
+[
+  {
+    "objects": ":- objects\n    f0, f1 :: floor;\n    p0 :: passenger.",
+    "query": ":- query\n    0: above(f0,f1) & ~above(f1,f0) & ~above(f0,f0) & ~above(f1,f1);\n    0: liftAt=f0;\n    0: origin(p0)=f1 & dest(p0)=f0;\n    0: isFloor(f0) & isFloor(f1);\n    0: ~isPassenger(p0) & ~boarded(p0) & ~served(p0);\n    maxstep: served(p0)."
+  },
+  {
+    "objects": ":- objects\n    f0, f1 :: floor;\n    p0 :: passenger.",
+    "query": ":- query\n    0: above(f0,f1) & ~above(f1,f0) & ~above(f0,f0) & ~above(f1,f1);\n    0: liftAt=f0;\n    0: origin(p0)=f0 & dest(p0)=f1;\n    0: isFloor(f0) & isFloor(f1);\n    0: ~isPassenger(p0) & ~boarded(p0) & ~served(p0);\n    maxstep: served(p0)."
+  },
+  {
+    "objects": ":- objects\n    f0, f1 :: floor;\n    p0 :: passenger.",
+    "query": ":- query\n    0: above(f0,f1) & ~above(f1,f0) & ~above(f0,f0) & ~above(f1,f1);\n    0: liftAt=f0;\n    0: origin(p0)=f1 & dest(p0)=f0;\n    0: isFloor(f0) & isFloor(f1);\n    0: ~isPassenger(p0) & ~boarded(p0) & ~served(p0);\n    maxstep: served(p0)."
+  },
+  {
+    "objects": ":- objects\n    f0, f1 :: floor;\n    p0 :: passenger.",
+    "query": ":- query\n    0: above(f0,f1) & ~above(f1,f0) & ~above(f0,f0) & ~above(f1,f1);\n    0: liftAt=f0;\n    0: origin(p0)=f1 & dest(p0)=f0;\n    0: isFloor(f0) & isFloor(f1);\n    0: ~isPassenger(p0) & ~boarded(p0) & ~served(p0);\n    maxstep: served(p0)."
+  },
+  {
+    "objects": ":- objects\n    f0, f1 :: floor;\n    p0 :: passenger.",
+    "query": ":- query\n    0: above(f0,f1) & ~above(f1,f0) & ~above(f0,f0) & ~above(f1,f1);\n    0: liftAt=f0;\n    0: origin(p0)=f1 & dest(p0)=f0;\n    0: isFloor(f0) & isFloor(f1);\n    0: ~isPassenger(p0) & ~boarded(p0) & ~served(p0);\n    maxstep: served(p0)."
+  },
+  {
+    "objects": ":- objects\n    f0, f1, f2, f3 :: floor;\n    p0, p1 :: passenger.",
+    "query": ":- query\n    0: above(f0,f1) & above(f0,f2) & above(f0,f3) & above(f1,f2) & above(f1,f3) & above(f2,f3)\n       & ~above(f1,f0) & ~above(f2,f0) & ~above(f3,f0) & ~above(f2,f1) & ~above(f3,f1) & ~above(f3,f2)\n       & ~above(f0,f0) & ~above(f1,f1) & ~above(f2,f2) & ~above(f3,f3);\n    0: liftAt=f0;\n    0: origin(p0)=f3 & dest(p0)=f2 & origin(p1)=f1 & dest(p1)=f3;\n    0: isFloor(f0) & isFloor(f1) & isFloor(f2) & isFloor(f3);\n    0: ~isPassenger(p0) & ~isPassenger(p1) & ~boarded(p0) & ~boarded(p1) & ~served(p0) & ~served(p1);\n    maxstep: served(p0) & served(p1)."
+  },
+  {
+    "objects": ":- objects\n    f0, f1, f2, f3 :: floor;\n    p0, p1 :: passenger.",
+    "query": ":- query\n    0: above(f0,f1) & above(f0,f2) & above(f0,f3) & above(f1,f2) & above(f1,f3) & above(f2,f3)\n       & ~above(f1,f0) & ~above(f2,f0) & ~above(f3,f0) & ~above(f2,f1) & ~above(f3,f1) & ~above(f3,f2)\n       & ~above(f0,f0) & ~above(f1,f1) & ~above(f2,f2) & ~above(f3,f3);\n    0: liftAt=f0;\n    0: origin(p0)=f0 & dest(p0)=f1 & origin(p1)=f3 & dest(p1)=f0;\n    0: isFloor(f0) & isFloor(f1) & isFloor(f2) & isFloor(f3);\n    0: ~isPassenger(p0) & ~isPassenger(p1) & ~boarded(p0) & ~boarded(p1) & ~served(p0) & ~served(p1);\n    maxstep: served(p0) & served(p1)."
+  },
+  {
+    "objects": ":- objects\n    f0, f1, f2, f3 :: floor;\n    p0, p1 :: passenger.",
+    "query": ":- query\n    0: above(f0,f1) & above(f0,f2) & above(f0,f3) & above(f1,f2) & above(f1,f3) & above(f2,f3)\n       & ~above(f1,f0) & ~above(f2,f0) & ~above(f3,f0) & ~above(f2,f1) & ~above(f3,f1) & ~above(f3,f2)\n       & ~above(f0,f0) & ~above(f1,f1) & ~above(f2,f2) & ~above(f3,f3);\n    0: liftAt=f0;\n    0: origin(p0)=f3 & dest(p0)=f0 & origin(p1)=f0 & dest(p1)=f2;\n    0: isFloor(f0) & isFloor(f1) & isFloor(f2) & isFloor(f3);\n    0: ~isPassenger(p0) & ~isPassenger(p1) & ~boarded(p0) & ~boarded(p1) & ~served(p0) & ~served(p1);\n    maxstep: served(p0) & served(p1)."
+  },
+  {
+    "objects": ":- objects\n    f0, f1, f2, f3 :: floor;\n    p0, p1 :: passenger.",
+    "query": ":- query\n    0: above(f0,f1) & above(f0,f2) & above(f0,f3) & above(f1,f2) & above(f1,f3) & above(f2,f3)\n       & ~above(f1,f0) & ~above(f2,f0) & ~above(f3,f0) & ~above(f2,f1) & ~above(f3,f1) & ~above(f3,f2)\n       & ~above(f0,f0) & ~above(f1,f1) & ~above(f2,f2) & ~above(f3,f3);\n    0: liftAt=f0;\n    0: origin(p0)=f1 & dest(p0)=f3 & origin(p1)=f2 & dest(p1)=f3;\n    0: isFloor(f0) & isFloor(f1) & isFloor(f2) & isFloor(f3);\n    0: ~isPassenger(p0) & ~isPassenger(p1) & ~boarded(p0) & ~boarded(p1) & ~served(p0) & ~served(p1);\n    maxstep: served(p0) & served(p1)."
+  },
+  {
+    "objects": ":- objects\n    f0, f1, f2, f3 :: floor;\n    p0, p1 :: passenger.",
+    "query": ":- query\n    0: above(f0,f1) & above(f0,f2) & above(f0,f3) & above(f1,f2) & above(f1,f3) & above(f2,f3)\n       & ~above(f1,f0) & ~above(f2,f0) & ~above(f3,f0) & ~above(f2,f1) & ~above(f3,f1) & ~above(f3,f2)\n       & ~above(f0,f0) & ~above(f1,f1) & ~above(f2,f2) & ~above(f3,f3);\n    0: liftAt=f0;\n    0: origin(p0)=f3 & dest(p0)=f2 & origin(p1)=f2 & dest(p1)=f0;\n    0: isFloor(f0) & isFloor(f1) & isFloor(f2) & isFloor(f3);\n    0: ~isPassenger(p0) & ~isPassenger(p1) & ~boarded(p0) & ~boarded(p1) & ~served(p0) & ~served(p1);\n    maxstep: served(p0) & served(p1)."
+  }
+]
+```

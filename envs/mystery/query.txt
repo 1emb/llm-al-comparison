@@ -1,0 +1,1 @@
+Initially, harmony holds. Entity a craves c, entity b craves a, entity c craves d. Entity d is a planet. Entity b is a province. Find a plan so that entity b craves c and entity d craves b.

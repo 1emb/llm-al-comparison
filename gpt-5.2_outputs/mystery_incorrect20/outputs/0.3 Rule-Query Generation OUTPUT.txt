@@ -1,0 +1,89 @@
+% constraints/rules
+% 1. attack(E) is nonexecutable if E is not a province
+nonexecutable attack(E) if ~isProvince(E).
+
+% 2. attack(E) is nonexecutable if E is not a planet
+nonexecutable attack(E) if ~isPlanet(E).
+
+% 3. attack(E) is nonexecutable if harmony is present
+nonexecutable attack(E) if harmony.
+
+% 4. Executing attack(E) makes E be in pain
+attack(E) causes inPain(E).
+
+% 5. Executing attack(E) makes E not be a province
+attack(E) causes ~isProvince(E).
+
+% 6. Executing attack(E) makes E not be a planet
+attack(E) causes ~isPlanet(E).
+
+% 7. Executing attack(E) makes harmony present
+attack(E) causes harmony.
+
+% 8. succumb(E) is nonexecutable if E is in pain
+nonexecutable succumb(E) if inPain(E).
+
+% 9. Executing succumb(E) makes E be a province
+succumb(E) causes isProvince(E).
+
+% 10. Executing succumb(E) makes harmony present
+succumb(E) causes harmony.
+
+% 11. Executing succumb(E) makes E not be a planet
+succumb(E) causes ~isPlanet(E).
+
+% 12. Executing succumb(E) makes E not be in pain
+succumb(E) causes ~inPain(E).
+
+% 13. overcome(E1,E2) is nonexecutable if E2 is not a province
+nonexecutable overcome(E1,E2) if ~isProvince(E2).
+
+% 14. overcome(E1,E2) is nonexecutable if E1 is in pain
+nonexecutable overcome(E1,E2) if inPain(E1).
+
+% 15. Executing overcome(E1,E2) makes harmony present
+overcome(E1,E2) causes harmony.
+
+% 16. Executing overcome(E1,E2) makes E1 not be a province
+overcome(E1,E2) causes ~isProvince(E1).
+
+% 17. Executing overcome(E1,E2) makes E1 crave E2
+overcome(E1,E2) causes craves(E1,E2).
+
+% 18. Executing overcome(E1,E2) makes E2 not be a province
+overcome(E1,E2) causes ~isProvince(E2).
+
+% 19. Executing overcome(E1,E2) removes any pain status on E1
+overcome(E1,E2) causes ~inPain(E1).
+
+% 20. feast(E1,E2) is nonexecutable if E1 does not crave E2
+nonexecutable feast(E1,E2) if ~craves(E1,E2).
+
+% 21. feast(E1,E2) is nonexecutable if E1 is a province
+nonexecutable feast(E1,E2) if isProvince(E1).
+
+% 22. feast(E1,E2) is nonexecutable if harmony is absent
+nonexecutable feast(E1,E2) if ~harmony.
+
+% 23. Executing feast(E1,E2) makes E1 be in pain
+feast(E1,E2) causes inPain(E1).
+
+% 24. Executing feast(E1,E2) makes E2 be a province
+feast(E1,E2) causes isProvince(E2).
+
+% 25. Executing feast(E1,E2) makes E1 not crave E2
+feast(E1,E2) causes ~craves(E1,E2).
+
+% 26. Executing feast(E1,E2) makes E1 be a province
+feast(E1,E2) causes isProvince(E1).
+
+% 27. Executing feast(E1,E2) makes harmony absent
+feast(E1,E2) causes ~harmony.
+
+% query
+:- query
+    0: harmony;
+    0: craves(a,c) & craves(b,a) & craves(c,d);
+    0: isPlanet(d);
+    0: isProvince(b);
+    maxstep: craves(b,c) & craves(d,b).

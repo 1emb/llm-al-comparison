@@ -1,0 +1,183 @@
+% Query 1: Try to put the lift at two different floors in the initial state (unsatisfiable).
+:- query
+    label :: q1_two_lift_locations;
+    0: isFloor(f0) & isFloor(f1) & isFloor(f2) & isFloor(f3);
+    0: isPassenger(p0) & isPassenger(p1);
+
+    0: above(f0,f1) & above(f0,f2) & above(f0,f3) &
+       above(f1,f2) & above(f1,f3) &
+       above(f2,f3);
+
+    0: origin(p0)=f3 & dest(p0)=f0;
+    0: origin(p1)=f0 & dest(p1)=f2;
+
+    0: ~boarded(p0) & ~served(p0) & ~boarded(p1) & ~served(p1);
+
+    0: liftAt(f0) & liftAt(f1).
+
+Cplus2ASP Output:
+
+Solving...
+UNSATISFIABLE
+Models       : 0
+No solution.
+
+
+
+% Query 2: Attempt to execute board at a floor where the lift is not located (unsatisfiable).
+:- query
+    label :: q2_board_wrong_floor;
+    0: isFloor(f0) & isFloor(f1) & isFloor(f2) & isFloor(f3);
+    0: isPassenger(p0) & isPassenger(p1);
+
+    0: above(f0,f1) & above(f0,f2) & above(f0,f3) &
+       above(f1,f2) & above(f1,f3) &
+       above(f2,f3);
+
+    0: origin(p0)=f3 & dest(p0)=f0;
+    0: origin(p1)=f0 & dest(p1)=f2;
+
+    0: liftAt(f0);
+
+    0: ~boarded(p0) & ~served(p0) & ~boarded(p1) & ~served(p1);
+
+    0: board(f1,p0).
+
+Cplus2ASP Output:
+
+Solving...
+UNSATISFIABLE
+Models       : 0
+No solution.
+
+
+
+% Query 3: Attempt to execute depart for a person who is not boarded (unsatisfiable).
+:- query
+    label :: q3_depart_not_boarded;
+    0: isFloor(f0) & isFloor(f1) & isFloor(f2) & isFloor(f3);
+    0: isPassenger(p0) & isPassenger(p1);
+
+    0: above(f0,f1) & above(f0,f2) & above(f0,f3) &
+       above(f1,f2) & above(f1,f3) &
+       above(f2,f3);
+
+    0: origin(p0)=f3 & dest(p0)=f0;
+    0: origin(p1)=f0 & dest(p1)=f2;
+
+    0: liftAt(f0);
+
+    0: ~boarded(p0) & ~served(p0) & ~boarded(p1) & ~served(p1);
+
+    0: depart(f0,p0).
+
+Cplus2ASP Output:
+
+Solving...
+UNSATISFIABLE
+Models       : 0
+No solution.
+
+
+
+% Query 4: Serve p0 by going to f3, boarding, returning to f0, then departing (satisfiable).
+:- query
+    label :: q4_serve_p0;
+    0: isFloor(f0) & isFloor(f1) & isFloor(f2) & isFloor(f3);
+    0: isPassenger(p0) & isPassenger(p1);
+
+    0: above(f0,f1) & above(f0,f2) & above(f0,f3) &
+       above(f1,f2) & above(f1,f3) &
+       above(f2,f3);
+
+    0: origin(p0)=f3 & dest(p0)=f0;
+    0: origin(p1)=f0 & dest(p1)=f2;
+
+    0: liftAt(f0);
+
+    0: ~boarded(p0) & ~served(p0) & ~boarded(p1) & ~served(p1);
+
+    0: up(f0,f3);
+    1: board(f3,p0);
+    2: down(f3,f0);
+    3: depart(f0,p0);
+
+    maxstep: served(p0) & ~boarded(p0).
+
+Cplus2ASP Output:
+
+Solving...
+UNSATISFIABLE
+Models       : 0
+No solution.
+
+
+% The query fails!
+
+Each step is satisfiable up until 0, which has state/actions: "    0: isFloor(f0) & isFloor(f1) & isFloor(f2) & isFloor(f3); and     0: isPassenger(p0) & isPassenger(p1); and     0: above(f0,f1) & above(f0,f2) & above(f0,f3) & and     0: origin(p0)=f3 & dest(p0)=f0; and     0: origin(p1)=f0 & dest(p1)=f2; and     0: liftAt(f0); and     0: ~boarded(p0) & ~served(p0) & ~boarded(p1) & ~served(p1); and     0: up(f0,f3);", which should be satisfiable but they are not.
+
+The last satisfiable state, correponding to this query is:
+:- query
+        0: isFloor(f0) & isFloor(f1) & isFloor(f2) & isFloor(f3);
+    0: isPassenger(p0) & isPassenger(p1);
+    0: above(f0,f1) & above(f0,f2) & above(f0,f3) &
+    0: origin(p0)=f3 & dest(p0)=f0;
+    0: origin(p1)=f0 & dest(p1)=f2;
+    0: liftAt(f0);
+    0: ~boarded(p0) & ~served(p0) & ~boarded(p1) & ~served(p1);
+        maxstep :: 0.
+
+is:
+
+Solving...
+UNSATISFIABLE
+Models       : 0
+No solution.
+
+
+
+The actions and states are shown up until the last step in the query which is satisfiable. Consider why "    0: isFloor(f0) & isFloor(f1) & isFloor(f2) & isFloor(f3); and     0: isPassenger(p0) & isPassenger(p1); and     0: above(f0,f1) & above(f0,f2) & above(f0,f3) & and     0: origin(p0)=f3 & dest(p0)=f0; and     0: origin(p1)=f0 & dest(p1)=f2; and     0: liftAt(f0); and     0: ~boarded(p0) & ~served(p0) & ~boarded(p1) & ~served(p1); and     0: up(f0,f3);" cannot be executed in step 0. Look at the last satisfiable state in the plan, and the rules which involve or may affect "    0: isFloor(f0) & isFloor(f1) & isFloor(f2) & isFloor(f3); and     0: isPassenger(p0) & isPassenger(p1); and     0: above(f0,f1) & above(f0,f2) & above(f0,f3) & and     0: origin(p0)=f3 & dest(p0)=f0; and     0: origin(p1)=f0 & dest(p1)=f2; and     0: liftAt(f0); and     0: ~boarded(p0) & ~served(p0) & ~boarded(p1) & ~served(p1); and     0: up(f0,f3);", which would cause it to be nonexecutable (if it is an action) or cause something that leads to the query being unsatisfiable.
+    
+
+
+
+:- query
+    0: isFloor(f0) & isFloor(f1) & isFloor(f2) & isFloor(f3);
+    0: isPassenger(p0) & isPassenger(p1);
+
+    0: above(f0,f1) & above(f0,f2) & above(f0,f3) &
+       above(f1,f2) & above(f1,f3) &
+       above(f2,f3);
+
+    0: origin(p0)=f3 & dest(p0)=f0;
+    0: origin(p1)=f0 & dest(p1)=f2;
+
+    0: liftAt(f0);
+
+    0: ~boarded(p0) & ~served(p0) & ~boarded(p1) & ~served(p1);
+
+    maxstep: served(p0) & served(p1).
+
+
+Cplus2ASP Output:
+
+Solving...
+	
+
+	0:  dest(p0)=f0 dest(p1)=f2 isFloor(f0) isFloor(f1) isFloor(f2) isFloor(f3) isPassenger(p0) isPassenger(p1) liftAt(f0) origin(p0)=f3 origin(p1)=f0 above(f0, f1) above(f0, f2) above(f0, f3) above(f1, f2) above(f1, f3) above(f2, f2) above(f2, f3) above(f3, f0) above(f3, f3)
+
+	ACTIONS:  board(f0, p1)
+
+	1:  boarded(p1) dest(p0)=f0 dest(p1)=f2 isFloor(f0) isFloor(f1) isFloor(f2) isFloor(f3) isPassenger(p0) isPassenger(p1) liftAt(f0) origin(p0)=f3 origin(p1)=f0 served(p1) above(f0, f1) above(f0, f2) above(f0, f3) above(f1, f2) above(f1, f3) above(f2, f2) above(f2, f3) above(f3, f0) above(f3, f3)
+
+	ACTIONS:  up(f0, f3)
+
+	2:  boarded(p1) dest(p0)=f0 dest(p1)=f2 isFloor(f0) isFloor(f1) isFloor(f2) isFloor(f3) isPassenger(p0) isPassenger(p1) liftAt(f3) origin(p0)=f3 origin(p1)=f0 served(p1) above(f0, f1) above(f0, f2) above(f0, f3) above(f1, f2) above(f1, f3) above(f2, f2) above(f2, f3) above(f3, f0) above(f3, f3)
+
+	ACTIONS:  board(f3, p0)
+
+	3:  boarded(p0) boarded(p1) dest(p0)=f0 dest(p1)=f2 isFloor(f0) isFloor(f1) isFloor(f2) isFloor(f3) isPassenger(p0) isPassenger(p1) liftAt(f3) origin(p0)=f3 origin(p1)=f0 served(p0) served(p1) above(f0, f1) above(f0, f2) above(f0, f3) above(f1, f2) above(f1, f3) above(f2, f2) above(f2, f3) above(f3, f0) above(f3, f3)
+
+SATISFIABLE
+Models       : 1+
+

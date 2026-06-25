@@ -1,0 +1,138 @@
+% Query 1: Boarding should be executable when liftLoc=F and origin(P)=F and isPassenger(P)=false. (satisfiable)
+:- query
+    label :: q1_board_ok;
+    0: liftLoc=f1 & origin(p1)=f1 & dest(p1)=f2 & ~isPassenger(p1) & ~boarded(p1) & ~served(p1);
+    0: board(p1);
+    maxstep: isPassenger(p1) & boarded(p1).
+
+Cplus2ASP Output:
+
+Solving...
+	
+
+	0:  liftLoc=f1 dest(p0)=f0 dest(p1)=f2 origin(p0)=f3 origin(p1)=f1
+
+	ACTIONS:  board(p1)
+
+	1:  liftLoc=f1 boarded(p1) dest(p0)=f0 dest(p1)=f2 isPassenger(p1) origin(p0)=f3 origin(p1)=f1
+
+SATISFIABLE
+Models       : 1+
+
+
+% Query 2: Boarding should be blocked if the lift is not at the boarding floor. (unsatisfiable)
+:- query
+    label :: q2_board_wrong_liftloc;
+    0: liftLoc=f2 & origin(p1)=f1 & dest(p1)=f2 & ~isPassenger(p1) & ~boarded(p1) & ~served(p1);
+    0: board(p1).
+
+Cplus2ASP Output:
+
+Solving...
+UNSATISFIABLE
+Models       : 0
+No solution.
+
+
+
+% Query 3: Departing should be executable when liftLoc=dest(P), isPassenger(P)=true, boarded(P)=true; it should make boarded(P)=false and served(P)=true. (satisfiable)
+:- query
+    label :: q3_depart_ok_effects;
+    0: liftLoc=f2 & origin(p1)=f1 & dest(p1)=f2 & isPassenger(p1) & boarded(p1) & ~served(p1);
+    0: depart(p1);
+    maxstep: ~boarded(p1) & served(p1).
+
+Cplus2ASP Output:
+
+Solving...
+	
+
+	0:  liftLoc=f2 boarded(p1) dest(p0)=f0 dest(p1)=f2 isPassenger(p1) origin(p0)=f3 origin(p1)=f1
+
+	ACTIONS:  depart(p1)
+
+	1:  liftLoc=f2 dest(p0)=f0 dest(p1)=f2 isPassenger(p1) origin(p0)=f3 origin(p1)=f1 served(p1)
+
+SATISFIABLE
+Models       : 1+
+
+
+% Query 4: Departing should be blocked if boarded(P)=false. (unsatisfiable)
+:- query
+    label :: q4_depart_blocked_not_boarded;
+    0: liftLoc=f2 & origin(p1)=f1 & dest(p1)=f2 & isPassenger(p1) & ~boarded(p1) & ~served(p1);
+    0: depart(p1).
+
+Cplus2ASP Output:
+
+Solving...
+UNSATISFIABLE
+Models       : 0
+No solution.
+
+
+
+% Make the query exhaustive enough to prevent the solver from setting above(f3,f1) to true.
+:- query
+    label :: q5_up_requires_above;
+    0: liftLoc=f3 & ~above(f3,f1) & above(f3,f0) & above(f0,f1) & above(f0,f2) & above(f0,f3) & above(f1,f2) & above(f1,f3) & above(f2,f3);
+    0: up(f1).
+
+Cplus2ASP Output:
+
+Solving...
+UNSATISFIABLE
+Models       : 0
+No solution.
+
+
+
+
+
+:- query
+    0: above(f0,f1) & above(f0,f2) & above(f0,f3) & above(f1,f2) & above(f1,f3) & above(f2,f3);
+    0: origin(p0)=f3 & dest(p0)=f2 & origin(p1)=f1 & dest(p1)=f3;
+    0: liftLoc=f0;
+    0: ~isPassenger(p0) & ~isPassenger(p1) & ~boarded(p0) & ~boarded(p1) & ~served(p0) & ~served(p1);
+    maxstep: served(p0) & served(p1).
+
+
+
+Cplus2ASP Output:
+
+Solving...
+	
+
+	0:  liftLoc=f0 dest(p0)=f2 dest(p1)=f3 origin(p0)=f3 origin(p1)=f1 above(f0, f1) above(f0, f2) above(f0, f3) above(f1, f2) above(f1, f3) above(f2, f3)
+
+	ACTIONS:  up(f1)
+
+	1:  liftLoc=f1 dest(p0)=f2 dest(p1)=f3 origin(p0)=f3 origin(p1)=f1 above(f0, f1) above(f0, f2) above(f0, f3) above(f1, f2) above(f1, f3) above(f2, f3)
+
+	ACTIONS:  board(p1)
+
+	2:  liftLoc=f1 boarded(p1) dest(p0)=f2 dest(p1)=f3 isPassenger(p1) origin(p0)=f3 origin(p1)=f1 above(f0, f1) above(f0, f2) above(f0, f3) above(f1, f2) above(f1, f3) above(f2, f3)
+
+	ACTIONS:  up(f3)
+
+	3:  liftLoc=f3 boarded(p1) dest(p0)=f2 dest(p1)=f3 isPassenger(p1) origin(p0)=f3 origin(p1)=f1 above(f0, f1) above(f0, f2) above(f0, f3) above(f1, f2) above(f1, f3) above(f2, f3)
+
+	ACTIONS:  board(p0)
+
+	4:  liftLoc=f3 boarded(p0) boarded(p1) dest(p0)=f2 dest(p1)=f3 isPassenger(p0) isPassenger(p1) origin(p0)=f3 origin(p1)=f1 above(f0, f1) above(f0, f2) above(f0, f3) above(f1, f2) above(f1, f3) above(f2, f3)
+
+	ACTIONS:  depart(p1)
+
+	5:  liftLoc=f3 boarded(p0) dest(p0)=f2 dest(p1)=f3 isPassenger(p0) isPassenger(p1) origin(p0)=f3 origin(p1)=f1 served(p1) above(f0, f1) above(f0, f2) above(f0, f3) above(f1, f2) above(f1, f3) above(f2, f3)
+
+	ACTIONS:  down(f2)
+
+	6:  liftLoc=f2 boarded(p0) dest(p0)=f2 dest(p1)=f3 isPassenger(p0) isPassenger(p1) origin(p0)=f3 origin(p1)=f1 served(p1) above(f0, f1) above(f0, f2) above(f0, f3) above(f1, f2) above(f1, f3) above(f2, f3)
+
+	ACTIONS:  depart(p0)
+
+	7:  liftLoc=f2 dest(p0)=f2 dest(p1)=f3 isPassenger(p0) isPassenger(p1) origin(p0)=f3 origin(p1)=f1 served(p0) served(p1) above(f0, f1) above(f0, f2) above(f0, f3) above(f1, f2) above(f1, f3) above(f2, f3)
+
+SATISFIABLE
+Models       : 1+
+

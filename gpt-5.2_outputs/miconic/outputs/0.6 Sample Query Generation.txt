@@ -1,0 +1,37 @@
+% Query 1: Board at the correct origin floor when the elevator is there, then depart at the correct destination after moving there (satisfiable)
+:- query
+    label :: q1_board_move_depart;
+    0: above(f0,f1) & origin(p0)=f1 & dest(p0)=f0 &
+       elevAt(f1) & ~elevAt(f0) & ~boarded(p0) & ~served(p0);
+    0: board(p0,f1);
+    1: moveDown(f1,f0);
+    2: depart(p0,f0);
+    maxstep: served(p0) & ~boarded(p0).
+
+% Query 2: Try to board when the elevator is not at that floor (unsatisfiable)
+:- query
+    label :: q2_board_wrong_floor;
+    0: above(f0,f1) & origin(p0)=f1 & dest(p0)=f0 &
+       elevAt(f0) & ~elevAt(f1) & ~boarded(p0) & ~served(p0);
+    0: board(p0,f1).
+
+% Query 3: Try to board at a floor that is not the passenger's origin (unsatisfiable)
+:- query
+    label :: q3_board_not_origin;
+    0: above(f0,f1) & origin(p0)=f1 & dest(p0)=f0 &
+       elevAt(f0) & ~elevAt(f1) & ~boarded(p0) & ~served(p0);
+    0: board(p0,f0).
+
+% Query 4: Try to depart without having boarded first (unsatisfiable)
+:- query
+    label :: q4_depart_without_boarding;
+    0: above(f0,f1) & origin(p0)=f1 & dest(p0)=f0 &
+       elevAt(f0) & ~elevAt(f1) & ~boarded(p0) & ~served(p0);
+    0: depart(p0,f0).
+
+% Query 5: Try to move up from f1 to f0 even though above(f1,f0) is false (given only above(f0,f1)) (unsatisfiable)
+:- query
+    label :: q5_moveup_not_above;
+    0: above(f0,f1) & origin(p0)=f1 & dest(p0)=f0 &
+       elevAt(f1) & ~elevAt(f0) & ~boarded(p0) & ~served(p0);
+    0: moveUp(f1,f0).

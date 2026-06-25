@@ -1,0 +1,37 @@
+% Query 1: Try to pick up a clear block that is NOT on the table while the hand is NOT empty (satisfiable)
+:- query
+    0: ~handEmpty
+       & loc(b1)=b5 & ~onTable(b1) & clear(b1)
+       & onTable(b5) & loc(b5)=table
+       & onTable(b2) & loc(b2)=table & clear(b2);
+    0: pickup(b1).
+
+% Query 2: Try to pick up a block that is on the table (should be disallowed by nonexecutable pickup(B) if onTable(B)) (unsatisfiable)
+:- query
+    0: ~handEmpty
+       & onTable(b3) & loc(b3)=table & clear(b3)
+       & onTable(b5) & loc(b5)=table;
+    0: pickup(b3).
+
+% Query 3: Try to put down a block that is not being held (should be disallowed by nonexecutable putdown(B) if ~holding(B)) (unsatisfiable)
+:- query
+    0: handEmpty
+       & ~holding(b4)
+       & onTable(b2) & loc(b2)=table & clear(b2);
+    0: putdown(b4).
+
+% Query 4: Stack onto a destination block that is not clear (should be disallowed by nonexecutable stack(B1,B2) if ~clear(B2)) (unsatisfiable)
+:- query
+    0: handEmpty
+       & loc(b1)=table & onTable(b1) & clear(b1)
+       & loc(b4)=b2 & ~onTable(b4) & clear(b4)
+       & loc(b2)=table & onTable(b2) & ~clear(b2);
+    0: stack(b1,b2).
+
+% Query 5: Unstack a clear top block from a bottom block while the hand is NOT empty (satisfiable)
+:- query
+    0: ~handEmpty
+       & loc(b4)=b2 & ~onTable(b4) & clear(b4)
+       & loc(b2)=table & onTable(b2) & ~clear(b2)
+       & onTable(b5) & loc(b5)=table & clear(b5);
+    0: unstack(b4,b2).

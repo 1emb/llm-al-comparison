@@ -1,0 +1,251 @@
+% PROGRAM CHANGED? [CHANGED]
+% BC+ signature
+:- sorts
+    floor;
+    passenger.
+
+:- objects
+    f0,f1,f2,f3 :: floor;
+    p0,p1 :: passenger.
+
+:- variables
+    F, F1, F2, F3, F4 :: floor;
+    P, P1, P2, P3, P4 :: passenger.
+
+:- constants
+    board(floor, passenger) :: exogenousAction;
+    depart(floor, passenger) :: exogenousAction;
+    up(floor, floor) :: exogenousAction;
+    down(floor, floor) :: exogenousAction;
+
+    isFloor(floor) :: inertialFluent(boolean);
+    isPassenger(passenger) :: inertialFluent(boolean);
+    liftAt(floor) :: inertialFluent(boolean);
+
+    % Treat "above" as fixed by making it inertial and never changing it.
+    above(floor, floor) :: inertialFluent(boolean);
+
+    origin(passenger) :: inertialFluent(floor);
+    dest(passenger) :: inertialFluent(floor);
+    boarded(passenger) :: inertialFluent(boolean);
+    served(passenger) :: inertialFluent(boolean).
+
+% Generated constraints
+
+% Each passenger's origin is a floor.
+isFloor(F) if origin(P)=F.
+
+% Each passenger's destination is a floor.
+isFloor(F) if dest(P)=F.
+
+% A passenger's origin and destination cannot be the same floor.
+impossible origin(P)=F & dest(P)=F.
+
+% The lift cannot be at two different floors at the same time.
+impossible liftAt(F1) & liftAt(F2) & F1\=F2.
+
+% Only passengers can board/depart.
+nonexecutable board(F,P) if ~isPassenger(P).
+nonexecutable depart(F,P) if ~isPassenger(P).
+
+% board(F,P) is not executable if F is not a floor.
+nonexecutable board(F,P) if ~isFloor(F).
+
+% board(F,P) is not executable if the lift is not at F.
+nonexecutable board(F,P) if ~liftAt(F).
+
+% Boarding should be allowed only at the origin floor.
+nonexecutable board(F,P) if origin(P)\=F.
+
+% Helpful: Do not allow boarding if already boarded.
+nonexecutable board(F,P) if boarded(P).
+
+% board(F,P) causes P to be boarded.
+board(F,P) causes boarded(P).
+
+% depart(F,P) is not executable if F is not a floor.
+nonexecutable depart(F,P) if ~isFloor(F).
+
+% depart(F,P) is not executable if the lift is not at F.
+nonexecutable depart(F,P) if ~liftAt(F).
+
+% Departing should be allowed only at the destination floor.
+nonexecutable depart(F,P) if dest(P)\=F.
+
+% You can only depart if you are currently boarded.
+nonexecutable depart(F,P) if ~boarded(P).
+
+% Helpful: Do not allow departing if already served.
+nonexecutable depart(F,P) if served(P).
+
+% depart(F,P) causes P to not be boarded.
+depart(F,P) causes ~boarded(P).
+
+% depart(F,P) causes P to be served.
+depart(F,P) causes served(P).
+
+% up(F1,F2) is not executable if F1 is not a floor.
+nonexecutable up(F1,F2) if ~isFloor(F1).
+
+% up(F1,F2) is not executable if F2 is not a floor.
+nonexecutable up(F1,F2) if ~isFloor(F2).
+
+% up(F1,F2) is not executable if the lift is not at F1.
+nonexecutable up(F1,F2) if ~liftAt(F1).
+
+% up(F1,F2) is not executable if F2 is not above F1.
+nonexecutable up(F1,F2) if ~above(F2,F1).
+
+% up(F1,F2) causes the lift to be at F2.
+up(F1,F2) causes liftAt(F2).
+
+% up(F1,F2) causes the lift to not be at F1.
+up(F1,F2) causes ~liftAt(F1).
+
+% down(F1,F2) is not executable if F1 is not a floor.
+nonexecutable down(F1,F2) if ~isFloor(F1).
+
+% down(F1,F2) is not executable if F2 is not a floor.
+nonexecutable down(F1,F2) if ~isFloor(F2).
+
+% down(F1,F2) is not executable if the lift is not at F1.
+nonexecutable down(F1,F2) if ~liftAt(F1).
+
+% down(F1,F2) is not executable if F2 is above F1.
+nonexecutable down(F1,F2) if above(F2,F1).
+
+% down(F1,F2) causes the lift to be at F2.
+down(F1,F2) causes liftAt(F2).
+
+% down(F1,F2) causes the lift to not be at F1.
+down(F1,F2) causes ~liftAt(F1).
+
+% It is not executable for the lift to move up and move down at the same time.
+nonexecutable up(F1,F2) & down(F3,F4).
+
+% It is not executable to perform board(F,P) and depart(F,P) at the same time for the same F and P.
+nonexecutable board(F,P) & depart(F,P).
+
+% Do not allow boarding/departing concurrently with movement.
+nonexecutable board(F,P) & up(F1,F2).
+nonexecutable board(F,P) & down(F1,F2).
+nonexecutable depart(F,P) & up(F1,F2).
+nonexecutable depart(F,P) & down(F1,F2).
+
+% Constrain "above" to be irreflexive and antisymmetric (prevents solver from inventing cycles/self-above).
+impossible above(F,F).
+impossible above(F1,F2) & above(F2,F1) & F1\=F2.
+
+% Defaults: unless stated otherwise, passengers start unboarded and unserved.
+default ~boarded(P).
+default ~served(P).
+
+% Served means "completed trip": cannot be served while still boarded.
+% NOTE: This was inconsistent with the sample/main plans (served becomes true at depart while boarded becomes false at depart).
+% So we remove this constraint.
+% impossible boarded(P) & served(P).
+
+
+% MAIN QUERY CHANGED? [UNCHANGED]
+:- query
+    0: isFloor(f0) & isFloor(f1) & isFloor(f2) & isFloor(f3);
+    0: isPassenger(p0) & isPassenger(p1);
+
+    0: above(f0,f1) & above(f0,f2) & above(f0,f3) &
+       above(f1,f2) & above(f1,f3) &
+       above(f2,f3);
+
+    0: origin(p0)=f3 & dest(p0)=f0;
+    0: origin(p1)=f0 & dest(p1)=f2;
+
+    0: liftAt(f0);
+
+    0: ~boarded(p0) & ~served(p0) & ~boarded(p1) & ~served(p1);
+
+    maxstep: served(p0) & served(p1).
+
+
+% SAMPLE QUERIES CHANGED? [UNCHANGED]
+% Query 1: Try to put the lift at two different floors in the initial state (unsatisfiable).
+:- query
+    label :: q1_two_lift_locations;
+    0: isFloor(f0) & isFloor(f1) & isFloor(f2) & isFloor(f3);
+    0: isPassenger(p0) & isPassenger(p1);
+
+    0: above(f0,f1) & above(f0,f2) & above(f0,f3) &
+       above(f1,f2) & above(f1,f3) &
+       above(f2,f3);
+
+    0: origin(p0)=f3 & dest(p0)=f0;
+    0: origin(p1)=f0 & dest(p1)=f2;
+
+    0: ~boarded(p0) & ~served(p0) & ~boarded(p1) & ~served(p1);
+
+    0: liftAt(f0) & liftAt(f1).
+
+
+% Query 2: Attempt to execute board at a floor where the lift is not located (unsatisfiable).
+:- query
+    label :: q2_board_wrong_floor;
+    0: isFloor(f0) & isFloor(f1) & isFloor(f2) & isFloor(f3);
+    0: isPassenger(p0) & isPassenger(p1);
+
+    0: above(f0,f1) & above(f0,f2) & above(f0,f3) &
+       above(f1,f2) & above(f1,f3) &
+       above(f2,f3);
+
+    0: origin(p0)=f3 & dest(p0)=f0;
+    0: origin(p1)=f0 & dest(p1)=f2;
+
+    0: liftAt(f0);
+
+    0: ~boarded(p0) & ~served(p0) & ~boarded(p1) & ~served(p1);
+
+    0: board(f1,p0).
+
+
+% Query 3: Attempt to execute depart for a person who is not boarded (unsatisfiable).
+:- query
+    label :: q3_depart_not_boarded;
+    0: isFloor(f0) & isFloor(f1) & isFloor(f2) & isFloor(f3);
+    0: isPassenger(p0) & isPassenger(p1);
+
+    0: above(f0,f1) & above(f0,f2) & above(f0,f3) &
+       above(f1,f2) & above(f1,f3) &
+       above(f2,f3);
+
+    0: origin(p0)=f3 & dest(p0)=f0;
+    0: origin(p1)=f0 & dest(p1)=f2;
+
+    0: liftAt(f0);
+
+    0: ~boarded(p0) & ~served(p0) & ~boarded(p1) & ~served(p1);
+
+    0: depart(f0,p0).
+
+
+% Query 4: Serve p0 with an explicit action sequence (satisfiable).
+% Note: up(f0,f3) is nonexecutable because above(f3,f0) is false in this ordering.
+% Correct is down(f0,f3) since above(f3,f0) holds.
+:- query
+    label :: q4_serve_p0;
+    0: isFloor(f0) & isFloor(f1) & isFloor(f2) & isFloor(f3);
+    0: isPassenger(p0) & isPassenger(p1);
+
+    0: above(f0,f1) & above(f0,f2) & above(f0,f3) &
+       above(f1,f2) & above(f1,f3) &
+       above(f2,f3);
+
+    0: origin(p0)=f3 & dest(p0)=f0;
+    0: origin(p1)=f0 & dest(p1)=f2;
+
+    0: liftAt(f0);
+
+    0: ~boarded(p0) & ~served(p0) & ~boarded(p1) & ~served(p1);
+
+    0: down(f0,f3);
+    1: board(f3,p0);
+    2: up(f3,f0);
+    3: depart(f0,p0);
+
+    maxstep: served(p0) & ~boarded(p0).

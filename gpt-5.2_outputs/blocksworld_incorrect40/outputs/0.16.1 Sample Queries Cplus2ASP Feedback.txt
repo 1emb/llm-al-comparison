@@ -1,0 +1,187 @@
+% Query 1: Pick up a clear block while the hand is empty (satisfiable)
+:- query
+    0: handEmpty
+       & loc(b5)=table
+       & loc(b4)=b5 & clear(b4)
+       & loc(b1)=table & clear(b1)
+       & loc(b7)=table & clear(b7)
+       & loc(b3)=table & clear(b3)
+       & loc(b6)=table
+       & loc(b2)=b6 & clear(b2);
+    0: pickup(b4);
+    maxstep: holding(b4) & loc(b4)=hand & ~handEmpty.
+
+Cplus2ASP Output:
+
+Solving...
+	
+
+	0:  handEmpty clear(b1) clear(b2) clear(b3) clear(b4) clear(b7) loc(b1)=table loc(b2)=b6 loc(b3)=table loc(b4)=b5 loc(b5)=table loc(b6)=table loc(b7)=table
+
+	ACTIONS:  pickup(b4)
+
+	1:  clear(b1) clear(b2) clear(b3) clear(b4) clear(b7) holding(b4) loc(b1)=table loc(b2)=b6 loc(b3)=table loc(b4)=hand loc(b5)=table loc(b6)=table loc(b7)=table
+
+SATISFIABLE
+Models       : 1
+
+
+% Query 2: Try to pick up b5 even though it is not clear (unsatisfiable)
+:- query
+    0: handEmpty
+       & loc(b5)=table
+       & loc(b4)=b5 & clear(b4)
+       & loc(b1)=table & clear(b1)
+       & loc(b7)=table & clear(b7)
+       & loc(b3)=table & clear(b3)
+       & loc(b6)=table
+       & loc(b2)=b6 & clear(b2);
+    0: pickup(b5).
+
+Cplus2ASP Output:
+
+Solving...
+UNSATISFIABLE
+Models       : 0
+No solution.
+
+
+
+% Query 3: Try to put down a block that is not being held (unsatisfiable)
+:- query
+    0: handEmpty
+       & loc(b5)=table
+       & loc(b4)=b5 & clear(b4)
+       & loc(b1)=table & clear(b1)
+       & loc(b7)=table & clear(b7)
+       & loc(b3)=table & clear(b3)
+       & loc(b6)=table
+       & loc(b2)=b6 & clear(b2);
+    0: putdown(b4).
+
+Cplus2ASP Output:
+
+Solving...
+UNSATISFIABLE
+Models       : 0
+No solution.
+
+
+
+% Query 4: Pick up b4 and then stack it onto clear block b1 (satisfiable)
+:- query
+    0: handEmpty
+       & loc(b5)=table
+       & loc(b4)=b5 & clear(b4)
+       & loc(b1)=table & clear(b1)
+       & loc(b7)=table & clear(b7)
+       & loc(b3)=table & clear(b3)
+       & loc(b6)=table
+       & loc(b2)=b6 & clear(b2);
+    0: pickup(b4);
+    1: stack(b4,b1);
+    maxstep: loc(b4)=b1 & handEmpty & ~holding(b4).
+
+Cplus2ASP Output:
+
+Solving...
+	
+
+	0:  handEmpty clear(b1) clear(b2) clear(b3) clear(b4) clear(b7) loc(b1)=table loc(b2)=b6 loc(b3)=table loc(b4)=b5 loc(b5)=table loc(b6)=table loc(b7)=table
+
+	ACTIONS:  pickup(b4)
+
+	1:  clear(b1) clear(b2) clear(b3) clear(b4) clear(b7) holding(b4) loc(b1)=table loc(b2)=b6 loc(b3)=table loc(b4)=hand loc(b5)=table loc(b6)=table loc(b7)=table
+
+	ACTIONS:  stack(b4, b1)
+
+	2:  handEmpty clear(b2) clear(b3) clear(b4) clear(b7) loc(b1)=table loc(b2)=b6 loc(b3)=table loc(b4)=b1 loc(b5)=table loc(b6)=table loc(b7)=table
+
+SATISFIABLE
+Models       : 1
+
+
+% Query 5: Try to stack b4 onto b5 even though b5 is not clear (unsatisfiable)
+:- query
+    0: handEmpty
+       & loc(b5)=table
+       & loc(b4)=b5 & clear(b4)
+       & loc(b1)=table & clear(b1)
+       & loc(b7)=table & clear(b7)
+       & loc(b3)=table & clear(b3)
+       & loc(b6)=table
+       & loc(b2)=b6 & clear(b2);
+    0: pickup(b4);
+    1: stack(b4,b5).
+
+Cplus2ASP Output:
+
+Solving...
+UNSATISFIABLE
+Models       : 0
+No solution.
+
+
+
+
+
+:- query
+    0: handEmpty
+       & loc(b5)=table
+       & loc(b4)=b5 & clear(b4)
+       & loc(b1)=table & clear(b1)
+       & loc(b7)=table & clear(b7)
+       & loc(b3)=table & clear(b3)
+       & loc(b6)=table
+       & loc(b2)=b6 & clear(b2);
+    maxstep: loc(b3)=table
+       & loc(b1)=b3
+       & loc(b5)=b1
+       & loc(b2)=b5 & clear(b2)
+       & loc(b6)=table
+       & loc(b7)=table
+       & loc(b4)=b7 & clear(b4).
+
+
+Cplus2ASP Output:
+
+Solving...
+	
+
+	0:  handEmpty clear(b1) clear(b2) clear(b3) clear(b4) clear(b7) loc(b1)=table loc(b2)=b6 loc(b3)=table loc(b4)=b5 loc(b5)=table loc(b6)=table loc(b7)=table
+
+	ACTIONS:  pickup(b1)
+
+	1:  clear(b1) clear(b2) clear(b3) clear(b4) clear(b7) holding(b1) loc(b1)=hand loc(b2)=b6 loc(b3)=table loc(b4)=b5 loc(b5)=table loc(b6)=table loc(b7)=table
+
+	ACTIONS:  stack(b1, b3)
+
+	2:  handEmpty clear(b1) clear(b2) clear(b4) clear(b7) loc(b1)=b3 loc(b2)=b6 loc(b3)=table loc(b4)=b5 loc(b5)=table loc(b6)=table loc(b7)=table
+
+	ACTIONS:  unstack(b4, b5)
+
+	3:  clear(b1) clear(b2) clear(b5) clear(b7) holding(b4) loc(b1)=b3 loc(b2)=b6 loc(b3)=table loc(b4)=hand loc(b5)=table loc(b6)=table loc(b7)=table
+
+	ACTIONS:  stack(b4, b7)
+
+	4:  handEmpty clear(b1) clear(b2) clear(b4) clear(b5) loc(b1)=b3 loc(b2)=b6 loc(b3)=table loc(b4)=b7 loc(b5)=table loc(b6)=table loc(b7)=table
+
+	ACTIONS:  pickup(b5)
+
+	5:  clear(b1) clear(b2) clear(b4) clear(b5) holding(b5) loc(b1)=b3 loc(b2)=b6 loc(b3)=table loc(b4)=b7 loc(b5)=hand loc(b6)=table loc(b7)=table
+
+	ACTIONS:  stack(b5, b1)
+
+	6:  handEmpty clear(b2) clear(b4) clear(b5) loc(b1)=b3 loc(b2)=b6 loc(b3)=table loc(b4)=b7 loc(b5)=b1 loc(b6)=table loc(b7)=table
+
+	ACTIONS:  pickup(b2)
+
+	7:  clear(b2) clear(b4) clear(b5) holding(b2) loc(b1)=b3 loc(b2)=hand loc(b3)=table loc(b4)=b7 loc(b5)=b1 loc(b6)=table loc(b7)=table
+
+	ACTIONS:  stack(b2, b5)
+
+	8:  handEmpty clear(b2) clear(b4) loc(b1)=b3 loc(b2)=b5 loc(b3)=table loc(b4)=b7 loc(b5)=b1 loc(b6)=table loc(b7)=table
+
+SATISFIABLE
+Models       : 1+
+

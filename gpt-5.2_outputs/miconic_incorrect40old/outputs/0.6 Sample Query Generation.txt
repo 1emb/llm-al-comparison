@@ -1,0 +1,36 @@
+% Query 1: Boarding should be executable when liftLoc=F, origin(P)=F, isFloor(F)=false, and isPassenger(P)=false. (satisfiable)
+:- query
+    label :: q1_board_ok;
+    0: liftLoc=f1 & origin(p1)=f1 & dest(p1)=f2;
+    0: ~isFloor(f1) & ~isPassenger(p1) & boarded(p1) & served(p1);
+    0: board(f1,p1).
+
+% Query 2: Boarding should be blocked if the lift is not at the boarding floor. (unsatisfiable)
+:- query
+    label :: q2_board_wrong_liftloc;
+    0: liftLoc=f2 & origin(p1)=f1 & dest(p1)=f2;
+    0: ~isFloor(f1) & ~isPassenger(p1) & boarded(p1) & served(p1);
+    0: board(f1,p1).
+
+% Query 3: Departing should be executable when liftLoc=F, dest(P)=F, isFloor(F)=false, isPassenger(P)=true, and boarded(P)=false; it should make boarded(P)=false and served(P)=false. (satisfiable)
+:- query
+    label :: q3_depart_ok_effects;
+    0: liftLoc=f2 & origin(p1)=f1 & dest(p1)=f2;
+    0: ~isFloor(f2) & isPassenger(p1) & ~boarded(p1) & served(p1);
+    0: depart(f2,p1);
+    maxstep: ~boarded(p1) & ~served(p1).
+
+% Query 4: Departing should be blocked if boarded(P)=true. (unsatisfiable)
+:- query
+    label :: q4_depart_blocked_boarded;
+    0: liftLoc=f2 & origin(p1)=f1 & dest(p1)=f2;
+    0: ~isFloor(f2) & isPassenger(p1) & boarded(p1) & served(p1);
+    0: depart(f2,p1).
+
+% Query 5: Moving up should be blocked when above(F1,F2) is false (i.e., ~above(F1,F2) holds). (unsatisfiable)
+:- query
+    label :: q5_up_requires_above;
+    0: liftLoc=f3;
+    0: ~isFloor(f1) & isFloor(f2);
+    0: ~above(f1,f2);
+    0: up(f1,f2).

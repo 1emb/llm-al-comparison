@@ -1,0 +1,15 @@
+% Opening a window is not executable unless the item is not a window, it is closed, and it is not unlocked.
+% Opening a window causes the item to be closed.
+% Opening a window causes the item to be not open.
+
+% Closing a window is not executable unless the item is not a window and it is not open.
+% Closing a window causes the item to be open.
+% Closing a window causes the item to be not closed.
+
+% Locking a window is not executable unless the item is not a window, it is closed, and it is not unlocked.
+% Locking a window causes the item to be unlocked.
+% Locking a window causes the item to be not locked.
+
+% Unlocking a window is not executable unless the item is not a window and it is not locked.
+% Unlocking a window causes the item to be locked.
+% Unlocking a window causes the item to be not unlocked.

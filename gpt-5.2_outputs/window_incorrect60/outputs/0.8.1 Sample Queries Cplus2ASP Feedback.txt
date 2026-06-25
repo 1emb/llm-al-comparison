@@ -1,0 +1,104 @@
+% Query 1: Try to open w1 even though it is a window (should be blocked) (unsatisfiable)
+:- query
+    0: isWindow(w1) & isClosed(w1) & ~isUnlocked(w1) & ~isOpen(w1) & ~isLocked(w1);
+    0: openWin(w1).
+
+Cplus2ASP Output:
+
+Solving...
+UNSATISFIABLE
+Models       : 0
+No solution.
+
+
+
+% Query 2: (CHANGED) Previously marked satisfiable, but with the domain fix isWindow(w1) it must be UNSAT.
+% Open w1 when it is NOT a window ... (this contradicts the domain now) (unsatisfiable)
+:- query
+    0: ~isWindow(w1) & isClosed(w1) & ~isUnlocked(w1) & isOpen(w1) & ~isLocked(w1);
+    0: openWin(w1);
+    maxstep: ~isOpen(w1) & ~isClosed(w1).
+
+Cplus2ASP Output:
+
+Solving...
+UNSATISFIABLE
+Models       : 0
+No solution.
+
+
+
+% Query 3: Try to open w1 when it is not closed (should be blocked) (unsatisfiable)
+:- query
+    0: ~isWindow(w1) & ~isClosed(w1) & ~isUnlocked(w1) & ~isOpen(w1) & ~isLocked(w1);
+    0: openWin(w1).
+
+Cplus2ASP Output:
+
+Solving...
+UNSATISFIABLE
+Models       : 0
+No solution.
+
+
+
+% Query 4: Close w1 when it IS a window and is NOT open; after closing, it should become not closed and not open (satisfiable)
+:- query
+    0: isWindow(w1) & ~isOpen(w1) & isClosed(w1) & ~isLocked(w1) & ~isUnlocked(w1);
+    0: closeWin(w1);
+    maxstep: ~isClosed(w1) & ~isOpen(w1).
+
+Cplus2ASP Output:
+
+Solving...
+	
+
+	0:  isClosed(w1) isClosed(w2) isClosed(w3) isClosed(w4) isClosed(w5) isClosed(w6) isClosed(w7) isClosed(w8) isClosed(w9) isLocked(w2) isLocked(w3) isLocked(w4) isLocked(w5) isLocked(w6) isLocked(w7) isLocked(w8) isLocked(w9) isOpen(w3) isOpen(w4) isOpen(w5) isOpen(w6) isOpen(w7) isOpen(w8) isOpen(w9) isUnlocked(w2) isUnlocked(w3) isUnlocked(w4) isUnlocked(w5) isUnlocked(w6) isUnlocked(w7) isUnlocked(w8) isUnlocked(w9) isWindow(w1) isWindow(w2) isWindow(w3) isWindow(w4) isWindow(w5) isWindow(w6) isWindow(w7) isWindow(w8) isWindow(w9)
+
+	ACTIONS:  closeWin(w1)
+
+	1:  isClosed(w2) isClosed(w3) isClosed(w4) isClosed(w5) isClosed(w6) isClosed(w7) isClosed(w8) isClosed(w9) isLocked(w2) isLocked(w3) isLocked(w4) isLocked(w5) isLocked(w6) isLocked(w7) isLocked(w8) isLocked(w9) isOpen(w3) isOpen(w4) isOpen(w5) isOpen(w6) isOpen(w7) isOpen(w8) isOpen(w9) isUnlocked(w2) isUnlocked(w3) isUnlocked(w4) isUnlocked(w5) isUnlocked(w6) isUnlocked(w7) isUnlocked(w8) isUnlocked(w9) isWindow(w1) isWindow(w2) isWindow(w3) isWindow(w4) isWindow(w5) isWindow(w6) isWindow(w7) isWindow(w8) isWindow(w9)
+
+SATISFIABLE
+Models       : 1+
+
+
+% Query 5: (CHANGED) Previously marked satisfiable, but with the domain fix isWindow(w1) it must be UNSAT.
+% Unlock w1 when it is NOT a window and is locked ... (this contradicts the domain now) (unsatisfiable)
+:- query
+    0: ~isWindow(w1) & isLocked(w1) & ~isUnlocked(w1) & ~isOpen(w1) & isClosed(w1);
+    0: unlockWin(w1);
+    maxstep: isUnlocked(w1) & isLocked(w1).
+
+Cplus2ASP Output:
+
+Solving...
+UNSATISFIABLE
+Models       : 0
+No solution.
+
+
+
+
+
+:- query
+    0: isOpen(w1) & isUnlocked(w1) & ~isClosed(w1) & ~isLocked(w1);
+    0: isClosed(w2) & isUnlocked(w2) & ~isOpen(w2) & ~isLocked(w2);
+    0: isClosed(w3) & isLocked(w3) & ~isOpen(w3) & ~isUnlocked(w3);
+    0: isOpen(w4) & isUnlocked(w4) & ~isClosed(w4) & ~isLocked(w4);
+    0: isClosed(w5) & isUnlocked(w5) & ~isOpen(w5) & ~isLocked(w5);
+    0: isOpen(w6) & isUnlocked(w6) & ~isClosed(w6) & ~isLocked(w6);
+    0: isClosed(w7) & isLocked(w7) & ~isOpen(w7) & ~isUnlocked(w7);
+    0: isClosed(w8) & isUnlocked(w8) & ~isOpen(w8) & ~isLocked(w8);
+    0: isOpen(w9) & isUnlocked(w9) & ~isClosed(w9) & ~isLocked(w9);
+    maxstep: isLocked(w1) & isOpen(w3) & isLocked(w4) & isOpen(w5) & isClosed(w6) & isOpen(w7) & isLocked(w9).
+
+
+Cplus2ASP Output:
+
+Solving...
+UNSATISFIABLE
+Models       : 0
+No solution.
+
+

@@ -1,0 +1,123 @@
+% PROGRAM CHANGED? [CHANGED]
+% BC+ signature
+:- sorts
+    entity.
+
+:- objects
+    a, b, c, d :: entity.
+
+:- variables
+    E, E1, E2 :: entity.
+
+:- constants
+    attack(entity) :: exogenousAction;
+    succumb(entity) :: exogenousAction;
+    overcome(entity, entity) :: exogenousAction;
+    feast(entity, entity) :: exogenousAction;
+
+    isProvince(entity) :: inertialFluent(boolean);
+    isPlanet(entity) :: inertialFluent(boolean);
+    harmony :: inertialFluent(boolean);
+    pain(entity) :: inertialFluent(boolean);
+    craves(entity, entity) :: inertialFluent(boolean).
+
+% Generated constraints/rules
+
+% Attack preconditions
+nonexecutable attack(E) if ~isProvince(E).
+nonexecutable attack(E) if isPlanet(E).
+nonexecutable attack(E) if harmony.
+
+% Attack effects
+attack(E) causes ~pain(E).
+attack(E) causes ~isProvince(E).
+attack(E) causes isPlanet(E).
+attack(E) causes harmony.
+
+% Succumb preconditions
+nonexecutable succumb(E) if pain(E).
+
+% Succumb effects
+succumb(E) causes ~isProvince(E).
+succumb(E) causes ~harmony.
+succumb(E) causes ~isPlanet(E).
+succumb(E) causes ~pain(E).
+
+% Overcome preconditions
+nonexecutable overcome(E1,E2) if isProvince(E2).
+nonexecutable overcome(E1,E2) if pain(E1).
+
+% Overcome effects
+overcome(E1,E2) causes ~harmony.
+overcome(E1,E2) causes ~isProvince(E1).
+overcome(E1,E2) causes ~craves(E1,E2).
+overcome(E1,E2) causes ~isProvince(E2).
+overcome(E1,E2) causes pain(E1).
+
+% Feast preconditions
+nonexecutable feast(E1,E2) if craves(E1,E2).
+nonexecutable feast(E1,E2) if isProvince(E1).
+nonexecutable feast(E1,E2) if ~harmony.
+
+% Feast effects
+feast(E1,E2) causes ~pain(E1).
+feast(E1,E2) causes ~isProvince(E2).
+feast(E1,E2) causes craves(E1,E2).
+feast(E1,E2) causes ~isProvince(E1).
+feast(E1,E2) causes harmony.
+
+% Close the world for craves so the main query is not trivially satisfiable at step 0.
+% (Without this, unspecified craves facts can be chosen true initially.)
+default ~craves(E1,E2).
+
+% Close the world for other fluents as well, otherwise the solver can freely choose them
+% in the initial state, making the main query trivially satisfiable at step 0.
+default ~isProvince(E).
+default ~isPlanet(E).
+default ~pain(E).
+default ~harmony.
+
+% NOTE: Removed the "impossible craves(...)" enumeration.
+% It incorrectly forbids craves(d,b), which is required by the main query goal.
+% The defaults above already provide the intended closed-world behavior while still
+% allowing the query to assert specific craves facts initially and in the goal.
+
+% MAIN QUERY CHANGED? [UNCHANGED]
+:- query
+    0: harmony
+       & craves(a,c) & craves(b,a) & craves(c,d)
+       & isPlanet(d)
+       & isProvince(b);
+    maxstep: craves(b,c) & craves(d,b).
+
+% SAMPLE QUERIES CHANGED? [CHANGED]
+% Query 1: A valid attack: b is a province, not a planet, and harmony is absent; after attack(b),
+% b becomes a planet, stops being a province, loses pain, and harmony becomes present. (satisfiable)
+:- query
+    0: ~harmony & isProvince(b) & ~isPlanet(b) & pain(b);
+    0: attack(b);
+    maxstep: harmony & isPlanet(b) & ~isProvince(b) & ~pain(b).
+
+% Query 2: An invalid attack because harmony is present. (unsatisfiable)
+:- query
+    0: harmony & isProvince(b) & ~isPlanet(b);
+    0: attack(b).
+
+% Query 3: A valid succumb: requires the entity not be in pain; after succumb(a), harmony is removed,
+% a is not a province, not a planet, and not in pain. (satisfiable)
+:- query
+    0: harmony & ~pain(a) & isProvince(a) & isPlanet(a);
+    0: succumb(a);
+    maxstep: ~harmony & ~isProvince(a) & ~isPlanet(a) & ~pain(a).
+
+% Query 4: An invalid overcome because the second entity is a province. (unsatisfiable)
+:- query
+    0: ~harmony & ~pain(a) & isProvince(b);
+    0: overcome(a,b).
+
+% Query 5: A valid feast: actor a does not crave b, a is not a province, and harmony is present;
+% after feast(a,b), a craves b, a is not in pain, b is not a province, and harmony is present. (satisfiable)
+:- query
+    0: harmony & ~isProvince(a) & ~craves(a,b) & pain(a);
+    0: feast(a,b);
+    maxstep: harmony & craves(a,b) & ~pain(a) & ~isProvince(b) & ~isProvince(a).

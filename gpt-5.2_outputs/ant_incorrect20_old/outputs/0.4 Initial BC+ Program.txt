@@ -1,0 +1,129 @@
+:- sorts
+    ant;
+    place.
+
+
+:- objects
+    ant1 :: ant;
+    p1, p2 :: place.
+
+
+:- variables
+    A, A1, A2, A3, A4 :: ant;
+    P, P1, P2, P3, P4 :: place;
+    Bool, Bool1, Bool2, Bool3, Bool4 :: boolean.
+
+
+:- constants
+    move(ant, place, place) :: exogenousAction;
+    pickUpFood(ant, place) :: exogenousAction;
+    dropFoodAtNest(ant, place) :: exogenousAction;
+    clearObstacle(ant, place, place) :: exogenousAction;
+
+    at(ant, place) :: inertialFluent(boolean);
+    adjacent(place, place) :: inertialFluent(boolean);
+    clear(place) :: inertialFluent(boolean);
+    hasFood(place) :: inertialFluent(boolean);
+    isNest(place) :: inertialFluent(boolean);
+    carryingFood(ant) :: inertialFluent(boolean).
+
+
+% constraints/rules
+% 1. An ant cannot be at two different places at the same time.
+impossible at(A,P1) & at(A,P2) & P1\=P2.
+
+% 2. Moving an ant from a starting place to a destination place causes the ant to be at the destination place.
+move(A,P1,P2) causes at(A,P2).
+
+% 3. Moving an ant from a starting place to a destination place causes the ant to no longer be at the starting place.
+move(A,P1,P2) causes ~at(A,P1).
+
+% 4. The move action is not executable unless the ant is currently at the starting place.
+nonexecutable move(A,P1,P2) if ~at(A,P1).
+
+% 5. The move action is not executable if the starting place is adjacent to the destination place.
+nonexecutable move(A,P1,P2) if adjacent(P1,P2).
+
+% 6. The move action is not executable if the destination place is not clear.
+nonexecutable move(A,P1,P2) if ~clear(P2).
+
+% 7. The move action is not executable if the starting place and the destination place are the same place.
+nonexecutable move(A,P1,P2) if P1=P2.
+
+% 8. Picking up food at a place causes the ant to be carrying food.
+pickUpFood(A,P) causes carryingFood(A).
+
+% 9. Picking up food at a place causes the place to no longer have food.
+pickUpFood(A,P) causes ~hasFood(P).
+
+% 10. The pick-up-food action is not executable unless the ant is at that place.
+nonexecutable pickUpFood(A,P) if ~at(A,P).
+
+% 11. The pick-up-food action is not executable if that place does not have food.
+nonexecutable pickUpFood(A,P) if ~hasFood(P).
+
+% 12. The pick-up-food action is not executable if the ant is already carrying food.
+nonexecutable pickUpFood(A,P) if carryingFood(A).
+
+% 13. Dropping food at a place causes the ant to no longer be carrying food.
+dropFoodAtNest(A,P) causes ~carryingFood(A).
+
+% 14. Dropping food at a place causes the place to have food.
+dropFoodAtNest(A,P) causes hasFood(P).
+
+% 15. The drop-food-at-nest action is not executable unless the ant is at that place.
+nonexecutable dropFoodAtNest(A,P) if ~at(A,P).
+
+% 16. The drop-food-at-nest action is not executable if that place is not a nest.
+nonexecutable dropFoodAtNest(A,P) if ~isNest(P).
+
+% 17. The drop-food-at-nest action is not executable if the ant is not carrying food.
+nonexecutable dropFoodAtNest(A,P) if ~carryingFood(A).
+
+% 18. Clearing an obstacle at a blocked place while at a current place causes the blocked place to become clear.
+clearObstacle(A,P1,P2) causes clear(P2).
+
+% 19. The clear-obstacle action is not executable unless the ant is at the current place.
+nonexecutable clearObstacle(A,P1,P2) if ~at(A,P1).
+
+% 20. The clear-obstacle action is not executable if the current place is adjacent to the blocked place.
+nonexecutable clearObstacle(A,P1,P2) if adjacent(P1,P2).
+
+% 21. The clear-obstacle action is not executable if the blocked place is already clear.
+nonexecutable clearObstacle(A,P1,P2) if clear(P2).
+
+% 22. The clear-obstacle action is not executable if the current place and the blocked place are the same place.
+nonexecutable clearObstacle(A,P1,P2) if P1=P2.
+
+% 23. It is not executable for the same ant to perform two different move actions at the same time.
+nonexecutable move(A,P1,P2) & move(A,P3,P4) if P1\=P3 | P2\=P4.
+
+% 24. It is not executable for the same ant to move and pick up food at the same time.
+nonexecutable move(A,P1,P2) & pickUpFood(A,P3) if true.
+
+% 25. It is not executable for the same ant to move and drop food at a nest at the same time.
+nonexecutable move(A,P1,P2) & dropFoodAtNest(A,P3) if true.
+
+% 26. It is not executable for the same ant to move and clear an obstacle at the same time.
+nonexecutable move(A,P1,P2) & clearObstacle(A,P3,P4) if true.
+
+% 27. It is not executable for the same ant to pick up food and drop food at a nest at the same time.
+nonexecutable pickUpFood(A,P1) & dropFoodAtNest(A,P2) if true.
+
+% 28. It is not executable for the same ant to pick up food and clear an obstacle at the same time.
+nonexecutable pickUpFood(A,P1) & clearObstacle(A,P2,P3) if true.
+
+% 29. It is not executable for the same ant to drop food at a nest and clear an obstacle at the same time.
+nonexecutable dropFoodAtNest(A,P1) & clearObstacle(A,P2,P3) if true.
+
+
+
+% query
+:- query
+    0: at(ant1,p1) & ~at(ant1,p2)
+       & adjacent(p1,p2) & adjacent(p2,p1)
+       & clear(p1) & clear(p2)
+       & isNest(p1) & ~isNest(p2)
+       & hasFood(p2) & ~hasFood(p1)
+       & ~carryingFood(ant1);
+    maxstep: hasFood(p1).

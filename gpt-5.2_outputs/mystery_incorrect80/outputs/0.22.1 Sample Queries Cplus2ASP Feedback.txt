@@ -1,0 +1,114 @@
+% Query 1: A valid attack: b is a province, not a planet, and harmony is absent; after attack(b),
+% b becomes a planet, stops being a province, loses pain, and harmony becomes present. (satisfiable)
+:- query
+    0: ~harmony & isProvince(b) & ~isPlanet(b) & pain(b);
+    0: attack(b);
+    maxstep: harmony & isPlanet(b) & ~isProvince(b) & ~pain(b).
+
+Cplus2ASP Output:
+
+Solving...
+	
+
+	0:  isProvince(b) pain(b)
+
+	ACTIONS:  attack(b)
+
+	1:  harmony isPlanet(b)
+
+SATISFIABLE
+Models       : 1+
+
+
+% Query 2: An invalid attack because harmony is present. (unsatisfiable)
+:- query
+    0: harmony & isProvince(b) & ~isPlanet(b);
+    0: attack(b).
+
+Cplus2ASP Output:
+
+Solving...
+UNSATISFIABLE
+Models       : 0
+No solution.
+
+
+
+% Query 3: A valid succumb: requires the entity not be in pain; after succumb(a), harmony is removed,
+% a is not a province, not a planet, and not in pain. (satisfiable)
+:- query
+    0: harmony & ~pain(a) & isProvince(a) & ~isPlanet(a);
+    0: succumb(a);
+    maxstep: ~harmony & ~isProvince(a) & ~isPlanet(a) & ~pain(a).
+
+Cplus2ASP Output:
+
+Solving...
+	
+
+	0:  harmony isProvince(a)
+
+	ACTIONS:  succumb(a)
+
+	1: 
+
+SATISFIABLE
+Models       : 1+
+
+
+% Query 4: An invalid overcome because the second entity is a province. (unsatisfiable)
+:- query
+    0: ~harmony & ~pain(a) & isProvince(b);
+    0: overcome(a,b).
+
+Cplus2ASP Output:
+
+Solving...
+UNSATISFIABLE
+Models       : 0
+No solution.
+
+
+
+% Query 5: A valid feast: actor a does not crave b, a is not a province, and harmony is present;
+% after feast(a,b), a craves b, a is not in pain, b is not a province, and harmony is present. (satisfiable)
+:- query
+    0: harmony & ~isProvince(a) & pain(a) & ~craves(a,b);
+    0: feast(a,b);
+    maxstep: harmony & craves(a,b) & ~pain(a) & ~isProvince(b) & ~isProvince(a).
+
+Cplus2ASP Output:
+
+Solving...
+	
+
+	0:  harmony pain(a)
+
+	ACTIONS:  feast(a, b)
+
+	1:  harmony craves(a, b)
+
+SATISFIABLE
+Models       : 1+
+
+
+
+
+:- query
+    0: harmony
+       & craves(a,c) & craves(b,a) & craves(c,d)
+       & isPlanet(d)
+       & isProvince(b);
+    maxstep: craves(b,c) & craves(d,b).
+
+
+Cplus2ASP Output:
+
+Solving...
+	
+
+	0:  harmony isPlanet(d) isProvince(b) craves(a, c) craves(a, d) craves(b, a) craves(b, c) craves(c, b) craves(c, d) craves(d, a) craves(d, b) craves(d, c)
+
+SATISFIABLE
+Models       : 1+
+

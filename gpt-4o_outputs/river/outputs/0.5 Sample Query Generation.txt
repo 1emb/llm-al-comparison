@@ -1,0 +1,26 @@
+% Query 1: Move the boat from the left bank to the right bank without any passengers. (satisfiable)
+:- query
+    0: loc(mouse) = leftBank & loc(snake) = leftBank & loc(cheese) = leftBank & loc(boat) = leftBank & ~onBoat(mouse) & ~onBoat(snake) & ~onBoat(cheese);
+    0: moveBoat(rightBank).
+
+% Query 2: Attempt to move the boat with both the mouse and the snake on board. (unsatisfiable)
+:- query
+    0: loc(mouse) = leftBank & loc(snake) = leftBank & loc(cheese) = leftBank & loc(boat) = leftBank & onBoat(mouse) & onBoat(snake);
+    0: moveBoat(rightBank).
+
+% Query 3: Board the mouse onto the boat and then move the boat to the right bank. (satisfiable)
+:- query
+    0: loc(mouse) = leftBank & loc(snake) = leftBank & loc(cheese) = leftBank & loc(boat) = leftBank & ~onBoat(mouse) & ~onBoat(snake) & ~onBoat(cheese);
+    0: boardBoat(mouse);
+    1: moveBoat(rightBank).
+
+% Query 4: Leave the mouse and cheese alone on the left bank without the snake or the boat. (unsatisfiable)
+:- query
+    0: loc(mouse) = leftBank & loc(snake) = rightBank & loc(cheese) = leftBank & loc(boat) = rightBank & ~onBoat(mouse) & ~onBoat(snake) & ~onBoat(cheese).
+
+% Query 5: Board the snake onto the boat, move to the right bank, and unboard the snake. (satisfiable)
+:- query
+    0: loc(mouse) = leftBank & loc(snake) = leftBank & loc(cheese) = leftBank & loc(boat) = leftBank & ~onBoat(mouse) & ~onBoat(snake) & ~onBoat(cheese);
+    0: boardBoat(snake);
+    1: moveBoat(rightBank);
+    2: unboardBoat(snake).

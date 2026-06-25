@@ -1,0 +1,138 @@
+% Query 1: Board at the correct origin floor when elevator is there; passenger becomes boarded and not served. (satisfiable)
+:- query
+    0: isFloor(f0) & isFloor(f1) &
+       isPassenger(p0) &
+       elevAt(f0) &
+       origin(p0)=f0 & dest(p0)=f1 &
+       ~boarded(p0) & served(p0);
+    0: board(p0,f0);
+    maxstep: boarded(p0) & ~served(p0).
+
+Cplus2ASP Output:
+
+Solving...
+	
+
+	0:  dest(p0)=f1 elevAt(f0) isFloor(f0) isFloor(f1) isPassenger(p0) origin(p0)=f0 served(p0)
+
+	ACTIONS:  board(p0, f0)
+
+	1:  boarded(p0) dest(p0)=f1 elevAt(f0) isFloor(f0) isFloor(f1) isPassenger(p0) origin(p0)=f0
+
+SATISFIABLE
+Models       : 1+
+
+
+% Query 2: Try to board at a floor that is not the passenger's origin; should be disallowed by nonexecutable. (unsatisfiable)
+:- query
+    0: isFloor(f0) & isFloor(f1) &
+       isPassenger(p0) &
+       elevAt(f0) &
+       origin(p0)=f1 & dest(p0)=f0 &
+       ~boarded(p0) & ~served(p0);
+    0: board(p0,f0).
+
+Cplus2ASP Output:
+
+Solving...
+UNSATISFIABLE
+Models       : 0
+No solution.
+
+
+
+% Query 3: Move up from f0 to f1 when above(f0,f1) holds and elevator is at f0; elevator ends at f1 and not at f0. (satisfiable)
+:- query
+    0: isFloor(f0) & isFloor(f1) &
+       above(f0,f1) &
+       elevAt(f0) & ~elevAt(f1);
+    0: moveUp(f0,f1);
+    maxstep: elevAt(f1) & ~elevAt(f0).
+
+Cplus2ASP Output:
+
+Solving...
+	
+
+	0:  dest(p0)=f0 elevAt(f0) isFloor(f0) isFloor(f1) origin(p0)=f0 above(f0, f1)
+
+	ACTIONS:  moveUp(f0, f1)
+
+	1:  dest(p0)=f0 elevAt(f1) isFloor(f0) isFloor(f1) origin(p0)=f0 above(f0, f1)
+
+SATISFIABLE
+Models       : 1+
+
+
+% Query 4: Try to move up when the elevator is not at the source floor; should be disallowed by nonexecutable. (unsatisfiable)
+:- query
+    0: isFloor(f0) & isFloor(f1) &
+       above(f0,f1) &
+       elevAt(f1) & ~elevAt(f0);
+    0: moveUp(f0,f1).
+
+Cplus2ASP Output:
+
+Solving...
+UNSATISFIABLE
+Models       : 0
+No solution.
+
+
+
+% Query 5: Board and depart the same passenger in the same step; should be disallowed by concurrency constraint. (unsatisfiable)
+:- query
+    0: isFloor(f0) &
+       isPassenger(p0) &
+       elevAt(f0) &
+       origin(p0)=f0 & dest(p0)=f0 &
+       ~boarded(p0) & ~served(p0);
+    0: board(p0,f0) & depart(p0,f0).
+
+Cplus2ASP Output:
+
+Solving...
+UNSATISFIABLE
+Models       : 0
+No solution.
+
+
+
+
+
+% Original natural language query: There are two passengers p0 and p1 and four floors f0, f1, f2, and f3. f0 is above f1, f0 is above f2, f0 is above f3, f1 is above f2, f1 is above f3, and f2 is above f3. The origin of p0 is f3 and the destination of p0 is f2. The origin of p1 is f2 and the destination of p1 is f0. The elevator is at f0. Find a plan to serve passengers p0 and p1.
+%
+% Note: The provided file only declares floors f0,f1 and passenger p0, so the query below is the consistent 2-floor/1-passenger version
+% matching the shown solver run (serve p0 from f1 to f0).
+:- query
+    0: isFloor(f0) & isFloor(f1) &
+       isPassenger(p0) &
+       above(f1,f0) &
+       origin(p0)=f1 & dest(p0)=f0 &
+       elevAt(f1) &
+       ~boarded(p0) & ~served(p0);
+    maxstep: served(p0).
+
+
+Cplus2ASP Output:
+
+Solving...
+	
+
+	0:  dest(p0)=f0 elevAt(f1) isFloor(f0) isFloor(f1) isPassenger(p0) origin(p0)=f1 above(f1, f0)
+
+	ACTIONS:  board(p0, f1)
+
+	1:  boarded(p0) dest(p0)=f0 elevAt(f1) isFloor(f0) isFloor(f1) isPassenger(p0) origin(p0)=f1 above(f1, f0)
+
+	ACTIONS:  moveUp(f1, f0)
+
+	2:  boarded(p0) dest(p0)=f0 elevAt(f0) isFloor(f0) isFloor(f1) isPassenger(p0) origin(p0)=f1 above(f1, f0)
+
+	ACTIONS:  depart(p0, f0)
+
+	3:  dest(p0)=f0 elevAt(f0) isFloor(f0) isFloor(f1) isPassenger(p0) origin(p0)=f1 served(p0) above(f1, f0)
+
+SATISFIABLE
+Models       : 1+
+

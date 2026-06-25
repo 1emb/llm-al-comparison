@@ -1,0 +1,27 @@
+Solving...
+Solution: 1 (Time: 0.015s)
+	
+
+	0:  clear(p1) clear(p2) hasFood(p2) isNest(p1) loc(ant1)=p1 adjacent(p1, p2) adjacent(p2, p1)
+
+	ACTIONS:  move(ant1, p1, p2)
+
+	1:  clear(p1) clear(p2) hasFood(p2) isNest(p1) loc(ant1)=p2 adjacent(p1, p2) adjacent(p2, p1)
+
+	ACTIONS:  pickupFood(ant1, p2)
+
+	2:  carryingFood(ant1) clear(p1) clear(p2) isNest(p1) loc(ant1)=p2 adjacent(p1, p2) adjacent(p2, p1)
+
+	ACTIONS:  move(ant1, p2, p1)
+
+	3:  carryingFood(ant1) clear(p1) clear(p2) isNest(p1) loc(ant1)=p1 adjacent(p1, p2) adjacent(p2, p1)
+
+	ACTIONS:  dropFood(ant1, p1)
+
+	4:  clear(p1) clear(p2) hasFood(p1) isNest(p1) loc(ant1)=p1 adjacent(p1, p2) adjacent(p2, p1)
+
+SATISFIABLE
+Models       : 1+
+Calls        : 5
+Time         : 0.014s (Solving: 0.00s 1st Model: 0.00s Unsat: 0.00s)
+CPU Time     : 0.014s

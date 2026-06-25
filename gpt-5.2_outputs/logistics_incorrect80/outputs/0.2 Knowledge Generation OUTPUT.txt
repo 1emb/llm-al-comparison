@@ -1,0 +1,47 @@
+
+% A package cannot be inside a vehicle unless the package and the vehicle are at the same location.
+% If a package is inside a vehicle, then the package's location is the same as the vehicle's location.
+
+% A package cannot be inside two different vehicles at the same time.
+
+% Loading a package into a truck at a location makes the package be inside that truck.
+% Loading a package into a truck at a location makes the package not be at that location as an independent thing.
+
+% Loading a package into a truck at a location is not executable if the truck is not at that location.
+% Loading a package into a truck at a location is not executable if the package is not at that location.
+% Loading a package into a truck at a location is not executable if the package is already inside some vehicle.
+
+% Loading a package into an airplane at a location makes the package be inside that airplane.
+% Loading a package into an airplane at a location makes the package not be at that location as an independent thing.
+
+% Loading a package into an airplane at a location is not executable if the airplane is not at that location.
+% Loading a package into an airplane at a location is not executable if the package is not at that location.
+% Loading a package into an airplane at a location is not executable if the package is already inside some vehicle.
+
+% Unloading a package from a truck at a location makes the package be at that location.
+% Unloading a package from a truck at a location makes the package not be inside that truck.
+
+% Unloading a package from a truck at a location is not executable if the truck is not at that location.
+% Unloading a package from a truck at a location is not executable if the package is not inside that truck.
+
+% Unloading a package from an airplane at a location makes the package be at that location.
+% Unloading a package from an airplane at a location makes the package not be inside that airplane.
+
+% Unloading a package from an airplane at a location is not executable if the airplane is not at that location.
+% Unloading a package from an airplane at a location is not executable if the package is not inside that airplane.
+
+% Driving a truck from one location to another in a city makes the truck be at the destination location.
+% Driving a truck from one location to another in a city makes the truck not be at the starting location.
+
+% Driving a truck from one location to another in a city is not executable if the truck is not at the starting location.
+% Driving a truck from one location to another in a city is not executable if the starting location is not in that city.
+% Driving a truck from one location to another in a city is not executable if the destination location is not in that city.
+
+% Flying an airplane from one airport to another makes the airplane be at the destination airport.
+% Flying an airplane from one airport to another makes the airplane not be at the starting airport.
+
+% Flying an airplane from one airport to another is not executable if the airplane is not at the starting airport.
+
+% It is not executable to load and unload the same package with the same vehicle at the same location at the same time.
+% It is not executable for a truck to drive and also be loaded or unloaded at the same time.
+% It is not executable for an airplane to fly and also be loaded or unloaded at the same time.

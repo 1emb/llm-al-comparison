@@ -1,0 +1,163 @@
+% Query 1: Try to put the lift at two different floors in the initial state, which should violate the uniqueness-of-location constraint. (unsatisfiable)
+:- query
+    0: isFloor(f0) & isFloor(f1) & isFloor(f2) & isFloor(f3);
+    0: isPassenger(p0) & isPassenger(p1);
+
+    0: above(f0,f1) & above(f0,f2) & above(f0,f3) &
+       above(f1,f2) & above(f1,f3) &
+       above(f2,f3);
+
+    0: origin(p0)=f3 & dest(p0)=f0;
+    0: origin(p1)=f0 & dest(p1)=f2;
+
+    0: ~boarded(p0) & ~served(p0) & ~boarded(p1) & ~served(p1);
+
+    0: liftAt(f0) & liftAt(f1).
+
+Cplus2ASP Output:
+
+Solving...
+UNSATISFIABLE
+Models       : 0
+No solution.
+
+
+
+% Query 2: Attempt to execute board at a floor where the lift is not located. (unsatisfiable)
+:- query
+    0: isFloor(f0) & isFloor(f1) & isFloor(f2) & isFloor(f3);
+    0: isPassenger(p0) & isPassenger(p1);
+
+    0: above(f0,f1) & above(f0,f2) & above(f0,f3) &
+       above(f1,f2) & above(f1,f3) &
+       above(f2,f3);
+
+    0: origin(p0)=f3 & dest(p0)=f0;
+    0: origin(p1)=f0 & dest(p1)=f2;
+
+    0: liftAt(f0);
+
+    0: ~boarded(p0) & ~served(p0) & ~boarded(p1) & ~served(p1);
+
+    0: board(f1,p0).
+
+Cplus2ASP Output:
+
+Solving...
+UNSATISFIABLE
+Models       : 0
+No solution.
+
+
+
+% Query 3: Attempt to execute depart for a person who is already boarded, which is disallowed. (unsatisfiable)
+:- query
+    0: isFloor(f0) & isFloor(f1) & isFloor(f2) & isFloor(f3);
+    0: isPassenger(p0) & isPassenger(p1);
+
+    0: above(f0,f1) & above(f0,f2) & above(f0,f3) &
+       above(f1,f2) & above(f1,f3) &
+       above(f2,f3);
+
+    0: origin(p0)=f3 & dest(p0)=f0;
+    0: origin(p1)=f0 & dest(p1)=f2;
+
+    0: liftAt(f0);
+
+    0: boarded(p0) & served(p0) & ~boarded(p1) & ~served(p1);
+
+    0: depart(f0,p0).
+
+Cplus2ASP Output:
+
+Solving...
+UNSATISFIABLE
+Models       : 0
+No solution.
+
+
+
+% Query 4: Execute depart for a not-boarded person at the lift's current floor, and check that they become served (and boarded) afterward. (satisfiable)
+:- query
+    0: isFloor(f0) & isFloor(f1) & isFloor(f2) & isFloor(f3);
+    0: isPassenger(p0) & isPassenger(p1);
+
+    0: above(f0,f1) & above(f0,f2) & above(f0,f3) &
+       above(f1,f2) & above(f1,f3) &
+       above(f2,f3);
+
+    0: origin(p0)=f3 & dest(p0)=f0;
+    0: origin(p1)=f0 & dest(p1)=f2;
+
+    0: liftAt(f0);
+
+    0: ~boarded(p0) & ~served(p0) & ~boarded(p1) & ~served(p1);
+
+    0: depart(f0,p0);
+
+    maxstep: served(p0) & boarded(p0).
+
+Cplus2ASP Output:
+
+Solving...
+UNSATISFIABLE
+Models       : 0
+No solution.
+
+
+
+% Query 5: Attempt to execute up(F1,F2) with F1 being a floor, which is disallowed by the nonexecutable condition. (unsatisfiable)
+:- query
+    0: isFloor(f0) & isFloor(f1) & isFloor(f2) & isFloor(f3);
+    0: isPassenger(p0) & isPassenger(p1);
+
+    0: above(f0,f1) & above(f0,f2) & above(f0,f3) &
+       above(f1,f2) & above(f1,f3) &
+       above(f2,f3);
+
+    0: origin(p0)=f3 & dest(p0)=f0;
+    0: origin(p1)=f0 & dest(p1)=f2;
+
+    0: liftAt(f0);
+
+    0: ~boarded(p0) & ~served(p0) & ~boarded(p1) & ~served(p1);
+
+    0: up(f0,f1).
+
+Cplus2ASP Output:
+
+Solving...
+UNSATISFIABLE
+Models       : 0
+No solution.
+
+
+
+
+
+:- query
+    0: isFloor(f0) & isFloor(f1) & isFloor(f2) & isFloor(f3);
+    0: isPassenger(p0) & isPassenger(p1);
+
+    0: above(f0,f1) & above(f0,f2) & above(f0,f3) &
+       above(f1,f2) & above(f1,f3) &
+       above(f2,f3);
+
+    0: origin(p0)=f3 & dest(p0)=f0;
+    0: origin(p1)=f0 & dest(p1)=f2;
+
+    0: liftAt(f0);
+
+    0: ~boarded(p0) & ~served(p0) & ~boarded(p1) & ~served(p1);
+
+    maxstep: served(p0) & served(p1).
+
+
+Cplus2ASP Output:
+
+Solving...
+UNSATISFIABLE
+Models       : 0
+No solution.
+
+

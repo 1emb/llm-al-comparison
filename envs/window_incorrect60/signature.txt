@@ -1,0 +1,15 @@
+There is one type of thing: "window".
+
+w1 and w2 are windows.
+
+Fluents
+Whether a (window) is open is an inertial fluent (boolean).
+Whether a (window) is closed is an inertial fluent (boolean).
+Whether a (window) is locked is an inertial fluent (boolean).
+Whether a (window) is unlocked is an inertial fluent (boolean).
+
+Actions
+Opening a (window) is an action.
+Closing a (window) is an action.
+Locking a (window) is an action.
+Unlocking a (window) is an action.

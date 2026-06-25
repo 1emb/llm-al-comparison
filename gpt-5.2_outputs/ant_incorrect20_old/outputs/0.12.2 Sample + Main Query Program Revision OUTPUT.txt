@@ -1,0 +1,189 @@
+% PROGRAM CHANGED? [CHANGED]
+% BC+ signature
+:- sorts
+    ant;
+    place.
+
+:- objects
+    ant1 :: ant;
+    p1, p2 :: place.
+
+:- variables
+    A :: ant;
+    P, P1, P2, P3, P4 :: place.
+
+:- constants
+    move(ant, place, place) :: exogenousAction;
+    pickUpFood(ant, place) :: exogenousAction;
+    dropFoodAtNest(ant, place) :: exogenousAction;
+    clearObstacle(ant, place, place) :: exogenousAction;
+
+    % Functional fluent for location (use this in queries; do not use at/2).
+    loc(ant) :: inertialFluent(place);
+
+    % adjacency is a static relation, not something that changes by actions
+    adjacent(place, place) :: inertialFluent(boolean);
+
+    clear(place) :: inertialFluent(boolean);
+    hasFood(place) :: inertialFluent(boolean);
+    isNest(place) :: inertialFluent(boolean);
+    carryingFood(ant) :: inertialFluent(boolean).
+
+% Generated constraints
+
+% Moving an ant from a starting place to a destination place causes the ant to be at the destination place.
+move(A,P1,P2) causes loc(A)=P2.
+
+% The move action is not executable unless the ant is currently at the starting place.
+nonexecutable move(A,P1,P2) if loc(A)\=P1.
+
+% The move action is not executable if the destination place is not clear.
+nonexecutable move(A,P1,P2) if ~clear(P2).
+
+% The move action is not executable if the starting place and the destination place are the same place.
+nonexecutable move(A,P1,P2) if P1=P2.
+
+% Move requires adjacency.
+nonexecutable move(A,P1,P2) if ~adjacent(P1,P2).
+
+% Picking up food at a place causes the ant to be carrying food.
+pickUpFood(A,P) causes carryingFood(A).
+
+% Picking up food at a place causes the place to no longer have food.
+pickUpFood(A,P) causes ~hasFood(P).
+
+% The pick-up-food action is not executable unless the ant is at that place.
+nonexecutable pickUpFood(A,P) if loc(A)\=P.
+
+% The pick-up-food action is not executable if that place does not have food.
+nonexecutable pickUpFood(A,P) if ~hasFood(P).
+
+% The pick-up-food action is not executable if the ant is already carrying food.
+nonexecutable pickUpFood(A,P) if carryingFood(A).
+
+% Dropping food at a nest causes the ant to no longer be carrying food.
+dropFoodAtNest(A,P) causes ~carryingFood(A).
+
+% Dropping food at a nest causes the nest place to have food.
+dropFoodAtNest(A,P) causes hasFood(P).
+
+% The drop-food-at-nest action is not executable unless the ant is at that place.
+nonexecutable dropFoodAtNest(A,P) if loc(A)\=P.
+
+% The drop-food-at-nest action is not executable if that place is not a nest.
+nonexecutable dropFoodAtNest(A,P) if ~isNest(P).
+
+% The drop-food-at-nest action is not executable if the ant is not carrying food.
+nonexecutable dropFoodAtNest(A,P) if ~carryingFood(A).
+
+% Clearing an obstacle at a blocked place while at a current place causes the blocked place to become clear.
+clearObstacle(A,P1,P2) causes clear(P2).
+
+% The clear-obstacle action is not executable unless the ant is at the current place.
+nonexecutable clearObstacle(A,P1,P2) if loc(A)\=P1.
+
+% Require adjacency between current place and blocked place.
+nonexecutable clearObstacle(A,P1,P2) if ~adjacent(P1,P2).
+
+% The clear-obstacle action is not executable if the blocked place is already clear.
+nonexecutable clearObstacle(A,P1,P2) if clear(P2).
+
+% The clear-obstacle action is not executable if the current place and the blocked place are the same place.
+nonexecutable clearObstacle(A,P1,P2) if P1=P2.
+
+% Concurrency constraints
+
+% It is not executable for the same ant to perform two different move actions at the same time.
+nonexecutable move(A,P1,P2) & move(A,P3,P4) if (P1\=P3 | P2\=P4).
+
+% It is not executable for the same ant to move and pick up food at the same time.
+nonexecutable move(A,P1,P2) & pickUpFood(A,P3) if true.
+
+% It is not executable for the same ant to move and drop food at a nest at the same time.
+nonexecutable move(A,P1,P2) & dropFoodAtNest(A,P3) if true.
+
+% It is not executable for the same ant to move and clear an obstacle at the same time.
+nonexecutable move(A,P1,P2) & clearObstacle(A,P3,P4) if true.
+
+% It is not executable for the same ant to pick up food and drop food at a nest at the same time.
+nonexecutable pickUpFood(A,P1) & dropFoodAtNest(A,P2) if true.
+
+% It is not executable for the same ant to pick up food and clear an obstacle at the same time.
+nonexecutable pickUpFood(A,P1) & clearObstacle(A,P2,P3) if true.
+
+% It is not executable for the same ant to drop food at a nest and clear an obstacle at the same time.
+nonexecutable dropFoodAtNest(A,P1) & clearObstacle(A,P2,P3) if true.
+
+% NOTE:
+% The solver outputs show adjacent(p2,p2) appearing even when not stated in the query.
+% To prevent unintended self-adjacency models, enforce irreflexive adjacency:
+% [CHANGED] This must be a fluent formula; adjacent/2 is declared inertialFluent(boolean),
+% so use equality-to-true form.
+impossible adjacent(P,P)=true.
+
+
+% MAIN QUERY CHANGED? [UNCHANGED]
+% Original natural language query: Ant ant1 is at p1. p1 is adjacent to p2 and p2 is adjacent to p1. p1 is clear and p2 is clear. p1 is the nest. Food is present at p2. Find a plan to bring the food to the nest.
+:- query
+    0: loc(ant1)=p1
+       & adjacent(p1,p2) & adjacent(p2,p1)
+       & clear(p1) & clear(p2)
+       & isNest(p1) & ~isNest(p2)
+       & hasFood(p2) & ~hasFood(p1)
+       & ~carryingFood(ant1);
+    maxstep: hasFood(p1).
+
+
+% SAMPLE QUERIES CHANGED? [UNCHANGED]
+% Query 1: A legal move from p1 to p2 when p2 is clear and p1 is adjacent to p2. (satisfiable)
+:- query
+    0: loc(ant1)=p1
+       & adjacent(p1,p2) & adjacent(p2,p1)
+       & clear(p1) & clear(p2)
+       & isNest(p1) & ~isNest(p2)
+       & hasFood(p2) & ~hasFood(p1)
+       & ~carryingFood(ant1);
+    0: move(ant1,p1,p2);
+    maxstep: loc(ant1)=p2.
+
+% Query 2: Attempt to move from p1 to p2 when p1 is NOT adjacent to p2 (move should be blocked). (unsatisfiable)
+:- query
+    0: loc(ant1)=p1
+       & ~adjacent(p1,p2) & ~adjacent(p2,p1)
+       & clear(p1) & clear(p2)
+       & isNest(p1) & ~isNest(p2)
+       & hasFood(p2) & ~hasFood(p1)
+       & ~carryingFood(ant1);
+    0: move(ant1,p1,p2).
+
+% Query 3: Pick up food at p2 while at p2 and not already carrying food. (satisfiable)
+:- query
+    0: loc(ant1)=p2
+       & adjacent(p1,p2) & adjacent(p2,p1)
+       & clear(p1) & clear(p2)
+       & isNest(p1) & ~isNest(p2)
+       & hasFood(p2) & ~hasFood(p1)
+       & ~carryingFood(ant1);
+    0: pickUpFood(ant1,p2);
+    maxstep: carryingFood(ant1) & ~hasFood(p2).
+
+% Query 4: Try to pick up food at p2 when p2 has no food (should be blocked). (unsatisfiable)
+:- query
+    0: loc(ant1)=p2
+       & adjacent(p1,p2) & adjacent(p2,p1)
+       & clear(p1) & clear(p2)
+       & isNest(p1) & ~isNest(p2)
+       & ~hasFood(p2) & ~hasFood(p1)
+       & ~carryingFood(ant1);
+    0: pickUpFood(ant1,p2).
+
+% Query 5: Clear an obstacle at p2 while at p1, with p1 adjacent to p2 and p2 not clear. (satisfiable)
+:- query
+    0: loc(ant1)=p1
+       & adjacent(p1,p2) & adjacent(p2,p1)
+       & clear(p1) & ~clear(p2)
+       & isNest(p1) & ~isNest(p2)
+       & hasFood(p2) & ~hasFood(p1)
+       & ~carryingFood(ant1);
+    0: clearObstacle(ant1,p1,p2);
+    maxstep: clear(p2).

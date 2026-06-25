@@ -1,0 +1,44 @@
+```json
+[
+  {
+    "objects": ":- objects\n    b1, b2, b3 :: block;\n    table :: loc.",
+    "query": ":- query\n    0: handEmpty\n       & on(b1)=b3 & clear(b1) & ~holding(b1)\n       & on(b2)=table & ~clear(b2) & ~holding(b2)\n       & on(b3)=b2 & ~clear(b3) & ~holding(b3);\n    maxstep: handEmpty\n             & on(b1)=table & clear(b1) & ~holding(b1)\n             & on(b2)=table & clear(b2) & ~holding(b2)\n             & on(b3)=table & clear(b3) & ~holding(b3)."
+  },
+  {
+    "objects": ":- objects\n    b1, b2, b3 :: block;\n    table :: loc.",
+    "query": ":- query\n    0: handEmpty\n       & on(b1)=b2 & clear(b1) & ~holding(b1)\n       & on(b2)=b3 & ~clear(b2) & ~holding(b2)\n       & on(b3)=table & ~clear(b3) & ~holding(b3);\n    maxstep: handEmpty\n             & on(b1)=table & clear(b1) & ~holding(b1)\n             & on(b2)=table & clear(b2) & ~holding(b2)\n             & on(b3)=table & clear(b3) & ~holding(b3)."
+  },
+  {
+    "objects": ":- objects\n    b1, b2, b3, b4 :: block;\n    table :: loc.",
+    "query": ":- query\n    0: handEmpty\n       & on(b1)=table & clear(b1) & ~holding(b1)\n       & on(b2)=table & clear(b2) & ~holding(b2)\n       & on(b3)=table & clear(b3) & ~holding(b3)\n       & on(b4)=table & clear(b4) & ~holding(b4);\n    maxstep: handEmpty\n             & on(b4)=table & ~holding(b4)\n             & on(b1)=b4 & clear(b1) & ~holding(b1)\n             & on(b3)=table & clear(b3) & ~holding(b3)\n             & on(b2)=table & clear(b2) & ~holding(b2)\n             & ~clear(b4)."
+  },
+  {
+    "objects": ":- objects\n    b1, b2, b3, b4 :: block;\n    table :: loc.",
+    "query": ":- query\n    0: handEmpty\n       & on(b3)=table & clear(b3) & ~holding(b3)\n       & on(b1)=table & clear(b1) & ~holding(b1)\n       & on(b2)=table & ~clear(b2) & ~holding(b2)\n       & on(b4)=b2 & clear(b4) & ~holding(b4);\n    maxstep: handEmpty\n             & on(b3)=table & clear(b3) & ~holding(b3)\n             & on(b2)=table & ~holding(b2)\n             & on(b4)=b2 & ~holding(b4)\n             & on(b1)=b4 & clear(b1) & ~holding(b1)\n             & ~clear(b4)\n             & ~clear(b2)."
+  },
+  {
+    "objects": ":- objects\n    b1, b2, b3, b4, b5 :: block;\n    table :: loc.",
+    "query": ":- query\n    0: handEmpty\n       & on(b5)=table & ~clear(b5) & ~holding(b5)\n       & on(b1)=b5 & clear(b1) & ~holding(b1)\n       & on(b3)=table & clear(b3) & ~holding(b3)\n       & on(b2)=table & ~clear(b2) & ~holding(b2)\n       & on(b4)=b2 & clear(b4) & ~holding(b4);\n    maxstep: handEmpty\n             & on(b3)=table & clear(b3) & ~holding(b3)\n             & on(b1)=table & ~holding(b1)\n             & on(b4)=b1 & clear(b4) & ~holding(b4)\n             & on(b2)=table & clear(b2) & ~holding(b2)\n             & on(b5)=table & clear(b5) & ~holding(b5)\n             & ~clear(b1)."
+  },
+  {
+    "objects": ":- objects\n    b1, b2, b3, b4, b5 :: block;\n    table :: loc.",
+    "query": ":- query\n    0: handEmpty\n       & on(b4)=table & clear(b4) & ~holding(b4)\n       & on(b3)=table & clear(b3) & ~holding(b3)\n       & on(b2)=table & ~clear(b2) & ~holding(b2)\n       & on(b1)=b2 & ~clear(b1) & ~holding(b1)\n       & on(b5)=b1 & clear(b5) & ~holding(b5);\n    maxstep: handEmpty\n             & on(b1)=table & clear(b1) & ~holding(b1)\n             & on(b2)=table & clear(b2) & ~holding(b2)\n             & on(b3)=table & clear(b3) & ~holding(b3)\n             & on(b4)=table & clear(b4) & ~holding(b4)\n             & on(b5)=table & clear(b5) & ~holding(b5)."
+  },
+  {
+    "objects": ":- objects\n    b1, b2, b3, b4, b5, b6 :: block;\n    table :: loc.",
+    "query": ":- query\n    0: handEmpty\n       & on(b4)=table & clear(b4) & ~holding(b4)\n       & on(b3)=table & clear(b3) & ~holding(b3)\n       & on(b1)=table & clear(b1) & ~holding(b1)\n       & on(b5)=table & ~clear(b5) & ~holding(b5)\n       & on(b6)=b5 & clear(b6) & ~holding(b6)\n       & on(b2)=table & clear(b2) & ~holding(b2);\n    maxstep: handEmpty\n             & on(b1)=table & clear(b1) & ~holding(b1)\n             & on(b2)=table & clear(b2) & ~holding(b2)\n             & on(b3)=table & clear(b3) & ~holding(b3)\n             & on(b4)=table & clear(b4) & ~holding(b4)\n             & on(b5)=table & clear(b5) & ~holding(b5)\n             & on(b6)=table & clear(b6) & ~holding(b6)."
+  },
+  {
+    "objects": ":- objects\n    b1, b2, b3, b4, b5, b6 :: block;\n    table :: loc.",
+    "query": ":- query\n    0: handEmpty\n       & on(b4)=table & ~clear(b4) & ~holding(b4)\n       & on(b5)=b4 & clear(b5) & ~holding(b5)\n       & on(b2)=table & clear(b2) & ~holding(b2)\n       & on(b3)=table & clear(b3) & ~holding(b3)\n       & on(b1)=table & clear(b1) & ~holding(b1)\n       & on(b6)=table & clear(b6) & ~holding(b6);\n    maxstep: handEmpty\n             & on(b1)=table & clear(b1) & ~holding(b1)\n             & on(b2)=table & clear(b2) & ~holding(b2)\n             & on(b3)=table & clear(b3) & ~holding(b3)\n             & on(b4)=table & clear(b4) & ~holding(b4)\n             & on(b5)=table & clear(b5) & ~holding(b5)\n             & on(b6)=table & clear(b6) & ~holding(b6)."
+  },
+  {
+    "objects": ":- objects\n    b1, b2, b3, b4, b5, b6, b7 :: block;\n    table :: loc.",
+    "query": ":- query\n    0: handEmpty\n       & on(b5)=table & ~clear(b5) & ~holding(b5)\n       & on(b4)=b5 & clear(b4) & ~holding(b4)\n       & on(b1)=table & clear(b1) & ~holding(b1)\n       & on(b7)=table & clear(b7) & ~holding(b7)\n       & on(b3)=table & clear(b3) & ~holding(b3)\n       & on(b6)=table & ~clear(b6) & ~holding(b6)\n       & on(b2)=b6 & clear(b2) & ~holding(b2);\n    maxstep: handEmpty\n             & on(b3)=table & ~holding(b3)\n             & on(b1)=b3 & ~holding(b1)\n             & on(b5)=b1 & ~holding(b5)\n             & on(b2)=b5 & clear(b2) & ~holding(b2)\n             & on(b6)=table & ~holding(b6)\n             & on(b7)=b6 & ~holding(b7)\n             & on(b4)=b7 & clear(b4) & ~holding(b4)\n             & ~clear(b3)\n             & ~clear(b1)\n             & ~clear(b5)\n             & ~clear(b6)\n             & ~clear(b7)."
+  },
+  {
+    "objects": ":- objects\n    b1, b2, b3, b4, b5, b6, b7 :: block;\n    table :: loc.",
+    "query": ":- query\n    0: handEmpty\n       & on(b3)=table & clear(b3) & ~holding(b3)\n       & on(b1)=table & ~clear(b1) & ~holding(b1)\n       & on(b7)=b1 & clear(b7) & ~holding(b7)\n       & on(b2)=table & clear(b2) & ~holding(b2)\n       & on(b6)=table & clear(b6) & ~holding(b6)\n       & on(b4)=table & clear(b4) & ~holding(b4)\n       & on(b5)=table & clear(b5) & ~holding(b5);\n    maxstep: handEmpty\n             & on(b1)=table & clear(b1) & ~holding(b1)\n             & on(b3)=table & clear(b3) & ~holding(b3)\n             & on(b4)=table & ~holding(b4)\n             & on(b7)=b4 & clear(b7) & ~holding(b7)\n             & on(b5)=table & clear(b5) & ~holding(b5)\n             & on(b6)=table & clear(b6) & ~holding(b6)\n             & on(b2)=table & clear(b2) & ~holding(b2)\n             & ~clear(b4)."
+  }
+]
+```

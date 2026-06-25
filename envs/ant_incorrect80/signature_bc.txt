@@ -1,0 +1,23 @@
+:- sorts
+    ant;
+    place.
+
+:- objects
+    ant1 :: ant;
+    p1, p2 :: place.
+
+:- variables
+    A :: ant;
+    P, P1, P2 :: place.
+
+:- constants
+    move(ant, place, place) :: exogenousAction;
+    pick_up_food(ant, place) :: exogenousAction;
+    drop_food(ant, place) :: exogenousAction;
+    clear_obstacle(ant, place, place) :: exogenousAction;
+    loc(ant, place) :: inertialFluent(boolean);
+    adjacent(place, place) :: inertialFluent(boolean);
+    clear(place) :: inertialFluent(boolean);
+    food(place) :: inertialFluent(boolean);
+    has_food(ant) :: inertialFluent(boolean);
+    nest(place) :: inertialFluent(boolean).

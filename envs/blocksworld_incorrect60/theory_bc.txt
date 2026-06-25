@@ -1,0 +1,76 @@
+:- sorts
+    loc >> block.
+
+:- objects
+    b1, b2, b3, b4, b5, b6, b7 :: block;
+    table :: loc.
+
+:- variables
+    B, B1, B2 :: block.
+
+:- constants
+    pickup(block) :: exogenousAction;
+    putdown(block) :: exogenousAction;
+    stack(block, block) :: exogenousAction;
+    unstack(block, block) :: exogenousAction;
+    on(block, loc) :: inertialFluent(boolean);
+    ontable(block) :: inertialFluent(boolean);
+    clear(block) :: inertialFluent(boolean);
+    handempty :: inertialFluent(boolean);
+    holding(block) :: inertialFluent(boolean).
+
+% pickup(B): requires clear(B), ontable(B), handempty
+nonexecutable pickup(B) if ~clear(B).
+nonexecutable pickup(B) if ~ontable(B).
+nonexecutable pickup(B) if ~handempty.
+pickup(B) causes ~ontable(B).
+pickup(B) causes ~clear(B).
+pickup(B) causes ~handempty.
+pickup(B) causes holding(B).
+
+% putdown(B): requires holding(B)
+nonexecutable putdown(B) if ~holding(B).
+putdown(B) causes ontable(B).
+putdown(B) causes clear(B).
+putdown(B) causes handempty.
+putdown(B) causes ~holding(B).
+
+% stack(B1, B2): requires holding(B1), clear(B2), B1 != B2
+nonexecutable stack(B1, B2) if ~holding(B1).
+nonexecutable stack(B1, B2) if ~clear(B2).
+nonexecutable stack(B1, B2) if B1 = B2.
+stack(B1, B2) causes ~holding(B1).
+stack(B1, B2) causes ~clear(B2).
+stack(B1, B2) causes clear(B1).
+stack(B1, B2) causes handempty.
+stack(B1, B2) causes on(B1, B2).
+
+% unstack(B1, B2): requires on(B1, B2), clear(B1), handempty, B1 != B2
+nonexecutable unstack(B1, B2) if ~on(B1, B2).
+nonexecutable unstack(B1, B2) if ~clear(B1).
+nonexecutable unstack(B1, B2) if ~handempty.
+nonexecutable unstack(B1, B2) if B1 = B2.
+unstack(B1, B2) causes holding(B1).
+unstack(B1, B2) causes ~clear(B1).
+unstack(B1, B2) causes ~handempty.
+unstack(B1, B2) causes ~on(B1, B2).
+unstack(B1, B2) causes clear(B2).
+
+% State constraints
+% Hand can hold at most one block at a time
+impossible holding(B1) & holding(B2) & B1 \= B2.
+% Cannot be holding a block while hand is empty
+impossible holding(B) & handempty.
+% A block cannot be on itself
+impossible on(B, B).
+% A block cannot be both on the table and on another block
+impossible ontable(B) & on(B, B1).
+
+% CWA defaults
+default ~on(B, B1).
+default ~ontable(B).
+default ~clear(B).
+default ~handempty.
+default ~holding(B).
+
+noconcurrency.

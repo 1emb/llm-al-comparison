@@ -1,0 +1,18 @@
+There are two types of things: "floor" and "passenger".
+
+p0 is a passenger.
+f0 and f1 are floors.
+
+Fluents
+Whether a (floor) is the origin of a (passenger) is an inertial fluent (boolean).
+Whether a (floor) is the destination of a (passenger) is an inertial fluent (boolean).
+Whether a (floor) is above another (floor) is an inertial fluent (boolean).
+Whether a (passenger) has boarded the elevator is an inertial fluent (boolean).
+Whether a (passenger) has been served is an inertial fluent (boolean).
+Whether the elevator is at a (floor) is an inertial fluent (boolean).
+
+Actions
+A (passenger) boarding the elevator at a (floor) is an action.
+A (passenger) departing the elevator at a (floor) is an action.
+The elevator moving up from a (floor) to a (floor) is an action.
+The elevator moving down from a (floor) to a (floor) is an action.

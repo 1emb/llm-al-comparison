@@ -1,0 +1,218 @@
+% PROGRAM CHANGED? [CHANGED/PROGRAM]
+% BC+ signature
+:- sorts
+    loc >> block.
+
+:- objects
+    b1, b2, b3, b4, b5, b6, b7 :: block;
+    table :: loc.
+
+:- variables
+    B, B1, B2, B3, B4 :: block;
+    L, L1, L2, L3, L4 :: loc.
+
+:- constants
+    pickup(block) :: exogenousAction;
+    putdown(block) :: exogenousAction;
+    stack(block, block) :: exogenousAction;
+    unstack(block, block) :: exogenousAction;
+
+    loc(block) :: inertialFluent(loc);
+    clear(block) :: inertialFluent(boolean);
+    onTable(block) :: inertialFluent(boolean);
+    handEmpty :: inertialFluent(boolean);
+    holding(block) :: inertialFluent(boolean);
+
+:- constants
+    supported(block,block) :: inertialFluent(boolean).
+
+% Generated constraints
+
+% 1. A block cannot be located on itself.
+impossible loc(B)=B.
+
+% 2. A block cannot be located on two different locations at the same time.
+impossible loc(B)=L1 & loc(B)=L2 & L1\=L2.
+
+% 3. If loc(B)=B1 (a block), then B is not on the table.
+~onTable(B) if loc(B)=B1 & B1\=table.
+
+% 4. If onTable(B) then loc(B)=table.
+loc(B)=table if onTable(B).
+
+% 5. If loc(B)=B1 (a block), then B1 is not clear.
+~clear(B1) if loc(B)=B1 & B1\=table.
+
+% 6. If clear(B1) then no block has location B1.
+impossible clear(B1) & loc(B)=B1.
+
+% 7. supported(B,B1) iff loc(B)=B1
+supported(B,B1) if loc(B)=B1.
+impossible supported(B,B1) & loc(B)\=B1.
+
+% If B1 is not clear, at least one block is on it.
+impossible ~clear(b1) & ~supported(b2,b1) & ~supported(b3,b1) & ~supported(b4,b1) & ~supported(b5,b1) & ~supported(b6,b1) & ~supported(b7,b1).
+impossible ~clear(b2) & ~supported(b1,b2) & ~supported(b3,b2) & ~supported(b4,b2) & ~supported(b5,b2) & ~supported(b6,b2) & ~supported(b7,b2).
+impossible ~clear(b3) & ~supported(b1,b3) & ~supported(b2,b3) & ~supported(b4,b3) & ~supported(b5,b3) & ~supported(b6,b3) & ~supported(b7,b3).
+impossible ~clear(b4) & ~supported(b1,b4) & ~supported(b2,b4) & ~supported(b3,b4) & ~supported(b5,b4) & ~supported(b6,b4) & ~supported(b7,b4).
+impossible ~clear(b5) & ~supported(b1,b5) & ~supported(b2,b5) & ~supported(b3,b5) & ~supported(b4,b5) & ~supported(b6,b5) & ~supported(b7,b5).
+impossible ~clear(b6) & ~supported(b1,b6) & ~supported(b2,b6) & ~supported(b3,b6) & ~supported(b4,b6) & ~supported(b5,b6) & ~supported(b7,b6).
+impossible ~clear(b7) & ~supported(b1,b7) & ~supported(b2,b7) & ~supported(b3,b7) & ~supported(b4,b7) & ~supported(b5,b7) & ~supported(b6,b7).
+
+% 8. The hand cannot be empty and holding a block at the same time.
+impossible handEmpty & holding(B).
+
+% 9. If holding(B) then handEmpty is not the case.
+~handEmpty if holding(B).
+
+% 10. If handEmpty then holding(B) is not the case for every block B.
+~holding(B) if handEmpty.
+
+% 11. The hand cannot be holding two different blocks at the same time.
+impossible holding(B1) & holding(B2) & B1\=B2.
+
+% --- Action effects and executability conditions ---
+% Standard blocks-world meaning:
+% - pickup: pick up from table
+% - putdown: put onto table
+% - unstack: take top block off bottom block
+% - stack: put held block onto clear block
+
+% pickup(B): allowed only if B is clear, B is on the table, and hand is empty.
+% Effects: holding(B), hand not empty, and B is no longer on the table (so loc(B) is no longer table).
+pickup(B) causes holding(B).
+pickup(B) causes ~handEmpty.
+pickup(B) causes ~onTable(B).
+
+% IMPORTANT FIX: after pickup, B cannot still have loc(B)=table (otherwise rule (4) forces onTable(B)).
+% Set loc(B) to some non-table location (some block) nondeterministically.
+pickup(B) causes loc(B)=B1 if B1\=B.
+
+nonexecutable pickup(B) if ~clear(B).
+nonexecutable pickup(B) if ~onTable(B).
+nonexecutable pickup(B) if ~handEmpty.
+
+% putdown(B): allowed only if holding(B).
+% Effects: B on table, loc(B)=table, hand empty, not holding(B), and B becomes clear.
+putdown(B) causes onTable(B).
+putdown(B) causes loc(B)=table.
+putdown(B) causes handEmpty.
+putdown(B) causes ~holding(B).
+putdown(B) causes clear(B).
+
+nonexecutable putdown(B) if ~holding(B).
+
+% stack(B1,B2): allowed only if holding(B1) and B2 is clear and B1!=B2.
+% Effects: loc(B1)=B2, hand empty, not holding(B1), and B1 becomes clear.
+stack(B1,B2) causes loc(B1)=B2.
+stack(B1,B2) causes handEmpty.
+stack(B1,B2) causes ~holding(B1).
+stack(B1,B2) causes clear(B1).
+
+nonexecutable stack(B1,B2) if ~holding(B1).
+nonexecutable stack(B1,B2) if ~clear(B2).
+nonexecutable stack(B1,B2) if B1=B2.
+
+% unstack(B1,B2): allowed only if loc(B1)=B2, B1 is clear, and hand is empty.
+% Effects: holding(B1), hand not empty, and B2 becomes clear.
+unstack(B1,B2) causes holding(B1).
+unstack(B1,B2) causes ~handEmpty.
+unstack(B1,B2) causes clear(B2).
+
+nonexecutable unstack(B1,B2) if loc(B1)\=B2.
+nonexecutable unstack(B1,B2) if ~clear(B1).
+nonexecutable unstack(B1,B2) if ~handEmpty.
+nonexecutable unstack(B1,B2) if B1=B2.
+
+% Concurrency restrictions (kept)
+nonexecutable pickup(B1) & putdown(B2) if true.
+nonexecutable pickup(B1) & stack(B2,B3) if true.
+nonexecutable pickup(B1) & unstack(B2,B3) if true.
+nonexecutable putdown(B1) & stack(B2,B3) if true.
+nonexecutable putdown(B1) & unstack(B2,B3) if true.
+nonexecutable stack(B1,B2) & unstack(B3,B4) if true.
+
+% Fix: held blocks are not supported by anything, and nothing can be on a held block.
+impossible holding(B) & supported(B,B1).
+impossible holding(B1) & supported(B,B1).
+
+% Fix: while holding a block, it is clear (common convention).
+clear(B) if holding(B).
+
+% MAIN QUERY CHANGED? [CHANGED/MAIN QUERY]
+:- query
+    0: handEmpty
+       & onTable(b5) & loc(b5)=table & ~clear(b5)
+       & loc(b1)=b5 & clear(b1) & ~onTable(b1)
+       & onTable(b3) & loc(b3)=table & clear(b3)
+       & onTable(b2) & loc(b2)=table & ~clear(b2)
+       & loc(b4)=b2 & clear(b4) & ~onTable(b4)
+       & onTable(b6) & loc(b6)=table & clear(b6)
+       & onTable(b7) & loc(b7)=table & clear(b7);
+    maxstep: onTable(b3) & loc(b3)=table & clear(b3)
+             & onTable(b1) & loc(b1)=table & clear(b1)
+             & loc(b4)=b1 & clear(b4)
+             & onTable(b2) & loc(b2)=table & clear(b2)
+             & onTable(b5) & loc(b5)=table & clear(b5).
+
+% SAMPLE QUERIES CHANGED? [CHANGED/SAMPLE QUERIES]
+% Query 1: Unstack a clear block b1 from b5 while hand is empty (satisfiable)
+:- query
+    0: handEmpty
+       & loc(b1)=b5 & ~onTable(b1) & clear(b1)
+       & onTable(b5) & loc(b5)=table & ~clear(b5)
+       & onTable(b2) & loc(b2)=table & clear(b2)
+       & onTable(b3) & loc(b3)=table & clear(b3)
+       & onTable(b4) & loc(b4)=table & clear(b4)
+       & onTable(b6) & loc(b6)=table & clear(b6)
+       & onTable(b7) & loc(b7)=table & clear(b7);
+    0: unstack(b1,b5).
+
+% Query 2: Pick up a block that is on the table (should be allowed if clear and hand empty) (satisfiable)
+:- query
+    0: handEmpty
+       & onTable(b3) & loc(b3)=table & clear(b3)
+       & onTable(b5) & loc(b5)=table & clear(b5)
+       & onTable(b1) & loc(b1)=table & clear(b1)
+       & onTable(b2) & loc(b2)=table & clear(b2)
+       & onTable(b4) & loc(b4)=table & clear(b4)
+       & onTable(b6) & loc(b6)=table & clear(b6)
+       & onTable(b7) & loc(b7)=table & clear(b7);
+    0: pickup(b3).
+
+% Query 3: Put down a block that is not being held (unsatisfiable)
+:- query
+    0: handEmpty
+       & ~holding(b4)
+       & onTable(b2) & loc(b2)=table & clear(b2)
+       & onTable(b1) & loc(b1)=table & clear(b1)
+       & onTable(b3) & loc(b3)=table & clear(b3)
+       & onTable(b4) & loc(b4)=table & clear(b4)
+       & onTable(b5) & loc(b5)=table & clear(b5)
+       & onTable(b6) & loc(b6)=table & clear(b6)
+       & onTable(b7) & loc(b7)=table & clear(b7);
+    0: putdown(b4).
+
+% Query 4: Stack onto a destination block that is not clear (unsatisfiable)
+:- query
+    0: ~handEmpty & holding(b1)
+       & ~onTable(b1) & clear(b1)
+       & loc(b4)=b2 & ~onTable(b4) & clear(b4)
+       & loc(b2)=table & onTable(b2) & ~clear(b2)
+       & onTable(b3) & loc(b3)=table & clear(b3)
+       & onTable(b5) & loc(b5)=table & clear(b5)
+       & onTable(b6) & loc(b6)=table & clear(b6)
+       & onTable(b7) & loc(b7)=table & clear(b7);
+    0: stack(b1,b2).
+
+% Query 5: Unstack b4 from b2 (satisfiable)
+:- query
+    0: handEmpty
+       & loc(b4)=b2 & ~onTable(b4) & clear(b4)
+       & loc(b2)=table & onTable(b2) & ~clear(b2)
+       & onTable(b5) & loc(b5)=table & clear(b5)
+       & onTable(b1) & loc(b1)=table & clear(b1)
+       & onTable(b3) & loc(b3)=table & clear(b3)
+       & onTable(b6) & loc(b6)=table & clear(b6)
+       & onTable(b7) & loc(b7)=table & clear(b7);
+    0: unstack(b4,b2).

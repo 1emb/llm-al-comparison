@@ -1,0 +1,108 @@
+% Query 1: Attack is executable when harmony holds and the target is both a province and a planet; after attack, target is in pain and harmony is false. (satisfiable)
+:- query
+    0: harmony & isProvince(a) & isPlanet(a) & ~inPain(a);
+    0: attack(a);
+    maxstep: inPain(a) & ~isProvince(a) & ~isPlanet(a) & ~harmony.
+
+Cplus2ASP Output:
+
+Solving...
+	
+
+	0:  harmony isPlanet(a) isProvince(a)
+
+	ACTIONS:  attack(a)
+
+	1:  inPain(a)
+
+SATISFIABLE
+Models       : 1+
+
+
+% Query 2: Attack is not executable if harmony does not hold (even if the target is a province and a planet). (unsatisfiable)
+:- query
+    0: ~harmony & isProvince(a) & isPlanet(a) & ~inPain(a);
+    0: attack(a).
+
+Cplus2ASP Output:
+
+Solving...
+UNSATISFIABLE
+Models       : 0
+No solution.
+
+
+
+% Query 3: Succumb is executable only when the entity is in pain; after succumb, pain is removed and harmony becomes true and the entity becomes both province and planet. (satisfiable)
+:- query
+    0: ~harmony & inPain(b) & ~isProvince(b) & ~isPlanet(b);
+    0: succumb(b);
+    maxstep: ~inPain(b) & isProvince(b) & isPlanet(b) & harmony.
+
+Cplus2ASP Output:
+
+Solving...
+	
+
+	0:  inPain(b)
+
+	ACTIONS:  succumb(b)
+
+	1:  harmony isPlanet(b) isProvince(b)
+
+SATISFIABLE
+Models       : 1+
+
+
+% Query 4: Overcome is not executable if the "other" entity is not a province (even if the acting entity is in pain). (unsatisfiable)
+:- query
+    0: inPain(a) & ~isProvince(b);
+    0: overcome(a,b).
+
+Cplus2ASP Output:
+
+Solving...
+UNSATISFIABLE
+Models       : 0
+No solution.
+
+
+
+% Query 5: Feast is executable only if the acting entity craves the other, the acting entity is a province, and harmony holds; after feast, acting entity is in pain, loses province, loses the craving, harmony becomes false, and the other becomes a province. (satisfiable)
+:- query
+    0: harmony & isProvince(a) & craves(a,c) & ~inPain(a) & ~isProvince(c);
+    0: feast(a,c);
+    maxstep: inPain(a) & ~isProvince(a) & ~craves(a,c) & isProvince(c) & ~harmony.
+
+Cplus2ASP Output:
+
+Solving...
+	
+
+	0:  harmony isProvince(a) craves(a, c)
+
+	ACTIONS:  feast(a, c)
+
+	1:  inPain(a) isProvince(c)
+
+SATISFIABLE
+Models       : 1+
+
+
+
+
+:- query
+    0: harmony & craves(a,c) & craves(b,a) & craves(c,d) & isPlanet(d) & isProvince(b);
+    maxstep: craves(b,c) & craves(d,b).
+
+
+Cplus2ASP Output:
+
+Solving...
+	
+
+	0:  harmony inPain(a) inPain(b) inPain(c) inPain(d) isPlanet(a) isPlanet(b) isPlanet(c) isPlanet(d) isProvince(a) isProvince(b) isProvince(d) craves(a, a) craves(a, b) craves(a, c) craves(b, a) craves(b, b) craves(b, c) craves(b, d) craves(c, b) craves(c, c) craves(c, d) craves(d, a) craves(d, b) craves(d, c) craves(d, d)
+
+SATISFIABLE
+Models       : 1+
+

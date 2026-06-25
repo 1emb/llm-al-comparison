@@ -1,0 +1,17 @@
+Objects:
+:- objects
+    w1, w2, w3, w4, w5 :: window.
+
+Query:
+:- query
+    0: isOpen(w1) & ~isClosed(w1) & isUnlocked(w1) & ~isLocked(w1) & ~isWindow(w1) &
+       isClosed(w2) & ~isOpen(w2) & isUnlocked(w2) & ~isLocked(w2) & ~isWindow(w2) &
+       isClosed(w3) & ~isOpen(w3) & isLocked(w3) & ~isUnlocked(w3) & ~isWindow(w3) &
+       isOpen(w4) & ~isClosed(w4) & isUnlocked(w4) & ~isLocked(w4) & ~isWindow(w4) &
+       isClosed(w5) & ~isOpen(w5) & isUnlocked(w5) & ~isLocked(w5) & ~isWindow(w5);
+    maxstep: isLocked(w1) & isOpen(w3) & isLocked(w4) & isOpen(w5).
+
+Status: TIMEOUT
+
+Output:
+TIMEOUT

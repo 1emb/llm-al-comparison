@@ -1,0 +1,44 @@
+```json
+[
+  {
+    "objects": ":- objects\n    a, b, c, d :: entity.",
+    "query": ":- query\n    0: harmony\n       & isProvince(a)=false & isProvince(b)=true & isProvince(c)=false & isProvince(d)=false\n       & isPlanet(a)=false & isPlanet(b)=false & isPlanet(c)=false & isPlanet(d)=true\n       & pain(a)=false & pain(b)=false & pain(c)=false & pain(d)=false\n       & craves(a,a)=false & craves(a,b)=false & craves(a,c)=true & craves(a,d)=false\n       & craves(b,a)=true & craves(b,b)=false & craves(b,c)=false & craves(b,d)=false\n       & craves(c,a)=false & craves(c,b)=false & craves(c,c)=false & craves(c,d)=true\n       & craves(d,a)=false & craves(d,b)=false & craves(d,c)=false & craves(d,d)=false;\n    maxstep: craves(b,c) & craves(d,b)."
+  },
+  {
+    "objects": ":- objects\n    a, b, c, d :: entity.",
+    "query": ":- query\n    0: harmony\n       & isProvince(a)=true & isProvince(b)=true & isProvince(c)=false & isProvince(d)=true\n       & isPlanet(a)=true & isPlanet(b)=false & isPlanet(c)=true & isPlanet(d)=true\n       & pain(a)=false & pain(b)=false & pain(c)=false & pain(d)=false\n       & craves(a,a)=false & craves(a,b)=false & craves(a,c)=false & craves(a,d)=false\n       & craves(b,a)=false & craves(b,b)=false & craves(b,c)=true & craves(b,d)=false\n       & craves(c,a)=false & craves(c,b)=false & craves(c,c)=false & craves(c,d)=false\n       & craves(d,a)=false & craves(d,b)=false & craves(d,c)=false & craves(d,d)=false;\n    maxstep: craves(c,b)."
+  },
+  {
+    "objects": ":- objects\n    a, b, c, d :: entity.",
+    "query": ":- query\n    0: harmony\n       & isProvince(a)=false & isProvince(b)=false & isProvince(c)=true & isProvince(d)=true\n       & isPlanet(a)=true & isPlanet(b)=true & isPlanet(c)=false & isPlanet(d)=false\n       & pain(a)=false & pain(b)=false & pain(c)=false & pain(d)=false\n       & craves(a,a)=false & craves(a,b)=false & craves(a,c)=false & craves(a,d)=false\n       & craves(b,a)=false & craves(b,b)=false & craves(b,c)=false & craves(b,d)=false\n       & craves(c,a)=false & craves(c,b)=true & craves(c,c)=false & craves(c,d)=false\n       & craves(d,a)=true & craves(d,b)=false & craves(d,c)=false & craves(d,d)=false;\n    maxstep: craves(a,d) & craves(b,c)."
+  },
+  {
+    "objects": ":- objects\n    a, b, c, d :: entity.",
+    "query": ":- query\n    0: harmony\n       & isProvince(a)=true & isProvince(b)=true & isProvince(c)=false & isProvince(d)=false\n       & isPlanet(a)=false & isPlanet(b)=false & isPlanet(c)=true & isPlanet(d)=true\n       & pain(a)=false & pain(b)=false & pain(c)=false & pain(d)=false\n       & craves(a,a)=false & craves(a,b)=false & craves(a,c)=false & craves(a,d)=true\n       & craves(b,a)=false & craves(b,b)=false & craves(b,c)=true & craves(b,d)=false\n       & craves(c,a)=false & craves(c,b)=false & craves(c,c)=false & craves(c,d)=false\n       & craves(d,a)=false & craves(d,b)=false & craves(d,c)=false & craves(d,d)=false;\n    maxstep: craves(b,d) & craves(d,a)."
+  },
+  {
+    "objects": ":- objects\n    a, b, c, d :: entity.",
+    "query": ":- query\n    0: harmony\n       & isProvince(a)=true & isProvince(b)=true & isProvince(c)=true & isProvince(d)=false\n       & isPlanet(a)=true & isPlanet(b)=false & isPlanet(c)=true & isPlanet(d)=true\n       & pain(a)=false & pain(b)=false & pain(c)=false & pain(d)=false\n       & craves(a,a)=false & craves(a,b)=false & craves(a,c)=false & craves(a,d)=false\n       & craves(b,a)=false & craves(b,b)=false & craves(b,c)=false & craves(b,d)=true\n       & craves(c,a)=false & craves(c,b)=false & craves(c,c)=false & craves(c,d)=false\n       & craves(d,a)=false & craves(d,b)=false & craves(d,c)=false & craves(d,d)=false;\n    maxstep: craves(b,c) & craves(d,a)."
+  },
+  {
+    "objects": ":- objects\n    a, b, c, d :: entity.",
+    "query": ":- query\n    0: harmony\n       & isProvince(a)=false & isProvince(b)=false & isProvince(c)=true & isProvince(d)=true\n       & isPlanet(a)=true & isPlanet(b)=true & isPlanet(c)=false & isPlanet(d)=false\n       & pain(a)=false & pain(b)=false & pain(c)=false & pain(d)=false\n       & craves(a,a)=false & craves(a,b)=false & craves(a,c)=false & craves(a,d)=false\n       & craves(b,a)=false & craves(b,b)=false & craves(b,c)=false & craves(b,d)=false\n       & craves(c,a)=false & craves(c,b)=true & craves(c,c)=false & craves(c,d)=false\n       & craves(d,a)=true & craves(d,b)=false & craves(d,c)=false & craves(d,d)=false;\n    maxstep: craves(a,b)."
+  },
+  {
+    "objects": ":- objects\n    a, b, c, d :: entity.",
+    "query": ":- query\n    0: harmony\n       & isProvince(a)=true & isProvince(b)=false & isProvince(c)=false & isProvince(d)=false\n       & isPlanet(a)=false & isPlanet(b)=false & isPlanet(c)=false & isPlanet(d)=true\n       & pain(a)=false & pain(b)=false & pain(c)=false & pain(d)=false\n       & craves(a,a)=false & craves(a,b)=true & craves(a,c)=false & craves(a,d)=false\n       & craves(b,a)=false & craves(b,b)=false & craves(b,c)=true & craves(b,d)=false\n       & craves(c,a)=false & craves(c,b)=false & craves(c,c)=false & craves(c,d)=true\n       & craves(d,a)=false & craves(d,b)=false & craves(d,c)=false & craves(d,d)=false;\n    maxstep: craves(b,c) & craves(c,d) & craves(d,a)."
+  },
+  {
+    "objects": ":- objects\n    a, b, c, d :: entity.",
+    "query": ":- query\n    0: harmony\n       & isProvince(a)=true & isProvince(b)=false & isProvince(c)=true & isProvince(d)=false\n       & isPlanet(a)=true & isPlanet(b)=false & isPlanet(c)=false & isPlanet(d)=true\n       & pain(a)=false & pain(b)=false & pain(c)=false & pain(d)=false\n       & craves(a,a)=false & craves(a,b)=false & craves(a,c)=false & craves(a,d)=false\n       & craves(b,a)=false & craves(b,b)=false & craves(b,c)=false & craves(b,d)=true\n       & craves(c,a)=false & craves(c,b)=true & craves(c,c)=false & craves(c,d)=false\n       & craves(d,a)=false & craves(d,b)=false & craves(d,c)=false & craves(d,d)=false;\n    maxstep: craves(a,c) & craves(b,a)."
+  },
+  {
+    "objects": ":- objects\n    a, b, c, d :: entity.",
+    "query": ":- query\n    0: harmony\n       & isProvince(a)=true & isProvince(b)=true & isProvince(c)=false & isProvince(d)=true\n       & isPlanet(a)=true & isPlanet(b)=true & isPlanet(c)=true & isPlanet(d)=false\n       & pain(a)=false & pain(b)=false & pain(c)=false & pain(d)=false\n       & craves(a,a)=false & craves(a,b)=false & craves(a,c)=false & craves(a,d)=false\n       & craves(b,a)=false & craves(b,b)=false & craves(b,c)=false & craves(b,d)=false\n       & craves(c,a)=false & craves(c,b)=false & craves(c,c)=false & craves(c,d)=false\n       & craves(d,a)=false & craves(d,b)=false & craves(d,c)=true & craves(d,d)=false;\n    maxstep: craves(c,b) & craves(d,a)."
+  },
+  {
+    "objects": ":- objects\n    a, b, c, d :: entity.",
+    "query": ":- query\n    0: harmony\n       & isProvince(a)=true & isProvince(b)=true & isProvince(c)=false & isProvince(d)=false\n       & isPlanet(a)=false & isPlanet(b)=true & isPlanet(c)=true & isPlanet(d)=false\n       & pain(a)=false & pain(b)=false & pain(c)=false & pain(d)=false\n       & craves(a,a)=false & craves(a,b)=false & craves(a,c)=false & craves(a,d)=true\n       & craves(b,a)=false & craves(b,b)=false & craves(b,c)=false & craves(b,d)=false\n       & craves(c,a)=false & craves(c,b)=false & craves(c,c)=false & craves(c,d)=false\n       & craves(d,a)=false & craves(d,b)=false & craves(d,c)=true & craves(d,d)=false;\n    maxstep: craves(b,c) & craves(c,d)."
+  }
+]
+```

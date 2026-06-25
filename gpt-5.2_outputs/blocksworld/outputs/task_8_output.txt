@@ -1,0 +1,34 @@
+Objects:
+:- objects
+    b1, b2, b3, b4, b5, b6 :: block;
+    table, inHand :: loc.
+
+Query:
+:- query
+    0: handEmpty
+       & on(b4)=table & ~holding(b4)
+       & on(b5)=b4 & clear(b5) & ~holding(b5)
+       & on(b2)=table & clear(b2) & ~holding(b2)
+       & on(b3)=table & clear(b3) & ~holding(b3)
+       & on(b1)=table & clear(b1) & ~holding(b1)
+       & on(b6)=table & clear(b6) & ~holding(b6)
+       & ~clear(b4);
+    maxstep: on(b1)=table & clear(b1)
+             & on(b2)=table & clear(b2)
+             & on(b3)=table & clear(b3)
+             & on(b4)=table & clear(b4)
+             & on(b5)=table & clear(b5)
+             & on(b6)=table & clear(b6).
+
+Status: True
+
+Output:
+Solving...
+Solution: 1 (Time: 0.001s)
+	
+
+SATISFIABLE
+Models       : 1+
+Calls        : 1
+Time         : 0.001s (Solving: 0.00s 1st Model: 0.00s Unsat: 0.00s)
+CPU Time     : 0.001s

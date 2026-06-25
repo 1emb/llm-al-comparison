@@ -1,0 +1,117 @@
+% Query 1: Pick up a clear block from the table with empty hand; should be satisfiable.
+:- query
+    0: handEmpty &
+       ~held(b1) & ~held(b2) & ~held(b3) & ~held(b4) & ~held(b5) & ~held(b6) & ~held(b7) &
+       onTable(b3) & clear(b3) &
+       onTable(b1) & clear(b1) &
+       onTable(b2) & clear(b2) &
+       onTable(b4) & clear(b4) &
+       onTable(b5) & clear(b5) &
+       onTable(b6) & clear(b6) &
+       onTable(b7) & clear(b7);
+    0: pickup(b3).
+
+Cplus2ASP Output:
+
+Solving...
+UNSATISFIABLE
+Models       : 0
+No solution.
+
+
+
+% Query 2: Put down a block that is not being held; should be unsatisfiable.
+:- query
+    0: handEmpty &
+       ~held(b1) & ~held(b2) & ~held(b3) & ~held(b4) & ~held(b5) & ~held(b6) & ~held(b7) &
+       onTable(b3) & clear(b3) &
+       onTable(b1) &
+       on(b7,b1) & clear(b7) &
+       onTable(b2) & clear(b2) &
+       onTable(b6) & clear(b6) &
+       onTable(b4) & clear(b4) &
+       onTable(b5) & clear(b5);
+    0: putdown(b2).
+
+Cplus2ASP Output:
+
+Solving...
+UNSATISFIABLE
+Models       : 0
+No solution.
+
+
+
+% Query 3: Stack b7 onto b4 while b7 is not held; should be unsatisfiable.
+:- query
+    0: handEmpty &
+       ~held(b1) & ~held(b2) & ~held(b3) & ~held(b4) & ~held(b5) & ~held(b6) & ~held(b7) &
+       onTable(b3) & clear(b3) &
+       onTable(b1) &
+       on(b7,b1) & clear(b7) &
+       onTable(b2) & clear(b2) &
+       onTable(b6) & clear(b6) &
+       onTable(b4) & clear(b4) &
+       onTable(b5) & clear(b5);
+    0: stack(b7,b4).
+
+Cplus2ASP Output:
+
+Solving...
+UNSATISFIABLE
+Models       : 0
+No solution.
+
+
+
+% Query 4: Unstack b7 from b1 when b7 is on b1 and clear and the hand is empty; should be satisfiable.
+:- query
+    0: handEmpty &
+       ~held(b1) & ~held(b2) & ~held(b3) & ~held(b4) & ~held(b5) & ~held(b6) & ~held(b7) &
+       onTable(b3) & clear(b3) &
+       onTable(b1) &
+       on(b7,b1) & clear(b7) &
+       onTable(b2) & clear(b2) &
+       onTable(b6) & clear(b6) &
+       onTable(b4) & clear(b4) &
+       onTable(b5) & clear(b5);
+    0: unstack(b7,b1).
+
+Cplus2ASP Output:
+
+Solving...
+UNSATISFIABLE
+Models       : 0
+No solution.
+
+
+
+
+
+:- query
+    0: handEmpty &
+       ~held(b1) & ~held(b2) & ~held(b3) & ~held(b4) & ~held(b5) & ~held(b6) & ~held(b7) &
+       onTable(b1) &
+       onTable(b3) & clear(b3) &
+       on(b7,b1) & clear(b7) &
+       onTable(b2) & clear(b2) &
+       onTable(b6) & clear(b6) &
+       onTable(b4) & clear(b4) &
+       onTable(b5) & clear(b5);
+    maxstep: onTable(b1) & clear(b1) &
+             onTable(b3) & clear(b3) &
+             onTable(b4) & ~clear(b4) &
+             on(b7,b4) & clear(b7) &
+             onTable(b5) & clear(b5) &
+             onTable(b6) & clear(b6) &
+             onTable(b2) & clear(b2).
+
+
+Cplus2ASP Output:
+
+Solving...
+UNSATISFIABLE
+Models       : 0
+No solution.
+
+

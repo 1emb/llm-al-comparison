@@ -1,0 +1,44 @@
+Objects:
+:- objects
+    f0, f1 :: floor;
+    p0 :: passenger.
+
+Query:
+:- query
+    0: validFloor(f0) & validFloor(f1) &
+       above(f0,f1) & ~above(f1,f0) &
+       origin(p0)=f1 & dest(p0)=f0 &
+       loc(f0) & ~loc(f1) &
+       ~passengerFlag(p0) & ~boarded(p0) & ~served(p0);
+    maxstep: served(p0).
+
+Status: True
+
+Output:
+Solving...
+Solution: 1 (Time: 0.015s)
+	
+
+	0:  dest(p0)=f0 loc(f0) origin(p0)=f1 validFloor(f0) validFloor(f1) above(f0, f1)
+
+	ACTIONS:  down(f0, f1)
+
+	1:  dest(p0)=f0 loc(f1) origin(p0)=f1 validFloor(f0) validFloor(f1) above(f0, f1)
+
+	ACTIONS:  board(f1, p0)
+
+	2:  boarded(p0) dest(p0)=f0 loc(f1) origin(p0)=f1 passengerFlag(p0) validFloor(f0) validFloor(f1) above(f0, f1)
+
+	ACTIONS:  up(f1, f0)
+
+	3:  boarded(p0) dest(p0)=f0 loc(f0) origin(p0)=f1 passengerFlag(p0) validFloor(f0) validFloor(f1) above(f0, f1)
+
+	ACTIONS:  depart(f0, p0)
+
+	4:  dest(p0)=f0 loc(f0) origin(p0)=f1 passengerFlag(p0) served(p0) validFloor(f0) validFloor(f1) above(f0, f1)
+
+SATISFIABLE
+Models       : 1+
+Calls        : 5
+Time         : 0.015s (Solving: 0.00s 1st Model: 0.00s Unsat: 0.00s)
+CPU Time     : 0.015s

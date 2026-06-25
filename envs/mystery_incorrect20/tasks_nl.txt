@@ -1,0 +1,19 @@
+Initially, harmony holds. Entity a craves c, entity b craves a, entity c craves d. Entity d is a planet. Entity b is a province. Find a plan so that entity b craves c and entity d craves b.
+---
+Initially, harmony holds. Entity a is a planet, entity b craves c, entity c is a planet, entity d is a planet. Entity a is a province, entity b is a province, entity d is a province. Find a plan so that entity c craves b.
+---
+Initially, harmony holds. Entity a is a planet, entity b is a planet. Entity c craves b, entity d craves a. Entity c is a province, entity d is a province. Find a plan so that entity a craves d and entity b craves c.
+---
+Initially, harmony holds. Entity a craves d, entity b craves c. Entity c is a planet, entity d is a planet. Entity a is a province, entity b is a province. Find a plan so that entity b craves d and entity d craves a.
+---
+Initially, harmony holds. Entity a is a planet, entity c is a planet, entity d is a planet. Entity b craves d. Entity a is a province, entity b is a province, entity c is a province. Find a plan so that entity b craves c and entity d craves a.
+---
+Initially, harmony holds. Entity a is a planet, entity b is a planet. Entity c craves b, entity d craves a. Entity c is a province, entity d is a province. Find a plan so that entity a craves b.
+---
+Initially, harmony holds. Entity a craves b, entity b craves c, entity c craves d. Entity d is a planet. Entity a is a province. Find a plan so that entity b craves c, entity c craves d, and entity d craves a.
+---
+Initially, harmony holds. Entity a is a planet, entity d is a planet. Entity b craves d, entity c craves b. Entity a is a province, entity c is a province. Find a plan so that entity a craves c and entity b craves a.
+---
+Initially, harmony holds. Entity a is a planet, entity b is a planet, entity c is a planet. Entity d craves c. Entity a is a province, entity b is a province, entity d is a province. Find a plan so that entity c craves b and entity d craves a.
+---
+Initially, harmony holds. Entity a craves d, entity d craves c. Entity b is a planet, entity c is a planet. Entity a is a province, entity b is a province. Find a plan so that entity b craves c and entity c craves d.

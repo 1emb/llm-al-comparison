@@ -1,0 +1,108 @@
+% constraints/rules
+% 1. A passenger cannot be both boarded and served at the same time.
+impossible boarded(P) & served(P).
+
+% 2. Boarding is not executable if the floor is not marked as a floor.
+nonexecutable board(P,F) if ~isFloor(F).
+
+% 3. Boarding is not executable if the passenger is not marked as a passenger.
+nonexecutable board(P,F) if ~isPassenger(P).
+
+% 4. Boarding is not executable if the elevator is not at that floor.
+nonexecutable board(P,F) if ~elevAt(F).
+
+% 5. Boarding is not executable if the floor is not the passenger's origin.
+nonexecutable board(P,F) if origin(P)\=F.
+
+% 6. Boarding is not executable if the passenger is already marked as boarded.
+nonexecutable board(P,F) if boarded(P).
+
+% 7. Boarding causes the passenger to be marked as boarded.
+board(P,F) causes boarded(P).
+
+% 8. Boarding causes the passenger to no longer be marked as served.
+board(P,F) causes ~served(P).
+
+% 9. Departing is not executable if the floor is not marked as a floor.
+nonexecutable depart(P,F) if ~isFloor(F).
+
+% 10. Departing is not executable if the passenger is not marked as a passenger.
+nonexecutable depart(P,F) if ~isPassenger(P).
+
+% 11. Departing is not executable if the elevator is not at that floor.
+nonexecutable depart(P,F) if ~elevAt(F).
+
+% 12. Departing is not executable if the floor is not the passenger's destination.
+nonexecutable depart(P,F) if dest(P)\=F.
+
+% 13. Departing is not executable if the passenger is not marked as boarded.
+nonexecutable depart(P,F) if ~boarded(P).
+
+% 14. Departing causes the passenger to no longer be marked as boarded.
+depart(P,F) causes ~boarded(P).
+
+% 15. Departing causes the passenger to be marked as served.
+depart(P,F) causes served(P).
+
+% 16. Moving up is not executable if the first floor is not marked as a floor.
+nonexecutable moveUp(F1,F2) if ~isFloor(F1).
+
+% 17. Moving up is not executable if the second floor is not marked as a floor.
+nonexecutable moveUp(F1,F2) if ~isFloor(F2).
+
+% 18. Moving up is not executable if the elevator is not at the first floor.
+nonexecutable moveUp(F1,F2) if ~elevAt(F1).
+
+% 19. Moving up is not executable if the first floor is not above the second floor.
+nonexecutable moveUp(F1,F2) if ~above(F1,F2).
+
+% 20. Moving up causes the elevator to be at the second floor.
+moveUp(F1,F2) causes elevAt(F2).
+
+% 21. Moving up causes the elevator to no longer be at the first floor.
+moveUp(F1,F2) causes ~elevAt(F1).
+
+% 22. Moving down is not executable if the first floor is not marked as a floor.
+nonexecutable moveDown(F1,F2) if ~isFloor(F1).
+
+% 23. Moving down is not executable if the second floor is not marked as a floor.
+nonexecutable moveDown(F1,F2) if ~isFloor(F2).
+
+% 24. Moving down is not executable if the elevator is not at the first floor.
+nonexecutable moveDown(F1,F2) if ~elevAt(F1).
+
+% 25. Moving down is not executable if the second floor is not above the first floor.
+nonexecutable moveDown(F1,F2) if ~above(F2,F1).
+
+% 26. Moving down causes the elevator to be at the second floor.
+moveDown(F1,F2) causes elevAt(F2).
+
+% 27. Moving down causes the elevator to no longer be at the first floor.
+moveDown(F1,F2) causes ~elevAt(F1).
+
+% 28. Concurrency: cannot perform moveUp and moveDown at the same time.
+nonexecutable moveUp(F1,F2) & moveDown(F3,F4).
+
+% 29. Concurrency: cannot perform moveUp and board at the same time.
+nonexecutable moveUp(F1,F2) & board(P,F).
+
+% 30. Concurrency: cannot perform moveUp and depart at the same time.
+nonexecutable moveUp(F1,F2) & depart(P,F).
+
+% 31. Concurrency: cannot perform moveDown and board at the same time.
+nonexecutable moveDown(F1,F2) & board(P,F).
+
+% 32. Concurrency: cannot perform moveDown and depart at the same time.
+nonexecutable moveDown(F1,F2) & depart(P,F).
+
+% 33. Concurrency: the same passenger cannot board and depart at the same time.
+nonexecutable board(P,F1) & depart(P,F2).
+
+% query
+:- query
+    0: isFloor(f0) & isFloor(f1) & isPassenger(p0) &
+       above(f0,f1) &
+       origin(p0)=f1 & dest(p0)=f0 &
+       elevAt(f0) &
+       ~boarded(p0) & ~served(p0);
+    maxstep: served(p0).

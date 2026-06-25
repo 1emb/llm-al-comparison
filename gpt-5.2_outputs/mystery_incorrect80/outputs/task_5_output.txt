@@ -1,0 +1,20 @@
+Objects:
+:- objects
+    a, b, c, d :: entity.
+
+Query:
+:- query
+    0: harmony
+       & isProvince(a)=true & isProvince(b)=true & isProvince(c)=true & isProvince(d)=false
+       & isPlanet(a)=true & isPlanet(b)=false & isPlanet(c)=true & isPlanet(d)=true
+       & pain(a)=false & pain(b)=false & pain(c)=false & pain(d)=false
+       & craves(a,a)=false & craves(a,b)=false & craves(a,c)=false & craves(a,d)=false
+       & craves(b,a)=false & craves(b,b)=false & craves(b,c)=false & craves(b,d)=true
+       & craves(c,a)=false & craves(c,b)=false & craves(c,c)=false & craves(c,d)=false
+       & craves(d,a)=false & craves(d,b)=false & craves(d,c)=false & craves(d,d)=false;
+    maxstep: craves(b,c) & craves(d,a).
+
+Status: TIMEOUT
+
+Output:
+TIMEOUT

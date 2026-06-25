@@ -1,0 +1,31 @@
+% An entity isProvince stays the same unless changed by an action.
+% An entity isPlanet stays the same unless changed by an action.
+% harmony stays the same unless changed by an action.
+% An entity inPain stays the same unless changed by an action.
+% The relation craves(E1,E2) stays the same unless changed by an action.
+
+% attack(E) is executable only when isProvince(E) holds, isPlanet(E) holds, and harmony is absent.
+% Executing attack(E) makes inPain(E) hold.
+% Executing attack(E) makes isProvince(E) not hold.
+% Executing attack(E) makes isPlanet(E) not hold.
+% Executing attack(E) makes harmony present.
+
+% succumb(E) is executable only when inPain(E) does not hold.
+% Executing succumb(E) makes isProvince(E) hold.
+% Executing succumb(E) makes harmony present.
+% Executing succumb(E) makes isPlanet(E) not hold.
+% Executing succumb(E) makes inPain(E) not hold.
+
+% overcome(E1,E2) is executable only when isProvince(E2) holds and inPain(E1) does not hold.
+% Executing overcome(E1,E2) makes harmony present.
+% Executing overcome(E1,E2) makes isProvince(E1) not hold.
+% Executing overcome(E1,E2) makes craves(E1,E2) hold.
+% Executing overcome(E1,E2) makes isProvince(E2) not hold.
+% Executing overcome(E1,E2) makes inPain(E1) not hold.
+
+% feast(E1,E2) is executable only when craves(E1,E2) holds, isProvince(E1) does not hold, and harmony is present.
+% Executing feast(E1,E2) makes inPain(E1) hold.
+% Executing feast(E1,E2) makes isProvince(E2) hold.
+% Executing feast(E1,E2) makes craves(E1,E2) not hold.
+% Executing feast(E1,E2) makes isProvince(E1) hold.
+% Executing feast(E1,E2) makes harmony absent.

@@ -1,0 +1,93 @@
+:- sorts
+    window.
+
+
+:- objects
+    w1, w2 :: window.
+
+
+:- variables
+    W, W1, W2, W3, W4 :: window;
+    Bool, Bool1, Bool2, Bool3, Bool4 :: boolean.
+
+
+:- constants
+    openWin(window) :: exogenousAction;
+    closeWin(window) :: exogenousAction;
+    lockWin(window) :: exogenousAction;
+    unlockWin(window) :: exogenousAction;
+
+    isWindow(window) :: inertialFluent(boolean);
+    isOpen(window) :: inertialFluent(boolean);
+    isClosed(window) :: inertialFluent(boolean);
+    isLocked(window) :: inertialFluent(boolean);
+    isUnlocked(window) :: inertialFluent(boolean).
+
+
+% constraints/rules
+% 1. Opening is nonexecutable unless the item is not a window, it is closed, and it is not unlocked.
+nonexecutable openWin(W) if isWindow(W).
+nonexecutable openWin(W) if ~isClosed(W).
+nonexecutable openWin(W) if isUnlocked(W).
+
+% 2. Opening causes the item to be closed.
+openWin(W) causes isClosed(W).
+
+% 3. Opening causes the item to be not open.
+openWin(W) causes ~isOpen(W).
+
+% 4. Closing is nonexecutable unless the item is not a window and it is not open.
+nonexecutable closeWin(W) if isWindow(W).
+nonexecutable closeWin(W) if isOpen(W).
+
+% 5. Closing causes the item to be open.
+closeWin(W) causes isOpen(W).
+
+% 6. Closing causes the item to be not closed.
+closeWin(W) causes ~isClosed(W).
+
+% 7. Locking is nonexecutable unless the item is not a window, it is closed, and it is not unlocked.
+nonexecutable lockWin(W) if isWindow(W).
+nonexecutable lockWin(W) if ~isClosed(W).
+nonexecutable lockWin(W) if isUnlocked(W).
+
+% 8. Locking causes the item to be unlocked.
+lockWin(W) causes isUnlocked(W).
+
+% 9. Locking causes the item to be not locked.
+lockWin(W) causes ~isLocked(W).
+
+% 10. Unlocking is nonexecutable unless the item is not a window and it is not locked.
+nonexecutable unlockWin(W) if isWindow(W).
+nonexecutable unlockWin(W) if isLocked(W).
+
+% 11. Unlocking causes the item to be locked.
+unlockWin(W) causes isLocked(W).
+
+% 12. Unlocking causes the item to be not unlocked.
+unlockWin(W) causes ~isUnlocked(W).
+
+
+% query
+:- query
+    0: isOpen(w1) & isUnlocked(w1) &
+       isClosed(w2) & isUnlocked(w2) &
+       isClosed(w3) & isLocked(w3) &
+       isOpen(w4) & isUnlocked(w4) &
+       isClosed(w5) & isUnlocked(w5) &
+       isOpen(w6) & isUnlocked(w6) &
+       isClosed(w7) & isLocked(w7) &
+       isOpen(w8) & isUnlocked(w8) &
+       isClosed(w9) & isUnlocked(w9) &
+       isClosed(w10) & isLocked(w10) &
+       isOpen(w11) & isUnlocked(w11);
+    maxstep: isLocked(w1) &
+             isOpen(w3) &
+             isLocked(w4) &
+             isOpen(w5) &
+             isClosed(w6) &
+             isOpen(w7) &
+             isLocked(w8) &
+             isOpen(w9) &
+             isOpen(w10) &
+             isClosed(w11).

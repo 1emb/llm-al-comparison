@@ -1,0 +1,61 @@
+:- sorts
+    floor;
+    passenger.
+
+:- objects
+    p0 :: passenger;
+    f0, f1 :: floor.
+
+:- variables
+    P :: passenger;
+    F, F1, F2 :: floor.
+
+:- constants
+    board(floor, passenger) :: exogenousAction;
+    depart(floor, passenger) :: exogenousAction;
+    up(floor, floor) :: exogenousAction;
+    down(floor, floor) :: exogenousAction;
+    origin(passenger, floor) :: inertialFluent(boolean);
+    destin(passenger, floor) :: inertialFluent(boolean);
+    above(floor, floor) :: inertialFluent(boolean);
+    boarded(passenger) :: inertialFluent(boolean);
+    served(passenger) :: inertialFluent(boolean);
+    lift_at(floor) :: inertialFluent(boolean).
+
+% board(F, P): elevator at F, F is P's origin
+nonexecutable board(F, P) if ~lift_at(F).
+nonexecutable board(F, P) if ~origin(P, F).
+board(F, P) causes boarded(P).
+
+% depart(F, P): elevator at F, F is P's destination, P has boarded
+nonexecutable depart(F, P) if ~lift_at(F).
+nonexecutable depart(F, P) if ~destin(P, F).
+nonexecutable depart(F, P) if ~boarded(P).
+depart(F, P) causes ~boarded(P).
+depart(F, P) causes served(P).
+
+% up(F1, F2): elevator at F1, F1 is above F2
+nonexecutable up(F1, F2) if ~lift_at(F1).
+nonexecutable up(F1, F2) if ~above(F1, F2).
+up(F1, F2) causes lift_at(F2).
+up(F1, F2) causes ~lift_at(F1).
+
+% down(F1, F2): elevator at F1, F2 is above F1
+nonexecutable down(F1, F2) if ~lift_at(F1).
+nonexecutable down(F1, F2) if ~above(F2, F1).
+down(F1, F2) causes lift_at(F2).
+down(F1, F2) causes ~lift_at(F1).
+
+% State constraints
+% Elevator can only be at one floor at a time
+impossible lift_at(F1) & lift_at(F2) & F1 \= F2.
+
+% CWA defaults
+default ~origin(P, F).
+default ~destin(P, F).
+default ~above(F1, F2).
+default ~boarded(P).
+default ~served(P).
+default ~lift_at(F).
+
+noconcurrency.

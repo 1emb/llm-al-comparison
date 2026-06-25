@@ -1,0 +1,122 @@
+% Query 1: Pick up a clear block from the table while the hand is empty, and verify it becomes held and the hand becomes not empty. (satisfiable)
+:- query
+    0: handEmpty
+       & on(b1)=table & clear(b1)
+       & on(b2)=table & clear(b2)
+       & ~holding(b1) & ~holding(b2);
+    0: pickupBlock(b1);
+    maxstep: holding(b1) & ~handEmpty.
+
+Cplus2ASP Output:
+
+Solving...
+UNSATISFIABLE
+Models       : 0
+No solution.
+
+
+
+% Query 2: Try to pick up a block that is not clear (because another block is on it). This should be nonexecutable. (unsatisfiable)
+:- query
+    0: handEmpty
+       & on(b1)=b2
+       & on(b2)=table
+       & clear(b1)
+       & ~holding(b1) & ~holding(b2)
+       & ~clear(b2);
+    0: pickupBlock(b2).
+
+Cplus2ASP Output:
+
+Solving...
+UNSATISFIABLE
+Models       : 0
+No solution.
+
+
+
+% Query 3: Try to pick up a clear block that is not on the table. This should be nonexecutable. (unsatisfiable)
+:- query
+    0: handEmpty
+       & on(b1)=b2
+       & on(b2)=table
+       & clear(b1)
+       & ~holding(b1) & ~holding(b2)
+       & ~clear(b2);
+    0: pickupBlock(b1).
+
+Cplus2ASP Output:
+
+Solving...
+UNSATISFIABLE
+Models       : 0
+No solution.
+
+
+
+% Query 4: Stack a held block onto a clear block, and verify the expected effects. (satisfiable)
+% Fix: holding(b1) implies ~handEmpty by constraint (6), so do not assert ~handEmpty explicitly.
+:- query
+    0: holding(b1)
+       & ~clear(b1)
+       & on(b2)=table & clear(b2)
+       & ~holding(b2);
+    0: stackBlock(b1,b2);
+    maxstep: on(b1)=b2 & clear(b1) & ~clear(b2) & handEmpty & ~holding(b1).
+
+Cplus2ASP Output:
+
+Solving...
+UNSATISFIABLE
+Models       : 0
+No solution.
+
+
+
+% Query 5: Attempt to execute two pickup actions on different blocks concurrently; this is forbidden by the concurrency constraint. (unsatisfiable)
+:- query
+    0: handEmpty
+       & on(b1)=table & clear(b1)
+       & on(b2)=table & clear(b2)
+       & ~holding(b1) & ~holding(b2);
+    0: pickupBlock(b1) & pickupBlock(b2).
+
+Cplus2ASP Output:
+
+Solving...
+UNSATISFIABLE
+Models       : 0
+No solution.
+
+
+
+
+
+:- query
+    0: handEmpty
+       & on(b4)=table
+       & on(b5)=b4 & clear(b5)
+       & on(b2)=table & clear(b2)
+       & on(b3)=table & clear(b3)
+       & on(b1)=table & clear(b1)
+       & on(b6)=table & clear(b6)
+       & ~holding(b1) & ~holding(b2) & ~holding(b3) & ~holding(b4) & ~holding(b5) & ~holding(b6)
+       & ~clear(b4);
+    maxstep: on(b1)=table & clear(b1)
+             & on(b2)=table & clear(b2)
+             & on(b3)=table & clear(b3)
+             & on(b4)=table & clear(b4)
+             & on(b5)=table & clear(b5)
+             & on(b6)=table & clear(b6)
+             & handEmpty.
+
+
+
+Cplus2ASP Output:
+
+Solving...
+UNSATISFIABLE
+Models       : 0
+No solution.
+
+

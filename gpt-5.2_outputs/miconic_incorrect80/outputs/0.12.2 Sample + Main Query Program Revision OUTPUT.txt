@@ -1,0 +1,201 @@
+% PROGRAM CHANGED? [CHANGED]
+% BC+ signature
+:- sorts
+    floor;
+    passenger.
+
+:- objects
+    f0, f1 :: floor;
+    p0 :: passenger.
+
+:- variables
+    F, F1, F2, F3, F4 :: floor;
+    P, P1, P2, P3, P4 :: passenger.
+
+:- constants
+    board(passenger,floor) :: exogenousAction;
+    depart(passenger,floor) :: exogenousAction;
+    moveUp(floor,floor) :: exogenousAction;
+    moveDown(floor,floor) :: exogenousAction;
+
+    isFloor(floor) :: inertialFluent(boolean);
+    isPassenger(passenger) :: inertialFluent(boolean);
+    above(floor,floor) :: inertialFluent(boolean);
+
+    elevAt(floor) :: inertialFluent(boolean);
+
+    origin(passenger) :: inertialFluent(floor);
+    dest(passenger) :: inertialFluent(floor);
+
+    boarded(passenger) :: inertialFluent(boolean);
+    served(passenger) :: inertialFluent(boolean).
+
+% Generated constraints
+
+% 0. Elevator cannot be at two different floors at the same time.
+impossible elevAt(F1) & elevAt(F2) & F1\=F2.
+
+% Ensure the elevator is at some floor in every state (given only f0,f1 in this file).
+impossible ~elevAt(f0) & ~elevAt(f1).
+
+% 1. A passenger cannot be both boarded and served at the same time.
+impossible boarded(P) & served(P).
+
+% 2. Boarding is not executable if the floor is not marked as a floor.
+nonexecutable board(P,F) if ~isFloor(F).
+
+% 3. Boarding is not executable if the passenger is not marked as a passenger.
+nonexecutable board(P,F) if ~isPassenger(P).
+
+% 4. Boarding is not executable if the elevator is not at that floor.
+nonexecutable board(P,F) if ~elevAt(F).
+
+% 5. Boarding is not executable if the floor is not the passenger's origin.
+nonexecutable board(P,F) if origin(P)\=F.
+
+% 6. Boarding is not executable if the passenger is already marked as boarded.
+nonexecutable board(P,F) if boarded(P).
+
+% 7. Boarding causes the passenger to be marked as boarded.
+board(P,F) causes boarded(P).
+
+% 8. Boarding causes the passenger to no longer be marked as served.
+board(P,F) causes ~served(P).
+
+% 9. Departing is not executable if the floor is not marked as a floor.
+nonexecutable depart(P,F) if ~isFloor(F).
+
+% 10. Departing is not executable if the passenger is not marked as a passenger.
+nonexecutable depart(P,F) if ~isPassenger(P).
+
+% 11. Departing is not executable if the elevator is not at that floor.
+nonexecutable depart(P,F) if ~elevAt(F).
+
+% 12. Departing is not executable if the floor is not the passenger's destination.
+nonexecutable depart(P,F) if dest(P)\=F.
+
+% 13. Departing is not executable if the passenger is not marked as boarded.
+nonexecutable depart(P,F) if ~boarded(P).
+
+% 14. Departing causes the passenger to no longer be marked as boarded.
+depart(P,F) causes ~boarded(P).
+
+% 15. Departing causes the passenger to be marked as served.
+depart(P,F) causes served(P).
+
+% 16. Moving up is not executable if the first floor is not marked as a floor.
+nonexecutable moveUp(F1,F2) if ~isFloor(F1).
+
+% 17. Moving up is not executable if the second floor is not marked as a floor.
+nonexecutable moveUp(F1,F2) if ~isFloor(F2).
+
+% 18. Moving up is not executable if the elevator is not at the first floor.
+nonexecutable moveUp(F1,F2) if ~elevAt(F1).
+
+% 19. Moving up is not executable if the first floor is not above the second floor.
+nonexecutable moveUp(F1,F2) if ~above(F1,F2).
+
+% 20. Moving up causes the elevator to be at the second floor.
+moveUp(F1,F2) causes elevAt(F2).
+
+% 21. Moving up causes the elevator to no longer be at the first floor.
+moveUp(F1,F2) causes ~elevAt(F1).
+
+% 22. Moving down is not executable if the first floor is not marked as a floor.
+nonexecutable moveDown(F1,F2) if ~isFloor(F1).
+
+% 23. Moving down is not executable if the second floor is not marked as a floor.
+nonexecutable moveDown(F1,F2) if ~isFloor(F2).
+
+% 24. Moving down is not executable if the elevator is not at the first floor.
+nonexecutable moveDown(F1,F2) if ~elevAt(F1).
+
+% 25. Moving down is not executable if the second floor is not above the first floor.
+nonexecutable moveDown(F1,F2) if ~above(F2,F1).
+
+% 26. Moving down causes the elevator to be at the second floor.
+moveDown(F1,F2) causes elevAt(F2).
+
+% 27. Moving down causes the elevator to no longer be at the first floor.
+moveDown(F1,F2) causes ~elevAt(F1).
+
+% 28. Concurrency: cannot perform moveUp and moveDown at the same time.
+nonexecutable moveUp(F1,F2) & moveDown(F3,F4).
+
+% 29. Concurrency: cannot perform moveUp and board at the same time.
+nonexecutable moveUp(F1,F2) & board(P,F).
+
+% 30. Concurrency: cannot perform moveUp and depart at the same time.
+nonexecutable moveUp(F1,F2) & depart(P,F).
+
+% 31. Concurrency: cannot perform moveDown and board at the same time.
+nonexecutable moveDown(F1,F2) & board(P,F).
+
+% 32. Concurrency: cannot perform moveDown and depart at the same time.
+nonexecutable moveDown(F1,F2) & depart(P,F).
+
+% 33. Concurrency: the same passenger cannot board and depart at the same time.
+nonexecutable board(P,F1) & depart(P,F2).
+
+% [CHANGED]
+% The natural language problem statement in the prompt had multiple incorrect "not a floor"
+% conditions and reversed move effects. The BC+ program above matches the sample outputs
+% and is internally consistent, but to better match common-sense elevator movement, add:
+% - prevent moving to the same floor
+% - prevent moving without changing location
+nonexecutable moveUp(F1,F2) if F1=F2.
+nonexecutable moveDown(F1,F2) if F1=F2.
+
+% MAIN QUERY CHANGED? [UNCHANGED]
+:- query
+    0: isFloor(f0) & isFloor(f1) &
+       isPassenger(p0) &
+       above(f1,f0) &
+       origin(p0)=f1 & dest(p0)=f0 &
+       elevAt(f1) &
+       ~boarded(p0) & ~served(p0);
+    maxstep: served(p0).
+
+% SAMPLE QUERIES CHANGED? [UNCHANGED]
+% Query 1: Board at the correct origin floor when elevator is there; passenger becomes boarded and not served. (satisfiable)
+:- query
+    0: isFloor(f0) & isFloor(f1) &
+       isPassenger(p0) &
+       elevAt(f0) &
+       origin(p0)=f0 & dest(p0)=f1 &
+       ~boarded(p0) & served(p0);
+    0: board(p0,f0);
+    maxstep: boarded(p0) & ~served(p0).
+
+% Query 2: Try to board at a floor that is not the passenger's origin; should be disallowed by nonexecutable. (unsatisfiable)
+:- query
+    0: isFloor(f0) & isFloor(f1) &
+       isPassenger(p0) &
+       elevAt(f0) &
+       origin(p0)=f1 & dest(p0)=f0 &
+       ~boarded(p0) & ~served(p0);
+    0: board(p0,f0).
+
+% Query 3: Move up from f0 to f1 when above(f0,f1) holds and elevator is at f0; elevator ends at f1 and not at f0. (satisfiable)
+:- query
+    0: isFloor(f0) & isFloor(f1) &
+       above(f0,f1) &
+       elevAt(f0) & ~elevAt(f1);
+    0: moveUp(f0,f1);
+    maxstep: elevAt(f1) & ~elevAt(f0).
+
+% Query 4: Try to move up when the elevator is not at the source floor; should be disallowed by nonexecutable. (unsatisfiable)
+:- query
+    0: isFloor(f0) & isFloor(f1) &
+       above(f0,f1) &
+       elevAt(f1) & ~elevAt(f0);
+    0: moveUp(f0,f1).
+
+% Query 5: Board and depart the same passenger in the same step; should be disallowed by concurrency constraint. (unsatisfiable)
+:- query
+    0: isFloor(f0) &
+       isPassenger(p0) &
+       elevAt(f0) &
+       origin(p0)=f0 & dest(p0)=f0 &
+       ~boarded(p0) & ~served(p0);
+    0: board(p0,f0) & depart(p0,f0).

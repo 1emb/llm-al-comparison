@@ -1,0 +1,26 @@
+Objects:
+:- objects
+    ant :: ant;
+    p1, p2 :: place.
+
+Query:
+:- query
+    0: at(ant,p1) & ~at(ant,p2)
+       & ~hasFood(ant)
+       & hasFoodAt(p1) & hasFoodAt(p2)
+       & isNest(p1) & ~isNest(p2)
+       & isClear(p1) & isClear(p2)
+       & adjacent(p1,p1) & adjacent(p1,p2)
+       & adjacent(p2,p1) & adjacent(p2,p2);
+    maxstep: hasFoodAt(p1).
+
+Status: FAIL
+
+Output:
+/home/grad24/mnguyen/.cplus2asp.config: cannot open file
+
+
+Errors:
+ERROR: temp.bc:100:8]: "at": Syntax error.
+ERROR: temp.bc:106:43]: ";": Syntax error.
+% Error: An error occurred while executing the translator.

@@ -1,0 +1,37 @@
+```
+Actions:
+attack(entity) - Attacking an entity.
+succumb(entity) - Succumbing for an entity.
+overcome(entity, entity) - Overcoming by an entity over another entity.
+feast(entity, entity) - Feasting by an entity on another entity.
+
+Constants:
+harmony - Global condition of harmony (boolean, inertial).
+inPain(entity) - Whether an entity is in pain (boolean, inertial).
+isProvince(entity) - Whether an entity is a province (boolean, inertial).
+isPlanet(entity) - Whether an entity is a planet (boolean, inertial).
+craves(entity, entity) - Directed craving relation from one entity to another (boolean, inertial).
+
+BC+ Signature:
+:- sorts
+    entity.
+
+:- objects
+    a, b, c, d :: entity.
+
+:- variables
+    E, E1, E2, E3, E4 :: entity;
+    Bool, Bool1, Bool2, Bool3, Bool4 :: boolean.
+
+:- constants
+    attack(entity) :: exogenousAction;
+    succumb(entity) :: exogenousAction;
+    overcome(entity, entity) :: exogenousAction;
+    feast(entity, entity) :: exogenousAction;
+
+    harmony :: inertialFluent(boolean);
+    inPain(entity) :: inertialFluent(boolean);
+    isProvince(entity) :: inertialFluent(boolean);
+    isPlanet(entity) :: inertialFluent(boolean);
+    craves(entity, entity) :: inertialFluent(boolean).
+```

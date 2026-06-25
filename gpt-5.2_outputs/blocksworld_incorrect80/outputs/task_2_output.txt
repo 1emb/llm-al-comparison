@@ -1,0 +1,24 @@
+Objects:
+:- objects
+    b1, b2, b3 :: block;
+    table :: loc.
+
+Query:
+:- query
+    0: handEmpty &
+       ~held(b1) & ~held(b2) & ~held(b3) &
+       onTable(b3) & ~onTable(b1) & ~onTable(b2) &
+       on(b2,b3) & on(b1,b2) &
+       ~on(b1,b3) & ~on(b2,b1) & ~on(b3,b1) & ~on(b3,b2) &
+       clear(b1) & ~clear(b2) & ~clear(b3);
+    maxstep: onTable(b1) & clear(b1) &
+             onTable(b2) & clear(b2) &
+             onTable(b3) & clear(b3) &
+             ~held(b1) & ~held(b2) & ~held(b3) &
+             handEmpty &
+             ~on(b1,b2) & ~on(b1,b3) & ~on(b2,b1) & ~on(b2,b3) & ~on(b3,b1) & ~on(b3,b2).
+
+Status: TIMEOUT
+
+Output:
+TIMEOUT

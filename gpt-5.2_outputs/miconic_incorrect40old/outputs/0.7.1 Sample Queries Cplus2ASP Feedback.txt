@@ -1,0 +1,105 @@
+% Query 1: Boarding should be executable when liftLoc=F, origin(P)=F, isFloor(F)=false, and isPassenger(P)=false. (satisfiable)
+:- query
+    label :: q1_board_ok;
+    0: liftLoc=f1 & origin(p1)=f1 & dest(p1)=f2;
+    0: ~isFloor(f1) & ~isPassenger(p1) & boarded(p1) & served(p1);
+    0: board(f1,p1).
+
+Cplus2ASP Output:
+
+ERROR: temp.bc:78:9]: "isFloor": Syntax error.
+
+% Query 2: Boarding should be blocked if the lift is not at the boarding floor. (unsatisfiable)
+:- query
+    label :: q2_board_wrong_liftloc;
+    0: liftLoc=f2 & origin(p1)=f1 & dest(p1)=f2;
+    0: ~isFloor(f1) & ~isPassenger(p1) & boarded(p1) & served(p1);
+    0: board(f1,p1).
+
+Cplus2ASP Output:
+
+ERROR: temp.bc:78:9]: "isFloor": Syntax error.
+
+% Query 3: Departing should be executable when liftLoc=F, dest(P)=F, isFloor(F)=false, isPassenger(P)=true, and boarded(P)=false; it should make boarded(P)=false and served(P)=false. (satisfiable)
+:- query
+    label :: q3_depart_ok_effects;
+    0: liftLoc=f2 & origin(p1)=f1 & dest(p1)=f2;
+    0: ~isFloor(f2) & isPassenger(p1) & ~boarded(p1) & served(p1);
+    0: depart(f2,p1);
+    maxstep: ~boarded(p1) & ~served(p1).
+
+Cplus2ASP Output:
+
+ERROR: temp.bc:78:9]: "isFloor": Syntax error.
+
+% Query 4: Departing should be blocked if boarded(P)=true. (unsatisfiable)
+:- query
+    label :: q4_depart_blocked_boarded;
+    0: liftLoc=f2 & origin(p1)=f1 & dest(p1)=f2;
+    0: ~isFloor(f2) & isPassenger(p1) & boarded(p1) & served(p1);
+    0: depart(f2,p1).
+
+Cplus2ASP Output:
+
+ERROR: temp.bc:78:9]: "isFloor": Syntax error.
+
+% Query 5: Moving up should be blocked when above(F1,F2) is false (i.e., ~above(F1,F2) holds). (unsatisfiable)
+:- query
+    label :: q5_up_requires_above;
+    0: liftLoc=f3;
+    0: ~isFloor(f1) & isFloor(f2);
+    0: ~above(f1,f2);
+    0: up(f1,f2).
+
+Cplus2ASP Output:
+
+ERROR: temp.bc:78:9]: "isFloor": Syntax error.
+
+
+
+:- query
+    0: above(f0,f1) & above(f0,f2) & above(f0,f3) & above(f1,f2) & above(f1,f3) & above(f2,f3);
+    0: origin(p0)=f3 & dest(p0)=f2 & origin(p1)=f1 & dest(p1)=f3;
+    0: liftLoc=f0;
+    0: ~isPassenger(p0) & ~isPassenger(p1) & ~boarded(p0) & ~boarded(p1) & ~served(p0) & ~served(p1);
+    maxstep: served(p0) & served(p1).
+
+
+Cplus2ASP Output:
+
+Solving...
+	
+
+	0:  liftLoc=f0 dest(p0)=f2 dest(p1)=f3 origin(p0)=f3 origin(p1)=f1 above(f0, f1) above(f0, f2) above(f0, f3) above(f1, f2) above(f1, f3) above(f2, f0) above(f2, f3) above(f3, f1) above(f3, f2)
+
+	ACTIONS:  up(f1)
+
+	1:  liftLoc=f1 dest(p0)=f2 dest(p1)=f3 origin(p0)=f3 origin(p1)=f1 above(f0, f1) above(f0, f2) above(f0, f3) above(f1, f2) above(f1, f3) above(f2, f0) above(f2, f3) above(f3, f1) above(f3, f2)
+
+	ACTIONS:  board(p1)
+
+	2:  liftLoc=f1 boarded(p1) dest(p0)=f2 dest(p1)=f3 isPassenger(p1) origin(p0)=f3 origin(p1)=f1 above(f0, f1) above(f0, f2) above(f0, f3) above(f1, f2) above(f1, f3) above(f2, f0) above(f2, f3) above(f3, f1) above(f3, f2)
+
+	ACTIONS:  down(f3)
+
+	3:  liftLoc=f3 boarded(p1) dest(p0)=f2 dest(p1)=f3 isPassenger(p1) origin(p0)=f3 origin(p1)=f1 above(f0, f1) above(f0, f2) above(f0, f3) above(f1, f2) above(f1, f3) above(f2, f0) above(f2, f3) above(f3, f1) above(f3, f2)
+
+	ACTIONS:  board(p0)
+
+	4:  liftLoc=f3 boarded(p0) boarded(p1) dest(p0)=f2 dest(p1)=f3 isPassenger(p0) isPassenger(p1) origin(p0)=f3 origin(p1)=f1 above(f0, f1) above(f0, f2) above(f0, f3) above(f1, f2) above(f1, f3) above(f2, f0) above(f2, f3) above(f3, f1) above(f3, f2)
+
+	ACTIONS:  depart(p1)
+
+	5:  liftLoc=f3 boarded(p0) dest(p0)=f2 dest(p1)=f3 isPassenger(p0) isPassenger(p1) origin(p0)=f3 origin(p1)=f1 served(p1) above(f0, f1) above(f0, f2) above(f0, f3) above(f1, f2) above(f1, f3) above(f2, f0) above(f2, f3) above(f3, f1) above(f3, f2)
+
+	ACTIONS:  up(f2)
+
+	6:  liftLoc=f2 boarded(p0) dest(p0)=f2 dest(p1)=f3 isPassenger(p0) isPassenger(p1) origin(p0)=f3 origin(p1)=f1 served(p1) above(f0, f1) above(f0, f2) above(f0, f3) above(f1, f2) above(f1, f3) above(f2, f0) above(f2, f3) above(f3, f1) above(f3, f2)
+
+	ACTIONS:  depart(p0)
+
+	7:  liftLoc=f2 dest(p0)=f2 dest(p1)=f3 isPassenger(p0) isPassenger(p1) origin(p0)=f3 origin(p1)=f1 served(p0) served(p1) above(f0, f1) above(f0, f2) above(f0, f3) above(f1, f2) above(f1, f3) above(f2, f0) above(f2, f3) above(f3, f1) above(f3, f2)
+
+SATISFIABLE
+Models       : 1+
+

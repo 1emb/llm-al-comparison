@@ -1,0 +1,19 @@
+Solving...
+Solution: 1 (Time: 0.012s)
+	
+
+	0:  harmony isPlanet(d) isProvince(b) craves(a, c) craves(b, a) craves(c, d)
+
+	ACTIONS:  feast(d, b)
+
+	1:  harmony isPlanet(d) craves(a, c) craves(b, a) craves(c, d) craves(d, b)
+
+	ACTIONS:  feast(b, c)
+
+	2:  harmony craves(b, c) craves(c, d) craves(d, b)
+
+SATISFIABLE
+Models       : 1+
+Calls        : 3
+Time         : 0.012s (Solving: 0.00s 1st Model: 0.00s Unsat: 0.00s)
+CPU Time     : 0.012s

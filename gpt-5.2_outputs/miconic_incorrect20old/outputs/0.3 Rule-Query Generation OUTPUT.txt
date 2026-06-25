@@ -1,0 +1,83 @@
+% constraints/rules
+% 1. The elevator cannot be at two different floors at the same time.
+impossible at(F1) & at(F2) & F1\=F2.
+
+% 2. Boarding at floor F by passenger P is not executable if validFloor(F) does not hold.
+nonexecutable board(F,P) if ~validFloor(F).
+
+% 3. Boarding at floor F by passenger P is not executable if at(F) does not hold.
+nonexecutable board(F,P) if ~at(F).
+
+% 4. Boarding at floor F by passenger P is not executable if origin(P) is not F.
+nonexecutable board(F,P) if origin(P)\=F.
+
+% 5. Boarding at floor F by passenger P is not executable if passengerFlag(P) holds.
+nonexecutable board(F,P) if passengerFlag(P).
+
+% 6. When boarding at floor F by passenger P happens, boarded(P) becomes false.
+board(F,P) causes ~boarded(P).
+
+% 7. Departing at floor F by passenger P is not executable if validFloor(F) does not hold.
+nonexecutable depart(F,P) if ~validFloor(F).
+
+% 8. Departing at floor F by passenger P is not executable if passengerFlag(P) does not hold.
+nonexecutable depart(F,P) if ~passengerFlag(P).
+
+% 9. Departing at floor F by passenger P is not executable if at(F) holds.
+nonexecutable depart(F,P) if at(F).
+
+% 10. Departing at floor F by passenger P is not executable if dest(P) is not F.
+nonexecutable depart(F,P) if dest(P)\=F.
+
+% 11. Departing at floor F by passenger P is not executable if boarded(P) does not hold.
+nonexecutable depart(F,P) if ~boarded(P).
+
+% 12. When departing at floor F by passenger P happens, boarded(P) becomes true.
+depart(F,P) causes boarded(P).
+
+% 13. When departing at floor F by passenger P happens, served(P) becomes true.
+depart(F,P) causes served(P).
+
+% 14. Moving up from floor F1 to floor F2 is not executable if validFloor(F1) does not hold.
+nonexecutable up(F1,F2) if ~validFloor(F1).
+
+% 15. Moving up from floor F1 to floor F2 is not executable if validFloor(F2) does not hold.
+nonexecutable up(F1,F2) if ~validFloor(F2).
+
+% 16. Moving up from floor F1 to floor F2 is not executable if at(F1) holds.
+nonexecutable up(F1,F2) if at(F1).
+
+% 17. Moving up from floor F1 to floor F2 is not executable if above(F1,F2) does not hold.
+nonexecutable up(F1,F2) if ~above(F1,F2).
+
+% 18. When moving up from floor F1 to floor F2 happens, at(F2) becomes false.
+up(F1,F2) causes ~at(F2).
+
+% 19. When moving up from floor F1 to floor F2 happens, at(F1) becomes false.
+up(F1,F2) causes ~at(F1).
+
+% 20. Moving down from floor F1 to floor F2 is not executable if validFloor(F1) does not hold.
+nonexecutable down(F1,F2) if ~validFloor(F1).
+
+% 21. Moving down from floor F1 to floor F2 is not executable if validFloor(F2) does not hold.
+nonexecutable down(F1,F2) if ~validFloor(F2).
+
+% 22. Moving down from floor F1 to floor F2 is not executable if at(F1) holds.
+nonexecutable down(F1,F2) if at(F1).
+
+% 23. Moving down from floor F1 to floor F2 is not executable if above(F2,F1) does not hold.
+nonexecutable down(F1,F2) if ~above(F2,F1).
+
+% 24. When moving down from floor F1 to floor F2 happens, at(F2) becomes true.
+down(F1,F2) causes at(F2).
+
+% 25. When moving down from floor F1 to floor F2 happens, at(F1) becomes true.
+down(F1,F2) causes at(F1).
+
+% query
+:- query
+    0: validFloor(f0) & validFloor(f1) & above(f0,f1) &
+       origin(p0)=f0 & dest(p0)=f1 &
+       at(f0) &
+       ~passengerFlag(p0) & boarded(p0) & ~served(p0);
+    maxstep: served(p0).

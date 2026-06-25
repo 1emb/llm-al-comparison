@@ -1,0 +1,44 @@
+```json
+[
+  {
+    "objects": ":- objects\n    w1, w2 :: window.\n",
+    "query": ":- query\n    label :: main;\n    maxstep :: 1;\n    0: isWindow(w1) & isWindow(w2)\n     & isClosed(w1) & ~isOpen(w1) & isUnlocked(w1) & ~isLocked(w1)\n     & isOpen(w2) & ~isClosed(w2) & isUnlocked(w2) & ~isLocked(w2);\n    1: isOpen(w1) & isLocked(w2).\n"
+  },
+  {
+    "objects": ":- objects\n    w1, w2, w3 :: window.\n",
+    "query": ":- query\n    label :: main;\n    maxstep :: 1;\n    0: isWindow(w1) & isWindow(w2) & isWindow(w3)\n     & isClosed(w1) & ~isOpen(w1) & isLocked(w1) & ~isUnlocked(w1)\n     & isOpen(w2) & ~isClosed(w2) & isUnlocked(w2) & ~isLocked(w2)\n     & isClosed(w3) & ~isOpen(w3) & isUnlocked(w3) & ~isLocked(w3);\n    1: isOpen(w1) & isLocked(w2) & isLocked(w3).\n"
+  },
+  {
+    "objects": ":- objects\n    w1, w2, w3, w4 :: window.\n",
+    "query": ":- query\n    label :: main;\n    maxstep :: 1;\n    0: isWindow(w1) & isWindow(w2) & isWindow(w3) & isWindow(w4)\n     & isClosed(w1) & ~isOpen(w1) & isUnlocked(w1) & ~isLocked(w1)\n     & isOpen(w2) & ~isClosed(w2) & isUnlocked(w2) & ~isLocked(w2)\n     & isClosed(w3) & ~isOpen(w3) & isLocked(w3) & ~isUnlocked(w3)\n     & isOpen(w4) & ~isClosed(w4) & isUnlocked(w4) & ~isLocked(w4);\n    1: isLocked(w1) & isOpen(w3) & isClosed(w4).\n"
+  },
+  {
+    "objects": ":- objects\n    w1, w2, w3, w4, w5 :: window.\n",
+    "query": ":- query\n    label :: main;\n    maxstep :: 1;\n    0: isWindow(w1) & isWindow(w2) & isWindow(w3) & isWindow(w4) & isWindow(w5)\n     & isOpen(w1) & ~isClosed(w1) & isUnlocked(w1) & ~isLocked(w1)\n     & isClosed(w2) & ~isOpen(w2) & isUnlocked(w2) & ~isLocked(w2)\n     & isClosed(w3) & ~isOpen(w3) & isLocked(w3) & ~isUnlocked(w3)\n     & isOpen(w4) & ~isClosed(w4) & isUnlocked(w4) & ~isLocked(w4)\n     & isClosed(w5) & ~isOpen(w5) & isUnlocked(w5) & ~isLocked(w5);\n    1: isLocked(w1) & isOpen(w3) & isLocked(w4) & isOpen(w5).\n"
+  },
+  {
+    "objects": ":- objects\n    w1, w2, w3, w4, w5, w6 :: window.\n",
+    "query": ":- query\n    label :: main;\n    maxstep :: 1;\n    0: isWindow(w1) & isWindow(w2) & isWindow(w3) & isWindow(w4) & isWindow(w5) & isWindow(w6)\n     & isClosed(w1) & ~isOpen(w1) & isLocked(w1) & ~isUnlocked(w1)\n     & isOpen(w2) & ~isClosed(w2) & isUnlocked(w2) & ~isLocked(w2)\n     & isClosed(w3) & ~isOpen(w3) & isUnlocked(w3) & ~isLocked(w3)\n     & isOpen(w4) & ~isClosed(w4) & isUnlocked(w4) & ~isLocked(w4)\n     & isClosed(w5) & ~isOpen(w5) & isUnlocked(w5) & ~isLocked(w5)\n     & isClosed(w6) & ~isOpen(w6) & isLocked(w6) & ~isUnlocked(w6);\n    1: isOpen(w1) & isLocked(w2) & isLocked(w3) & isClosed(w4) & isOpen(w6).\n"
+  },
+  {
+    "objects": ":- objects\n    w1, w2, w3, w4, w5, w6, w7 :: window.\n",
+    "query": ":- query\n    label :: main;\n    maxstep :: 1;\n    0: isWindow(w1) & isWindow(w2) & isWindow(w3) & isWindow(w4) & isWindow(w5) & isWindow(w6) & isWindow(w7)\n     & isOpen(w1) & ~isClosed(w1) & isUnlocked(w1) & ~isLocked(w1)\n     & isClosed(w2) & ~isOpen(w2) & isUnlocked(w2) & ~isLocked(w2)\n     & isClosed(w3) & ~isOpen(w3) & isLocked(w3) & ~isUnlocked(w3)\n     & isOpen(w4) & ~isClosed(w4) & isUnlocked(w4) & ~isLocked(w4)\n     & isClosed(w5) & ~isOpen(w5) & isUnlocked(w5) & ~isLocked(w5)\n     & isOpen(w6) & ~isClosed(w6) & isUnlocked(w6) & ~isLocked(w6)\n     & isClosed(w7) & ~isOpen(w7) & isLocked(w7) & ~isUnlocked(w7);\n    1: isLocked(w1) & isOpen(w3) & isLocked(w4) & isOpen(w5) & isClosed(w6) & isOpen(w7).\n"
+  },
+  {
+    "objects": ":- objects\n    w1, w2, w3, w4, w5, w6, w7, w8 :: window.\n",
+    "query": ":- query\n    label :: main;\n    maxstep :: 1;\n    0: isWindow(w1) & isWindow(w2) & isWindow(w3) & isWindow(w4) & isWindow(w5) & isWindow(w6) & isWindow(w7) & isWindow(w8)\n     & isClosed(w1) & ~isOpen(w1) & isUnlocked(w1) & ~isLocked(w1)\n     & isOpen(w2) & ~isClosed(w2) & isUnlocked(w2) & ~isLocked(w2)\n     & isClosed(w3) & ~isOpen(w3) & isLocked(w3) & ~isUnlocked(w3)\n     & isOpen(w4) & ~isClosed(w4) & isUnlocked(w4) & ~isLocked(w4)\n     & isClosed(w5) & ~isOpen(w5) & isUnlocked(w5) & ~isLocked(w5)\n     & isClosed(w6) & ~isOpen(w6) & isUnlocked(w6) & ~isLocked(w6)\n     & isOpen(w7) & ~isClosed(w7) & isUnlocked(w7) & ~isLocked(w7)\n     & isClosed(w8) & ~isOpen(w8) & isLocked(w8) & ~isUnlocked(w8);\n    1: isOpen(w1) & isLocked(w2) & isOpen(w3) & isLocked(w4) & isOpen(w6) & isClosed(w7) & isOpen(w8).\n"
+  },
+  {
+    "objects": ":- objects\n    w1, w2, w3, w4, w5, w6, w7, w8, w9 :: window.\n",
+    "query": ":- query\n    label :: main;\n    maxstep :: 1;\n    0: isWindow(w1) & isWindow(w2) & isWindow(w3) & isWindow(w4) & isWindow(w5) & isWindow(w6) & isWindow(w7) & isWindow(w8) & isWindow(w9)\n     & isOpen(w1) & ~isClosed(w1) & isUnlocked(w1) & ~isLocked(w1)\n     & isClosed(w2) & ~isOpen(w2) & isUnlocked(w2) & ~isLocked(w2)\n     & isClosed(w3) & ~isOpen(w3) & isLocked(w3) & ~isUnlocked(w3)\n     & isOpen(w4) & ~isClosed(w4) & isUnlocked(w4) & ~isLocked(w4)\n     & isClosed(w5) & ~isOpen(w5) & isUnlocked(w5) & ~isLocked(w5)\n     & isOpen(w6) & ~isClosed(w6) & isUnlocked(w6) & ~isLocked(w6)\n     & isClosed(w7) & ~isOpen(w7) & isLocked(w7) & ~isUnlocked(w7)\n     & isClosed(w8) & ~isOpen(w8) & isUnlocked(w8) & ~isLocked(w8)\n     & isOpen(w9) & ~isClosed(w9) & isUnlocked(w9) & ~isLocked(w9);\n    1: isLocked(w1) & isOpen(w3) & isLocked(w4) & isOpen(w5) & isClosed(w6) & isOpen(w7) & isLocked(w9).\n"
+  },
+  {
+    "objects": ":- objects\n    w1, w2, w3, w4, w5, w6, w7, w8, w9, w10 :: window.\n",
+    "query": ":- query\n    label :: main;\n    maxstep :: 1;\n    0: isWindow(w1) & isWindow(w2) & isWindow(w3) & isWindow(w4) & isWindow(w5) & isWindow(w6) & isWindow(w7) & isWindow(w8) & isWindow(w9) & isWindow(w10)\n     & isClosed(w1) & ~isOpen(w1) & isLocked(w1) & ~isUnlocked(w1)\n     & isOpen(w2) & ~isClosed(w2) & isUnlocked(w2) & ~isLocked(w2)\n     & isClosed(w3) & ~isOpen(w3) & isUnlocked(w3) & ~isLocked(w3)\n     & isOpen(w4) & ~isClosed(w4) & isUnlocked(w4) & ~isLocked(w4)\n     & isClosed(w5) & ~isOpen(w5) & isUnlocked(w5) & ~isLocked(w5)\n     & isClosed(w6) & ~isOpen(w6) & isLocked(w6) & ~isUnlocked(w6)\n     & isOpen(w7) & ~isClosed(w7) & isUnlocked(w7) & ~isLocked(w7)\n     & isClosed(w8) & ~isOpen(w8) & isUnlocked(w8) & ~isLocked(w8)\n     & isOpen(w9) & ~isClosed(w9) & isUnlocked(w9) & ~isLocked(w9)\n     & isClosed(w10) & ~isOpen(w10) & isLocked(w10) & ~isUnlocked(w10);\n    1: isOpen(w1) & isLocked(w2) & isLocked(w3) & isClosed(w4) & isOpen(w6) & isLocked(w7) & isOpen(w8) & isClosed(w9) & isOpen(w10).\n"
+  },
+  {
+    "objects": ":- objects\n    w1, w2, w3, w4, w5, w6, w7, w8, w9, w10, w11 :: window.\n",
+    "query": ":- query\n    label :: main;\n    maxstep :: 1;\n    0: isWindow(w1) & isWindow(w2) & isWindow(w3) & isWindow(w4) & isWindow(w5) & isWindow(w6) & isWindow(w7) & isWindow(w8) & isWindow(w9) & isWindow(w10) & isWindow(w11)\n     & isOpen(w1) & ~isClosed(w1) & isUnlocked(w1) & ~isLocked(w1)\n     & isClosed(w2) & ~isOpen(w2) & isUnlocked(w2) & ~isLocked(w2)\n     & isClosed(w3) & ~isOpen(w3) & isLocked(w3) & ~isUnlocked(w3)\n     & isOpen(w4) & ~isClosed(w4) & isUnlocked(w4) & ~isLocked(w4)\n     & isClosed(w5) & ~isOpen(w5) & isUnlocked(w5) & ~isLocked(w5)\n     & isOpen(w6) & ~isClosed(w6) & isUnlocked(w6) & ~isLocked(w6)\n     & isClosed(w7) & ~isOpen(w7) & isLocked(w7) & ~isUnlocked(w7)\n     & isOpen(w8) & ~isClosed(w8) & isUnlocked(w8) & ~isLocked(w8)\n     & isClosed(w9) & ~isOpen(w9) & isUnlocked(w9) & ~isLocked(w9)\n     & isClosed(w10) & ~isOpen(w10) & isLocked(w10) & ~isUnlocked(w10)\n     & isOpen(w11) & ~isClosed(w11) & isUnlocked(w11) & ~isLocked(w11);\n    1: isLocked(w1) & isOpen(w3) & isLocked(w4) & isOpen(w5) & isClosed(w6) & isOpen(w7) & isLocked(w8) & isOpen(w9) & isOpen(w10) & isClosed(w11).\n"
+  }
+]
+```

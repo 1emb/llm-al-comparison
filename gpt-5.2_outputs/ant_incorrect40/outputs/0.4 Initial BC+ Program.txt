@@ -1,0 +1,93 @@
+:- sorts
+    ant;
+    place.
+
+
+:- objects
+    ant1 :: ant;
+    p1, p2 :: place.
+
+
+:- variables
+    A, A1, A2, A3, A4 :: ant;
+    P, P1, P2, P3, P4 :: place;
+    Bool, Bool1, Bool2, Bool3, Bool4 :: boolean.
+
+
+:- constants
+    move(ant, place, place) :: exogenousAction;
+    pickUpFood(ant, place) :: exogenousAction;
+    dropFoodAtNest(ant, place) :: exogenousAction;
+    clearObstacle(ant, place, place) :: exogenousAction;
+
+    at(ant, place) :: inertialFluent(boolean);
+    adjacent(place, place) :: rigidFluent(boolean);
+    hasFood(place) :: inertialFluent(boolean);
+    isNest(place) :: rigidFluent(boolean);
+    isClear(place) :: inertialFluent(boolean);
+    carryingFood(ant) :: inertialFluent(boolean).
+
+
+% constraints/rules
+% 1. Moving an ant from a starting place to a destination place causes the ant to be at the destination place.
+move(A,P1,P2) causes at(A,P2).
+
+% 2. Moving an ant from a starting place to a destination place causes the ant to be at the starting place.
+move(A,P1,P2) causes at(A,P1).
+
+% 3. Moving an ant from a starting place to a destination place is not executable if the ant is not at the starting place.
+nonexecutable move(A,P1,P2) if ~at(A,P1).
+
+% 4. Moving an ant from a starting place to a destination place is not executable if the starting place is not adjacent to the destination place.
+nonexecutable move(A,P1,P2) if ~adjacent(P1,P2).
+
+% 5. Moving an ant from a starting place to a destination place is not executable if the destination place is clear.
+nonexecutable move(A,P1,P2) if isClear(P2).
+
+% 6. Picking up food at a place causes the ant to be carrying food.
+pickUpFood(A,P) causes carryingFood(A).
+
+% 7. Picking up food at a place causes the place to have food.
+pickUpFood(A,P) causes hasFood(P).
+
+% 8. Picking up food at a place is not executable if the ant is at the place.
+nonexecutable pickUpFood(A,P) if at(A,P).
+
+% 9. Picking up food at a place is not executable if the place does not have food.
+nonexecutable pickUpFood(A,P) if ~hasFood(P).
+
+% 10. Picking up food at a place is not executable if the ant is already carrying food.
+nonexecutable pickUpFood(A,P) if carryingFood(A).
+
+% 11. Dropping food at a nest place causes the ant to be carrying food.
+dropFoodAtNest(A,P) causes carryingFood(A).
+
+% 12. Dropping food at a nest place causes the nest place to have food.
+dropFoodAtNest(A,P) causes hasFood(P).
+
+% 13. Dropping food at a nest place is not executable if the ant is at the place.
+nonexecutable dropFoodAtNest(A,P) if at(A,P).
+
+% 14. Dropping food at a nest place is not executable if the place is not a nest.
+nonexecutable dropFoodAtNest(A,P) if ~isNest(P).
+
+% 15. Dropping food at a nest place is not executable if the ant is not carrying food.
+nonexecutable dropFoodAtNest(A,P) if ~carryingFood(A).
+
+% 16. Clearing an obstacle at a blocked place from a starting place causes the blocked place to not be clear.
+clearObstacle(A,P1,P2) causes ~isClear(P2).
+
+% 17. Clearing an obstacle at a blocked place from a starting place is not executable if the ant is at the starting place.
+nonexecutable clearObstacle(A,P1,P2) if at(A,P1).
+
+% 18. Clearing an obstacle at a blocked place from a starting place is not executable if the starting place is not adjacent to the blocked place.
+nonexecutable clearObstacle(A,P1,P2) if ~adjacent(P1,P2).
+
+% 19. Clearing an obstacle at a blocked place from a starting place is not executable if the blocked place is clear.
+nonexecutable clearObstacle(A,P1,P2) if isClear(P2).
+
+
+% query
+:- query
+    0: at(ant1,p1) & adjacent(p1,p2) & adjacent(p2,p1) & isClear(p1) & isClear(p2) & isNest(p1) & hasFood(p2);
+    maxstep: hasFood(p1).

@@ -1,0 +1,44 @@
+```json
+[
+  {
+    "objects": ":- objects\n    a, b, c, d :: entity.",
+    "query": ":- query\n    0: harmony\n       & craves(a,c) & craves(b,a) & craves(c,d)\n       & isPlanet(d)\n       & isProvince(b)\n       & ~craves(a,a) & ~craves(a,b) & ~craves(a,d)\n       & ~craves(b,b) & ~craves(b,c) & ~craves(b,d)\n       & ~craves(c,a) & ~craves(c,b) & ~craves(c,c)\n       & ~craves(d,a) & ~craves(d,b) & ~craves(d,c) & ~craves(d,d)\n       & ~inPain(a) & ~inPain(b) & ~inPain(c) & ~inPain(d)\n       & ~isProvince(a) & ~isProvince(c) & ~isProvince(d)\n       & ~isPlanet(a) & ~isPlanet(b) & ~isPlanet(c);\n    maxstep: craves(b,c) & craves(d,b)."
+  },
+  {
+    "objects": ":- objects\n    a, b, c, d :: entity.",
+    "query": ":- query\n    0: harmony\n       & isPlanet(a) & isPlanet(c) & isPlanet(d)\n       & isProvince(a) & isProvince(b) & isProvince(d)\n       & craves(b,c)\n       & ~craves(a,a) & ~craves(a,b) & ~craves(a,c) & ~craves(a,d)\n       & ~craves(b,a) & ~craves(b,b) & ~craves(b,d)\n       & ~craves(c,a) & ~craves(c,b) & ~craves(c,c) & ~craves(c,d)\n       & ~craves(d,a) & ~craves(d,b) & ~craves(d,c) & ~craves(d,d)\n       & ~inPain(a) & ~inPain(b) & ~inPain(c) & ~inPain(d)\n       & ~isProvince(c)\n       & ~isPlanet(b);\n    maxstep: craves(c,b)."
+  },
+  {
+    "objects": ":- objects\n    a, b, c, d :: entity.",
+    "query": ":- query\n    0: harmony\n       & isPlanet(a) & isPlanet(b)\n       & craves(c,b) & craves(d,a)\n       & isProvince(c) & isProvince(d)\n       & ~craves(a,a) & ~craves(a,b) & ~craves(a,c) & ~craves(a,d)\n       & ~craves(b,a) & ~craves(b,b) & ~craves(b,c) & ~craves(b,d)\n       & ~craves(c,a) & ~craves(c,c) & ~craves(c,d)\n       & ~craves(d,b) & ~craves(d,c) & ~craves(d,d)\n       & ~inPain(a) & ~inPain(b) & ~inPain(c) & ~inPain(d)\n       & ~isProvince(a) & ~isProvince(b)\n       & ~isPlanet(c) & ~isPlanet(d);\n    maxstep: craves(a,d) & craves(b,c)."
+  },
+  {
+    "objects": ":- objects\n    a, b, c, d :: entity.",
+    "query": ":- query\n    0: harmony\n       & craves(a,d) & craves(b,c)\n       & isPlanet(c) & isPlanet(d)\n       & isProvince(a) & isProvince(b)\n       & ~craves(a,a) & ~craves(a,b) & ~craves(a,c)\n       & ~craves(b,a) & ~craves(b,b) & ~craves(b,d)\n       & ~craves(c,a) & ~craves(c,b) & ~craves(c,c) & ~craves(c,d)\n       & ~craves(d,a) & ~craves(d,b) & ~craves(d,c) & ~craves(d,d)\n       & ~inPain(a) & ~inPain(b) & ~inPain(c) & ~inPain(d)\n       & ~isProvince(c) & ~isProvince(d)\n       & ~isPlanet(a) & ~isPlanet(b);\n    maxstep: craves(b,d) & craves(d,a)."
+  },
+  {
+    "objects": ":- objects\n    a, b, c, d :: entity.",
+    "query": ":- query\n    0: harmony\n       & isPlanet(a) & isPlanet(c) & isPlanet(d)\n       & craves(b,d)\n       & isProvince(a) & isProvince(b) & isProvince(c)\n       & ~craves(a,a) & ~craves(a,b) & ~craves(a,c) & ~craves(a,d)\n       & ~craves(b,a) & ~craves(b,b) & ~craves(b,c)\n       & ~craves(c,a) & ~craves(c,b) & ~craves(c,c) & ~craves(c,d)\n       & ~craves(d,a) & ~craves(d,b) & ~craves(d,c) & ~craves(d,d)\n       & ~inPain(a) & ~inPain(b) & ~inPain(c) & ~inPain(d)\n       & ~isProvince(d)\n       & ~isPlanet(b);\n    maxstep: craves(b,c) & craves(d,a)."
+  },
+  {
+    "objects": ":- objects\n    a, b, c, d :: entity.",
+    "query": ":- query\n    0: harmony\n       & isPlanet(a) & isPlanet(b)\n       & craves(c,b) & craves(d,a)\n       & isProvince(c) & isProvince(d)\n       & ~craves(a,a) & ~craves(a,b) & ~craves(a,c) & ~craves(a,d)\n       & ~craves(b,a) & ~craves(b,b) & ~craves(b,c) & ~craves(b,d)\n       & ~craves(c,a) & ~craves(c,c) & ~craves(c,d)\n       & ~craves(d,b) & ~craves(d,c) & ~craves(d,d)\n       & ~inPain(a) & ~inPain(b) & ~inPain(c) & ~inPain(d)\n       & ~isProvince(a) & ~isProvince(b)\n       & ~isPlanet(c) & ~isPlanet(d);\n    maxstep: craves(a,b)."
+  },
+  {
+    "objects": ":- objects\n    a, b, c, d :: entity.",
+    "query": ":- query\n    0: harmony\n       & craves(a,b) & craves(b,c) & craves(c,d)\n       & isPlanet(d)\n       & isProvince(a)\n       & ~craves(a,a) & ~craves(a,c) & ~craves(a,d)\n       & ~craves(b,a) & ~craves(b,b) & ~craves(b,d)\n       & ~craves(c,a) & ~craves(c,b) & ~craves(c,c)\n       & ~craves(d,a) & ~craves(d,b) & ~craves(d,c) & ~craves(d,d)\n       & ~inPain(a) & ~inPain(b) & ~inPain(c) & ~inPain(d)\n       & ~isProvince(b) & ~isProvince(c) & ~isProvince(d)\n       & ~isPlanet(a) & ~isPlanet(b) & ~isPlanet(c);\n    maxstep: craves(b,c) & craves(c,d) & craves(d,a)."
+  },
+  {
+    "objects": ":- objects\n    a, b, c, d :: entity.",
+    "query": ":- query\n    0: harmony\n       & isPlanet(a) & isPlanet(d)\n       & craves(b,d) & craves(c,b)\n       & isProvince(a) & isProvince(c)\n       & ~craves(a,a) & ~craves(a,b) & ~craves(a,c) & ~craves(a,d)\n       & ~craves(b,a) & ~craves(b,b) & ~craves(b,c)\n       & ~craves(c,a) & ~craves(c,c) & ~craves(c,d)\n       & ~craves(d,a) & ~craves(d,b) & ~craves(d,c) & ~craves(d,d)\n       & ~inPain(a) & ~inPain(b) & ~inPain(c) & ~inPain(d)\n       & ~isProvince(b) & ~isProvince(d)\n       & ~isPlanet(b) & ~isPlanet(c);\n    maxstep: craves(a,c) & craves(b,a)."
+  },
+  {
+    "objects": ":- objects\n    a, b, c, d :: entity.",
+    "query": ":- query\n    0: harmony\n       & isPlanet(a) & isPlanet(b) & isPlanet(c)\n       & craves(d,c)\n       & isProvince(a) & isProvince(b) & isProvince(d)\n       & ~craves(a,a) & ~craves(a,b) & ~craves(a,c) & ~craves(a,d)\n       & ~craves(b,a) & ~craves(b,b) & ~craves(b,c) & ~craves(b,d)\n       & ~craves(c,a) & ~craves(c,b) & ~craves(c,c) & ~craves(c,d)\n       & ~craves(d,a) & ~craves(d,b) & ~craves(d,d)\n       & ~inPain(a) & ~inPain(b) & ~inPain(c) & ~inPain(d)\n       & ~isProvince(c)\n       & ~isPlanet(d);\n    maxstep: craves(c,b) & craves(d,a)."
+  },
+  {
+    "objects": ":- objects\n    a, b, c, d :: entity.",
+    "query": ":- query\n    0: harmony\n       & craves(a,d) & craves(d,c)\n       & isPlanet(b) & isPlanet(c)\n       & isProvince(a) & isProvince(b)\n       & ~craves(a,a) & ~craves(a,b) & ~craves(a,c)\n       & ~craves(b,a) & ~craves(b,b) & ~craves(b,c) & ~craves(b,d)\n       & ~craves(c,a) & ~craves(c,b) & ~craves(c,c) & ~craves(c,d)\n       & ~craves(d,a) & ~craves(d,b) & ~craves(d,d)\n       & ~inPain(a) & ~inPain(b) & ~inPain(c) & ~inPain(d)\n       & ~isProvince(c) & ~isProvince(d)\n       & ~isPlanet(a) & ~isPlanet(d);\n    maxstep: craves(b,c) & craves(c,d)."
+  }
+]
+```

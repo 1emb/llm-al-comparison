@@ -1,0 +1,11 @@
+There are two types of objects: "block" and "loc".
+"loc" includes "block".
+
+b1, b2, b3, b4, b5, b6, and b7 are blocks.
+table is a loc.
+
+Actions
+pickupblock - picking up a block from the table.
+putdownblock - putting a block down onto the table.
+stackblock, block - stacking one block onto another block.
+unstackblock, block - unstacking one block from on top of another block.

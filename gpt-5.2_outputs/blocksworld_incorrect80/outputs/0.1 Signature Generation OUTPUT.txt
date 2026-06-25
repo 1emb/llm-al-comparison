@@ -1,0 +1,41 @@
+```
+Actions:
+pickup(B)        - pick up block B.
+putdown(B)       - put down block B onto the table.
+stack(B1,B2)     - stack block B1 onto block B2.
+unstack(B1,B2)   - unstack block B1 from block B2.
+
+Constants:
+loc(B)           - the location of block B (a loc: either another block or the table); inertial.
+on(B1,B2)        - block B1 is on top of block B2; inertial.
+onTable(B)       - block B is on the table; inertial.
+clear(B)         - block B has nothing on top of it; inertial.
+held(B)          - block B is being held; inertial.
+handEmpty        - the hand is empty; inertial.
+
+BC+ Signature:
+:- sorts
+    loc >> block.
+
+:- objects
+    b1, b2, b3, b4, b5, b6, b7 :: block;
+    table :: loc.
+
+:- variables
+    B, B1, B2, B3, B4 :: block;
+    L, L1, L2, L3, L4 :: loc;
+    Bool, Bool1, Bool2, Bool3, Bool4 :: boolean.
+
+:- constants
+    pickup(block) :: exogenousAction;
+    putdown(block) :: exogenousAction;
+    stack(block, block) :: exogenousAction;
+    unstack(block, block) :: exogenousAction;
+
+    loc(block) :: inertialFluent(loc);
+    on(block, block) :: inertialFluent(boolean);
+    onTable(block) :: inertialFluent(boolean);
+    clear(block) :: inertialFluent(boolean);
+    held(block) :: inertialFluent(boolean);
+    handEmpty :: inertialFluent(boolean).
+```
